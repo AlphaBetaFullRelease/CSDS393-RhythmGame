@@ -9,4 +9,12 @@ public class Note {
     public Note(int col){
         this.col = col % 4;
     }
+
+    public double getPos(){
+        return pos;
+    }
+
+    public int getCol(){
+        return col;
+    }
 }
