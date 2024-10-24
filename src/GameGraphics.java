@@ -15,6 +15,7 @@ public class GameGraphics {
     private static final double trackWidth = 0.06; // the width of a single track
     private static final double noteWidth = 0.055; // width of a note
     private static final double noteSpawnOffset = 0.5; // in units of noteWidth, allows the note to spawn off screen
+    private static final double targetPlace = 0.8; // where the target line is displayed
 
     // needs to be passed a GameState object that is linked to the Game
     public GameGraphics(GameState gs){
@@ -41,9 +42,8 @@ public class GameGraphics {
             for(Note note : tracks.get(lane))
                 drawNote(g, lane, note);
 
-        // example moving circle to prove that things are working
-        // Note firstNote = gameState.getTracks().get(0).get(0);
-        // g.fillOval((int)(firstNote.pos * getWidth()), 100, 20, 20);
+        // draw the target line
+        drawTarget(g);
     }
 
     // draws a track at the desired x coordinate (where x is the left side of the track)
@@ -69,6 +69,22 @@ public class GameGraphics {
         // actually draw the note
         g.setColor(Colors.noteColor);
         g.fillOval(Layout.trackLeft[lane], yPos, Layout.noteWid, Layout.noteWid);
+    }
+
+    // draws the target line
+    public void drawTarget(Graphics2D g){
+        g.setColor(Colors.targetColor);
+        g.drawLine(0, Layout.targetLevel, getWidth(), Layout.targetLevel);
+    }
+
+    // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
+    public double getTargetStart(){
+        return targetPlace - noteWidth / getWidth();
+    }
+
+    // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
+    public double getTargetEnd(){
+        return targetPlace + noteWidth / getWidth();
     }
 
     public static int getWidth(){
@@ -97,6 +113,8 @@ public class GameGraphics {
         public static int noteOffset;
         // the length of the track (accounting for noteOffset)
         public static int trackLen;
+        // the pixel level for the target line
+        public static int targetLevel;
 
         // uses the variables in GameGraphics to generate coordinates for graphical elements
         public static void initialize(){
@@ -117,6 +135,8 @@ public class GameGraphics {
             noteOffset = (int)(noteWidth * noteSpawnOffset * getWidth());
             // track length is height + 2 noteOffset (one for top of the screen and the other for bottom)
             trackLen = getHeight() + 2 * noteOffset;
+            // target level needs to account for note offset
+            targetLevel = (int)(trackLen * targetPlace - noteOffset);
         }
 
         // calculates the y position of a note on screen
@@ -134,5 +154,7 @@ public class GameGraphics {
         public static final Color trackFill = new Color(145, 145, 145);
         // note fill color
         public static final Color noteColor = new Color(24, 222, 163);
+        // target color
+        public static final Color targetColor = new Color(0, 0, 0);
     }
 }
