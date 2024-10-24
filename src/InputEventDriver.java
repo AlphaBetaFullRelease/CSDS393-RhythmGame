@@ -27,6 +27,19 @@ public class InputEventDriver implements KeyListener{
     public void keyPressed(KeyEvent e) {
         // check if any of these keys are bound to the strike keys
         // if so, send a strike event to game
+        //not sure if this is entirely correct since I tried to sneak it in during class
+        //assumes we're using Z X . and / for inputs for the demo
+        int code = e.getKeyCode();
+        switch(code){
+            case KeyEvent.VK_Z:
+                break;
+            case KeyEvent.VK_X:
+                break;
+            case KeyEvent.VK_PERIOD:
+                break;
+            case KeyEvent.VK_SLASH:
+                break;
+        }
     }
 
     @Override
