@@ -113,7 +113,7 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // returns closest note in specified lane
     private Note closestNote(int lane){
-        Note closest;
+        Note closest = new Note(lane);
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(ArrayList<Note> track : tracks){
             for(Note note : track){
