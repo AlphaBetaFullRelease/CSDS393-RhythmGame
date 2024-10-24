@@ -91,7 +91,14 @@ public class Game extends JPanel implements ActionListener, Scene {
     public void actionPerformed(ActionEvent e) {
         // should check the type of action and react accordingly
         // strike
-        // pause 
+        if (e.getID() == 2000) { // 2000 = strike
+            System.out.println(e.getActionCommand());
+        }
+
+        // pause
+        if (e.getID() == 2001) { // 2001 = pause
+
+        }
     }
 
     // casts this object to jpanel and returns it
