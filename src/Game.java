@@ -35,7 +35,7 @@ public class Game extends JPanel implements ActionListener, Scene {
         makeTrack();
 
         // DEBUG (add one note to the track to show off graphics)
-        gameState.getTracks().get(0).add(new Note());
+        gameState.getTracks().get(0).add(new Note(0));
 
         // set up graphics handler
         graphicsHandler = new GameGraphics(gameState);
@@ -104,7 +104,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private void strike(int lane){
         // check if there is a note that the user can strike in the right lane
         // do the things that need to happen when a strike lands or misses
-        note = closestNote(lane); // gets the closest note in the lane where the strike occurred
+        Note note = closestNote(lane); // gets the closest note in the lane where the strike occurred
         if(note.getPos() >= 0.9) // assuming 0.9 to 1 is a valid position for successful strike
             hitSuccess();
         else
@@ -124,7 +124,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 }
             }
         }
-        return note;
+        return closest;
     }
 
     private void hitSuccess(){
