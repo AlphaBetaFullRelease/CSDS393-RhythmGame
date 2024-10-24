@@ -104,6 +104,37 @@ public class Game extends JPanel implements ActionListener, Scene {
     private void strike(int lane){
         // check if there is a note that the user can strike in the right lane
         // do the things that need to happen when a strike lands or misses
+        note = closestNote(lane); // gets the closest note in the lane where the strike occurred
+        if(note.getPos() >= 0.9) // assuming 0.9 to 1 is a valid position for successful strike
+            hitSuccess();
+        else
+            hitFail();
+    }
+
+    // returns closest note in specified lane
+    private Note closestNote(int lane){
+        Note closest;
+        ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
+        for(ArrayList<Note> track : tracks){
+            for(Note note : track){
+                if(note.getCol() == lane){
+                    if(note.getPos() > closest.getPos()){
+                        closest = note;
+                    }
+                }
+            }
+        }
+        return note;
+    }
+
+    private void hitSuccess(){
+        noteHits += 1;
+        score += 1;
+    }
+
+    private void hitFail(){
+        noteMisses += 1;
+        health -= 5;
     }
 
     // creates a track
