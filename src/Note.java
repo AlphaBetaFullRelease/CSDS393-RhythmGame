@@ -7,6 +7,6 @@ public class Note {
     public int col;
     
     public Note(int col){
-        this.col = col;
+        this.col = col % 4;
     }
 }
