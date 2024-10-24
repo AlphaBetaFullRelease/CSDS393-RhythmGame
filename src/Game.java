@@ -21,6 +21,9 @@ public class Game extends JPanel implements ActionListener, Scene {
     // does all graphics
     private final GameGraphics graphicsHandler;
 
+    // number of tracks
+    private final int numTracks = 4;
+
     // sets up the game
     public Game() {
         // JPanel properties
@@ -32,15 +35,15 @@ public class Game extends JPanel implements ActionListener, Scene {
         addKeyListener(inputHandler); // tells JPanel where to send input events
 
         // create tracks
-        makeTrack();
+        for(int i = 0; i < numTracks; i++)
+            makeTrack();
 
         // DEBUG (add one note to the track to show off graphics)
-        gameState.getTracks().get(0).add(new Note(0));
+        for(int i = 0; i < numTracks; i++)
+            gameState.getTracks().get(i).add(new Note(i));
 
         // set up graphics handler
         graphicsHandler = new GameGraphics(gameState);
-        graphicsHandler.width = 800;
-        graphicsHandler.height = 450;
 
         // instantiate fields
         noteHits = 0;
