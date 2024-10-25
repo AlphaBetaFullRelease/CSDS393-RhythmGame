@@ -17,7 +17,6 @@ public class GameState {
     }
 
     public void spawnNote(int track, Note n){
-        ArrayList<Note> track = tracks.get(track);
-        track.add(n);
+        tracks.get(track).add(n);
     }
 }

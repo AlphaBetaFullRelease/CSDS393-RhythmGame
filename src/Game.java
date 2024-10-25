@@ -30,9 +30,6 @@ public class Game extends JPanel implements ActionListener, Scene {
     // current level note grid indexes
     private int[] noteIndex;
 
-    // start time
-    private long startTime;
-
     // time elapsed
     private long elapsedTime;
 
@@ -62,7 +59,6 @@ public class Game extends JPanel implements ActionListener, Scene {
         noteMisses = 0;
         health = 0;
         score = 0;
-        startTime = System.currentTimeMillis();
 
         //initialize noteGrid index
         this.noteIndex = new int[numTracks - 1];
@@ -82,6 +78,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 gameState.spawnNote(i, n); //update gameState
                 noteIndex[i] ++;
                 sNote = level.getStoredNote(noteIndex[i], i); //update nearest StoredNote
+                diff = elapsedTime - sNote.getPos();
             }
         }
         // check for notes that have moved off screen
