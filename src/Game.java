@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,17 +11,17 @@ public class Game extends JPanel implements ActionListener, Scene {
     private int health;
     private int score;
 
+    // number of tracks
+    private final int numTracks = 4;
+    
     // stores information about the game state for the graphics handler to display
-    private final GameState gameState = new GameState();
+    private final GameState gameState = new GameState(numTracks);
 
     // handles game input
     private final InputEventDriver inputHandler;
 
     // does all graphics
     private final GameGraphics graphicsHandler;
-
-    // number of tracks
-    private final int numTracks = 4;
 
     // current level
     private Level level;
@@ -32,9 +31,15 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // time elapsed
     private long elapsedTime;
+    
+    // note movement speed (%/s)
+    private double noteSpeed = 1;
 
     // sets up the game
-    public Game() {
+    public Game(Level level) {
+    	// set level to play
+    	this.level = level;
+    	
         // JPanel properties
         this.setPreferredSize(new Dimension(800, 450)); // screen size/resolution can be changed later, I just picked one to start
         this.setFocusable(true);
@@ -42,14 +47,6 @@ public class Game extends JPanel implements ActionListener, Scene {
         // set up the input handler
         inputHandler = new InputEventDriver(this); // create input event driver
         addKeyListener(inputHandler); // tells JPanel where to send input events
-
-        // create tracks
-        for(int i = 0; i < numTracks; i++)
-            makeTrack();
-
-        // DEBUG (add one note to the track to show off graphics)
-        for(int i = 0; i < numTracks; i++)
-            gameState.getTracks().get(i).add(new Note(i));
 
         // set up graphics handler
         graphicsHandler = new GameGraphics(gameState);
@@ -70,15 +67,17 @@ public class Game extends JPanel implements ActionListener, Scene {
         elapsedTime += delta; //update elapsed time
         // check for new notes to spawn
         for (int i = 0; i < noteIndex.length; i ++){ //iterate through tracks
-            StoredNote sNote = level.getStoredNote(noteIndex[i], i); //get nearest StoredNote at track
+            StoredNote sNote = level.getStoredNote(i, noteIndex[i]); //get nearest StoredNote at track
             double diff = elapsedTime - sNote.getPos();
             while (diff >= 0) { //position is equal or less than elapsed time, spawn it and increment track index
                 Note n = sNote.getNote(); //get note object
-                n.updatePos(diff);  //update pos according to delta
+                //n.updatePos(0);  //TODO: make this an actual calculation
                 gameState.spawnNote(i, n); //update gameState
-                noteIndex[i] ++;
-                sNote = level.getStoredNote(noteIndex[i], i); //update nearest StoredNote
-                diff = elapsedTime - sNote.getPos();
+                if (noteIndex[i] < level.getTrackLength(i) - 1) {
+	                noteIndex[i] ++;
+	                sNote = level.getStoredNote(i, noteIndex[i]); //update nearest StoredNote
+	                diff = elapsedTime - sNote.getPos();
+                } else diff = -1;
             }
         }
         // check for notes that have moved off screen
@@ -87,9 +86,10 @@ public class Game extends JPanel implements ActionListener, Scene {
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(ArrayList<Note> track : tracks){
             for(Note note : track){
-                note.updatePos(0.1);
+                note.updatePos(noteSpeed/10); //TODO: have this use delta
             }
         }
+        gameState.setTracks(tracks);
         // check for end of song
 
         // draw frame
@@ -104,7 +104,7 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     @Override
     public void paint (Graphics graphics) {
-        // cast grapphics to 2D
+        // cast graphics to 2D
         Graphics2D g = (Graphics2D) graphics;
 
         // clear the previous frame
@@ -171,11 +171,5 @@ public class Game extends JPanel implements ActionListener, Scene {
     private void hitFail(){
         noteMisses += 1;
         health -= 5;
-    }
-
-    // creates a track
-    private void makeTrack(){
-        // add track to the game state
-        gameState.setTracks(gameState.getTracks().add(new ArrayList<Note>()););
     }
 }

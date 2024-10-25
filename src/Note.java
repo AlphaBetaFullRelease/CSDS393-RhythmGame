@@ -11,6 +11,7 @@ public class Note {
     
     public Note(int col){
         this.col = col % 4;
+        this.dur = 0;
     }
 
     public double getPos(){

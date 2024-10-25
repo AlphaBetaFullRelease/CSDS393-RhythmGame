@@ -5,7 +5,11 @@ public class GameState {
     // stores the notes that are on each track
     private ArrayList<ArrayList<Note>> tracks = new ArrayList<ArrayList<Note>>();
 
-    public GameState(){}
+    public GameState(int tracks){
+    	for (int i = 0; i < tracks; i ++) {
+    		this.tracks.add(new ArrayList<Note>());
+    	}
+    }
 
     // returns the tracks array
     public ArrayList<ArrayList<Note>> getTracks(){
