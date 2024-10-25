@@ -9,7 +9,8 @@ import java.util.Objects;
 public class InputEventDriver implements KeyListener{
     // where to send events to (should be Game object casted down to an ActionListener)
     private final ActionListener game;
-    private final int KEY1 = 90, KEY2 = 88, KEY3 = 46, KEY4 = 47;
+    private final int KEY1 = 'Z', KEY2 = 'X', KEY3 = '.', KEY4 = '/';
+    private boolean[] down = {false, false, false, false};
 
     // create new input event driver with a receiver (can receive input events)
     public InputEventDriver(ActionListener actionListener){
@@ -31,15 +32,41 @@ public class InputEventDriver implements KeyListener{
         // if so, send a strike event to game
         int code = e.getKeyCode();
         switch (code) {
-            case KEY1 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY1"));
-            case KEY2 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY2"));
-            case KEY3 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY3"));
-            case KEY4 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY4"));
+            case KEY1:
+                if (!down[0]) {
+                    down[0] = true;
+                    game.actionPerformed(new ActionEvent(this, 2000, null));
+                }
+                break;
+            case KEY2:
+                if (!down[1]) {
+                    down[1] = true;
+                    game.actionPerformed(new ActionEvent(this, 2001, null));
+                }
+                break;
+            case KEY3:
+                if (!down[2]) {
+                    down[2] = true;
+                    game.actionPerformed(new ActionEvent(this, 2002, null));
+                }
+                break;
+            case KEY4:
+                if (!down[3]) {
+                    down[3] = true;
+                    game.actionPerformed(new ActionEvent(this, 2003, null));
+                }
+                break;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        int code = e.getKeyCode();
+        switch (code) {
+            case KEY1 -> down[0] = false;
+            case KEY2 -> down[1] = false;
+            case KEY3 -> down[2] = false;
+            case KEY4 -> down[3] = false;
+        }
     }
 }
