@@ -78,12 +78,20 @@ public class GameGraphics {
     }
 
     // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
+<<<<<<< HEAD
     public double getTargetStart(){
+=======
+    public static double getTargetStart(){
+>>>>>>> parent of 900deb2 (fixed gameGraphics)
         return targetPlace - noteWidth / getWidth();
     }
 
     // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
+<<<<<<< HEAD
     public double getTargetEnd(){
+=======
+    public static double getTargetEnd(){
+>>>>>>> parent of 900deb2 (fixed gameGraphics)
         return targetPlace + noteWidth / getWidth();
     }
 
