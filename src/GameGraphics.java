@@ -82,6 +82,9 @@ public class GameGraphics {
     public double getTargetStart(){
 =======
     public static double getTargetStart(){
+<<<<<<< HEAD
+>>>>>>> parent of 900deb2 (fixed gameGraphics)
+=======
 >>>>>>> parent of 900deb2 (fixed gameGraphics)
         return targetPlace - noteWidth / getWidth();
     }
@@ -91,6 +94,9 @@ public class GameGraphics {
     public double getTargetEnd(){
 =======
     public static double getTargetEnd(){
+<<<<<<< HEAD
+>>>>>>> parent of 900deb2 (fixed gameGraphics)
+=======
 >>>>>>> parent of 900deb2 (fixed gameGraphics)
         return targetPlace + noteWidth / getWidth();
     }
