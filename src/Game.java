@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Game extends JPanel implements ActionListener, Scene {
     // player performance information
@@ -32,8 +33,8 @@ public class Game extends JPanel implements ActionListener, Scene {
     // time elapsed
     private long elapsedTime;
     
-    // note movement speed (%/s)
-    private double noteSpeed = 1;
+    // note movement speed (%/Ms)
+    private double noteSpeed = 0.001;
 
     // sets up the game
     public Game(Level level) {
@@ -58,7 +59,7 @@ public class Game extends JPanel implements ActionListener, Scene {
         score = 0;
 
         //initialize noteGrid index
-        this.noteIndex = new int[numTracks - 1];
+        this.noteIndex = new int[numTracks];
     }
 
     // this is the frame update function
@@ -66,28 +67,32 @@ public class Game extends JPanel implements ActionListener, Scene {
     public void update(long delta) {
         elapsedTime += delta; //update elapsed time
         // check for new notes to spawn
-        for (int i = 0; i < noteIndex.length; i ++){ //iterate through tracks
-            StoredNote sNote = level.getStoredNote(i, noteIndex[i]); //get nearest StoredNote at track
-            double diff = elapsedTime - sNote.getPos();
-            while (diff >= 0) { //position is equal or less than elapsed time, spawn it and increment track index
-                Note n = sNote.getNote(); //get note object
-                //n.updatePos(0);  //TODO: make this an actual calculation
-                gameState.spawnNote(i, n); //update gameState
-                if (noteIndex[i] < level.getTrackLength(i) - 1) {
-	                noteIndex[i] ++;
-	                sNote = level.getStoredNote(i, noteIndex[i]); //update nearest StoredNote
-	                diff = elapsedTime - sNote.getPos();
-                } else diff = -1;
-            }
+        for (int i = 0; i <= noteIndex.length - 1; i ++){ //iterate through tracks
+        	double diff = 0;
+        	for (int y = noteIndex[i]; y < level.getTrackLength(i) && diff >= 0; y ++) {
+        		StoredNote sNote = level.getStoredNote(i, y);
+        		diff = elapsedTime - sNote.getPos();
+        		if (diff >= 0) {
+        			Note n = sNote.getNote();
+        			n.updatePos(noteSpeed * diff);
+        			gameState.spawnNote(i, n);
+        			noteIndex[i] ++;
+        		} else diff = -1;
+        	}
         }
         // check for notes that have moved off screen
-
-        // move notes forward
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
-        for(ArrayList<Note> track : tracks){
-            for(Note note : track){
-                note.updatePos(noteSpeed/10); //TODO: have this use delta
-            }
+        //iterate through tracks
+        for(Iterator<ArrayList<Note>> it = tracks.iterator(); it.hasNext();) {
+        	ArrayList<Note> track = it.next();
+        	//iterate through notes
+        	for (int i = 0; i < track.size(); i ++) {
+        		Note n = track.get(i);
+        		if (n.getPos() > 1) {
+        			track.remove(i); 
+        			i --;
+        		}  else n.updatePos(noteSpeed * delta); //move notes
+        	}
         }
         gameState.setTracks(tracks);
         // check for end of song
