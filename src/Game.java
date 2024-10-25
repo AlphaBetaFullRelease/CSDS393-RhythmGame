@@ -67,7 +67,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     public void update(long delta) {
         elapsedTime += delta; //update elapsed time
         // check for new notes to spawn
-        for (int i = 0; i <= noteIndex.length - 1; i ++){ //iterate through tracks
+        for (int i = 0; i <= noteIndex.length - 1; i ++){ //iterate through notegrid tracks
         	double diff = 0;
         	for (int y = noteIndex[i]; y < level.getTrackLength(i) && diff >= 0; y ++) {
         		StoredNote sNote = level.getStoredNote(i, y);
@@ -88,10 +88,10 @@ public class Game extends JPanel implements ActionListener, Scene {
         	//iterate through notes
         	for (int i = 0; i < track.size(); i ++) {
         		Note n = track.get(i);
-        		if (n.getPos() > 1) {
-        			track.remove(i); 
+        		if (n.getPos() > 2) {
+        			track.remove(i); //delete note
         			i --;
-        		}  else n.updatePos(noteSpeed * delta); //move notes
+        		}  else n.updatePos(noteSpeed * delta); //move notes that aren't off-screen
         	}
         }
         gameState.setTracks(tracks);
@@ -166,17 +166,12 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // checks if there is a note within the target zone of a specified lane
     private Note getTargetNote(int lane){
-        ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
-        for(Note note : tracks.get(lane)){
+        ArrayList<Note> track = gameState.getTracks().get(lane);
+        for(Note note : track){
             if(note.getPos() >= graphicsHandler.getTargetStart() && note.getPos() <= graphicsHandler.getTargetEnd())
                 return note;
         }
         return null;
-    }
-
-    // this function is called when a note passes off screen without being hit
-    private void notePassed(Note note){
-        
     }
 
     private void hitSuccess(){

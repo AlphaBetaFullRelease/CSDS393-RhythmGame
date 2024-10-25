@@ -23,10 +23,10 @@ public class SceneRunner extends JFrame{
     public static void main(String[] args){
     	// DEBUG create placeholder level data
     	StoredNote[][] ng = {
-    			{new StoredNote(600, 0)},
-    			{new StoredNote(610, 1)},
-    			{new StoredNote(620, 2)},
-    			{new StoredNote(630, 3)}
+    			{new StoredNote(600, 0), new StoredNote(1000, 0)},
+    			{new StoredNote(800, 1), new StoredNote(1200, 1)},
+    			{new StoredNote(600, 2), new StoredNote(1000, 2)},
+    			{new StoredNote(800, 3), new StoredNote(1200, 3)}
     	};
     	Level testLevel = new Level("Test", "Ricardo", ng);
     	
