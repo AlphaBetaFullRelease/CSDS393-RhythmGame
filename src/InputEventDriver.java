@@ -35,25 +35,25 @@ public class InputEventDriver implements KeyListener{
             case KEY1:
                 if (!down[0]) {
                     down[0] = true;
-                    game.actionPerformed(new ActionEvent(this, 2000, "KEY1"));
+                    game.actionPerformed(new ActionEvent(this, 2000, null));
                 }
                 break;
             case KEY2:
                 if (!down[1]) {
                     down[1] = true;
-                    game.actionPerformed(new ActionEvent(this, 2000, "KEY2"));
+                    game.actionPerformed(new ActionEvent(this, 2001, null));
                 }
                 break;
             case KEY3:
                 if (!down[2]) {
                     down[2] = true;
-                    game.actionPerformed(new ActionEvent(this, 2000, "KEY3"));
+                    game.actionPerformed(new ActionEvent(this, 2002, null));
                 }
                 break;
             case KEY4:
                 if (!down[3]) {
                     down[3] = true;
-                    game.actionPerformed(new ActionEvent(this, 2000, "KEY3"));
+                    game.actionPerformed(new ActionEvent(this, 2003, null));
                 }
                 break;
         }
