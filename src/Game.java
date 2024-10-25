@@ -57,12 +57,29 @@ public class Game extends JPanel implements ActionListener, Scene {
     public void update(long delta) {
         // check for new notes to spawn
         // check for notes that have moved off screen
-        // move notes forward
+
+        // loop through every track
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(ArrayList<Note> track : tracks){
+            // notes to remove after iterating through all notes
+            ArrayList<Note> toRemove = new ArrayList<>();
+
+            // loop through every active note in the track
             for(Note note : track){
+                // check for note that has moved off screen
+                if(note.pos > 1){
+                    // affect score calculation
+                    notePassed(note);
+                    // add note to remove queue
+                    toRemove.add(note);
+                }
+                
+                // move notes forward
                 note.pos += .01;
             }
+
+            // remove all notes in remove queue
+            toRemove.stream().forEach(note -> track.remove(note));
         }
         // check for end of song
 
@@ -141,6 +158,11 @@ public class Game extends JPanel implements ActionListener, Scene {
                 return note;
         }
         return null;
+    }
+
+    // this function is called when a note passes off screen without being hit
+    private void notePassed(Note note){
+        
     }
 
     private void hitSuccess(){
