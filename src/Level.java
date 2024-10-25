@@ -18,8 +18,8 @@ public class Level {
         return null;
     }
 
-    //
-    public StoredNote getStoredNote(int track, int index){
+    //get StoredNote from noteGrid
+    public StoredNote getStoredNote(int index, int track){
         return noteGrid[index][track];
     }
 }
