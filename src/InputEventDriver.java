@@ -32,9 +32,9 @@ public class InputEventDriver implements KeyListener{
         int code = e.getKeyCode();
         switch (code) {
             case KEY1 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY1"));
-            case KEY2 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY2"));
-            case KEY3 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY3"));
-            case KEY4 -> game.actionPerformed(new ActionEvent(this, 2000, "KEY4"));
+            case KEY2 -> game.actionPerformed(new ActionEvent(this, 2001, "KEY2"));
+            case KEY3 -> game.actionPerformed(new ActionEvent(this, 2002, "KEY3"));
+            case KEY4 -> game.actionPerformed(new ActionEvent(this, 2003, "KEY4"));
         }
     }
 
