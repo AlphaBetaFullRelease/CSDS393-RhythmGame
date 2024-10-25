@@ -93,14 +93,21 @@ public class Game extends JPanel implements ActionListener, Scene {
     @Override
     public void actionPerformed(ActionEvent e) {
         // should check the type of action and react accordingly
-        // strike
-        if (e.getID() == 2000) { // 2000 = strike
-            System.out.println(e.getActionCommand());
-        }
-
-        // pause
-        if (e.getID() == 2001) { // 2001 = pause
-
+        // strikes
+        switch (e.getID()) {
+            case 2000 -> // 2000 = strike lane 1
+                strike(0);
+            case 2001 -> // 2001 = strike lane 2
+                strike(1);
+            case 2002 -> // 2002 = strike lane 3
+                strike(2);
+            case 2003 -> // 2003 = strike lane 4
+                strike(3);
+            case 2004 -> // 2004 = pause
+                System.out.println("pause not implemented");
+            default -> {
+                System.out.println("invalid actionEvent id");
+            }
         }
     }
 
@@ -112,22 +119,28 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // this function is called when a user inputs a strike
     private void strike(int lane){
-        // check if there is a note that the user can strike in the right lane
-        // do the things that need to happen when a strike lands or misses
-        if(isTargetNote(lane)) 
+        // get note if there is one inside the target area
+        Note hitNote = getTargetNote(lane);
+
+        // check if note exists
+        if(hitNote != null){
+            // adjust score
             hitSuccess();
-        else
+            // remove note from notes list
+            gameState.getTracks().get(lane).remove(hitNote);
+        }else{
             hitFail();
+        }
     }
 
     // checks if there is a note within the target zone of a specified lane
-    private boolean isTargetNote(int lane){
+    private Note getTargetNote(int lane){
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(Note note : tracks.get(lane)){
-            if(note.getPos() >= GameGraphics.getTargetStart() && note.getPos() <= GameGraphics.getTargetEnd())
-                return true;
+            if(note.getPos() >= graphicsHandler.getTargetStart() && note.getPos() <= graphicsHandler.getTargetEnd())
+                return note;
         }
-        return false;
+        return null;
     }
 
     private void hitSuccess(){
