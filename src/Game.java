@@ -24,6 +24,18 @@ public class Game extends JPanel implements ActionListener, Scene {
     // number of tracks
     private final int numTracks = 4;
 
+    // current level
+    private Level level;
+
+    // current level note grid indexes
+    private int[] noteIndex;
+
+    // start time
+    private long startTime;
+
+    // time elapsed
+    private long elapsedTime;
+
     // sets up the game
     public Game() {
         // JPanel properties
@@ -50,18 +62,35 @@ public class Game extends JPanel implements ActionListener, Scene {
         noteMisses = 0;
         health = 0;
         score = 0;
+        startTime = System.currentTimeMillis();
+
+        //initialize noteGrid index
+        this.noteIndex = new int[numTracks - 1];
     }
 
     // this is the frame update function
     @Override
     public void update(long delta) {
+        elapsedTime += delta; //update elapsed time
         // check for new notes to spawn
+        for (int i = 0; i < noteIndex.length; i ++){ //iterate through tracks
+            StoredNote sNote = level.getStoredNote(noteIndex[i], i); //get nearest StoredNote at track
+            double diff = elapsedTime - sNote.getPos();
+            while (diff >= 0) { //position is equal or less than elapsed time, spawn it and increment track index
+                Note n = sNote.getNote(); //get note object
+                n.updatePos(diff);  //update pos according to delta
+                gameState.spawnNote(i, n); //update gameState
+                noteIndex[i] ++;
+                sNote = level.getStoredNote(noteIndex[i], i); //update nearest StoredNote
+            }
+        }
         // check for notes that have moved off screen
+
         // move notes forward
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(ArrayList<Note> track : tracks){
             for(Note note : track){
-                note.pos += .01;
+                note.updatePos(0.1);
             }
         }
         // check for end of song
@@ -150,6 +179,6 @@ public class Game extends JPanel implements ActionListener, Scene {
     // creates a track
     private void makeTrack(){
         // add track to the game state
-        gameState.getTracks().add(new ArrayList<>());
+        gameState.setTracks(gameState.getTracks().add(new ArrayList<Note>()););
     }
 }

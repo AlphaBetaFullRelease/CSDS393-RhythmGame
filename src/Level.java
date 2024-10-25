@@ -1,6 +1,7 @@
 // holds all static data about a level & provides functions to load / save a level file
 public class Level {
     // store note data
+    private StoredNote[][] noteGrid;
     // store path to mp3
 
     public Level(){
@@ -15,5 +16,10 @@ public class Level {
     // loads a level from a json file
     public Level loadFromFile(String path){
         return null;
+    }
+
+    //
+    public StoredNote getStoredNote(int track, int index){
+        return noteGrid[index][track];
     }
 }
