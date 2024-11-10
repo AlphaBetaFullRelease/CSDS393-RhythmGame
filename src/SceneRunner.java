@@ -30,15 +30,11 @@ public class SceneRunner extends JFrame{
         };
         Level testLevel = new Level("Test", "Ricardo", ng);
 
-        // create level select
-        LevelSelect levelSelect = new LevelSelect();
-        levelSelect.addLevel(testLevel);
-
         // create game
-        //Game game = new Game(testLevel);
+        Game game = new Game(testLevel);
         
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(levelSelect);
+        SceneRunner sceneRunner = new SceneRunner(game);
 
         // main loop
         while(true){
