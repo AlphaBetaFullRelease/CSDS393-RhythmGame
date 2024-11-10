@@ -87,6 +87,11 @@ public class GameGraphics {
         return targetPlace + noteWidth;
     }
 
+    // returns the center position of the target
+    public double getTargetCenter(){
+        return targetPlace;
+    }
+
     public static int getWidth(){
         return 800;
     }
