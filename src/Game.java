@@ -24,6 +24,9 @@ public class Game extends JPanel implements ActionListener, Scene {
     // does all graphics
     private final GameGraphics graphicsHandler;
 
+    // reference to the sceneRunner so scenes can be changed
+    private SceneRunner sceneChanger;
+
     // current level
     private Level level;
 
@@ -40,7 +43,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     public Game(Level level) {
     	// set level to play
     	this.level = level;
-    	
+
         // JPanel properties
         this.setPreferredSize(new Dimension(800, 450)); // screen size/resolution can be changed later, I just picked one to start
         this.setFocusable(true);
@@ -100,10 +103,10 @@ public class Game extends JPanel implements ActionListener, Scene {
         repaint();
     }
 
-    // signals a scene swap to the SceneRunner
+    // sets reference for the sceneChanger
     @Override
-    public void changeScene(Scene scene) {
-        // unimplemented for now becasue the demo only uses one scene
+    public void setSceneRunner(SceneRunner sceneRunner){
+        sceneChanger = sceneRunner;
     }
 
     @Override
@@ -158,10 +161,8 @@ public class Game extends JPanel implements ActionListener, Scene {
             hitSuccess();
             // remove note from notes list
             gameState.getTracks().get(lane).remove(hitNote);
-            System.out.println("hit note success");
         }else{
             hitFail();
-            System.out.println("hit note fail");
         }
     }
 
@@ -169,7 +170,6 @@ public class Game extends JPanel implements ActionListener, Scene {
     private Note getTargetNote(int lane){
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(Note note : tracks.get(lane)){
-            System.out.println("note pos: " + note.getPos() + " track goal: " + graphicsHandler.getTargetStart() + " " + graphicsHandler.getTargetEnd());
             if(note.getPos() >= graphicsHandler.getTargetStart() && note.getPos() <= graphicsHandler.getTargetEnd())
                 return note;
         }

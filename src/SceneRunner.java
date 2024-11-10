@@ -21,17 +21,24 @@ public class SceneRunner extends JFrame{
     // starts the game with the main menu open
     // for now, launches straight into Game since there is no main menu
     public static void main(String[] args){
-    	// DEBUG create placeholder level data
-    	StoredNote[][] ng = {
-    			{new StoredNote(600, 0)},
-    			{new StoredNote(610, 1)},
-    			{new StoredNote(620, 2)},
-    			{new StoredNote(630, 3)}
-    	};
-    	Level testLevel = new Level("Test", "Ricardo", ng);
-    	
+        // DEBUG create placeholder level data
+        StoredNote[][] ng = {
+                {new StoredNote(600, 0)},
+                {new StoredNote(610, 1)},
+                {new StoredNote(620, 2)},
+                {new StoredNote(630, 3)}
+        };
+        Level testLevel = new Level("Test", "Ricardo", ng);
+
+        // create level select
+        LevelSelect levelSelect = new LevelSelect();
+        levelSelect.addLevel(testLevel);
+
+        // create game
+        //Game game = new Game(testLevel);
+        
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(new Game(testLevel));
+        SceneRunner sceneRunner = new SceneRunner(levelSelect);
 
         // main loop
         while(true){
@@ -56,7 +63,6 @@ public class SceneRunner extends JFrame{
         changeScene(scene);
 
         // create the window
-        this.add(scene.getPanel());
         this.pack();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -70,10 +76,26 @@ public class SceneRunner extends JFrame{
         // make sure new scene is not null
         Objects.requireNonNull(scene);
 
+        // deactivate current scene (if there is one)
+        if(loadedScene != null){
+            loadedScene.getPanel().setVisible(false);
+            this.remove(loadedScene.getPanel());
+        }
+
+        // add new scene
+        this.add(scene.getPanel());
+
+        // set sceneRunner reference
+        scene.setSceneRunner(this);
+
+        getContentPane().revalidate();
+
         // change scene reference
         loadedScene = scene;
 
-        // 
+        // set the focus to the new scene
+        loadedScene.getPanel().setFocusable(true);
+        loadedScene.getPanel().requestFocusInWindow();
     }
 
     // calculates and returns fps (using average number of frames passed since frameTrackStart)

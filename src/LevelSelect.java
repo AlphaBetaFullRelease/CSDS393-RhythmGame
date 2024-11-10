@@ -6,7 +6,11 @@ import java.util.ArrayList;
 
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
-    private Level[] levels;
+    // reference to the sceneRunner so scenes can be changed
+    private SceneRunner sceneChanger;
+
+    // reference to all the levels
+    private ArrayList<Level> levels = new ArrayList<>();
     private ArrayList<LevelCard> displayList = new ArrayList<LevelCard>();
     private final LevelSelectGraphics graphicsHandler;
     public LevelSelect(Level level) {
@@ -33,9 +37,10 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
         graphicsHandler.drawFrame(g);
     }
     
+    // sets reference for the sceneChanger
     @Override
-    public void changeScene(Scene scene) {
-    	//
+    public void setSceneRunner(SceneRunner sceneRunner){
+        sceneChanger = sceneRunner;
     }
     
     @Override
