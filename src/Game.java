@@ -34,7 +34,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.001;
+    private double noteSpeed = 0.0001;
 
     // sets up the game
     public Game(Level level) {
@@ -83,16 +83,15 @@ public class Game extends JPanel implements ActionListener, Scene {
         // check for notes that have moved off screen
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         //iterate through tracks
-        for(Iterator<ArrayList<Note>> it = tracks.iterator(); it.hasNext();) {
-        	ArrayList<Note> track = it.next();
-        	//iterate through notes
-        	for (int i = 0; i < track.size(); i ++) {
-        		Note n = track.get(i);
-        		if (n.getPos() > 1) {
-        			track.remove(i); 
-        			i --;
-        		}  else n.updatePos(noteSpeed * delta); //move notes
-        	}
+        for (ArrayList<Note> track : tracks) {
+            //iterate through notes
+            for (int i = 0; i < track.size(); i ++) {
+                Note n = track.get(i);
+                if (n.getPos() > 1) {
+                    track.remove(i);
+                    i --;
+                }  else n.updatePos(noteSpeed * delta); //move notes
+            }
         }
         gameState.setTracks(tracks);
         // check for end of song
@@ -159,8 +158,10 @@ public class Game extends JPanel implements ActionListener, Scene {
             hitSuccess();
             // remove note from notes list
             gameState.getTracks().get(lane).remove(hitNote);
+            System.out.println("hit note success");
         }else{
             hitFail();
+            System.out.println("hit note fail");
         }
     }
 
@@ -168,6 +169,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private Note getTargetNote(int lane){
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         for(Note note : tracks.get(lane)){
+            System.out.println("note pos: " + note.getPos() + " track goal: " + graphicsHandler.getTargetStart() + " " + graphicsHandler.getTargetEnd());
             if(note.getPos() >= graphicsHandler.getTargetStart() && note.getPos() <= graphicsHandler.getTargetEnd())
                 return note;
         }
