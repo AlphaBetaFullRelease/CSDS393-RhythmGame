@@ -40,7 +40,11 @@ public class GameAudio {
 
             // set clip to loop
             clip.loop(Clip.LOOP_CONTINUOUSLY);
-        }catch(Exception e){
+        }catch(IOException e){
+            // notify user that if they pull from the github, they need to manually import audio files
+            System.out.println("If you pulled this project from the github repo, please manually import the audio files or extract this project from a zip that contains the song files");
+            throw new RuntimeException(e);
+        }catch(LineUnavailableException | UnsupportedAudioFileException e){
             // wrap in runtime exception
             throw new RuntimeException(e);
         }

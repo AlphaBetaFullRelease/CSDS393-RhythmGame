@@ -23,3 +23,9 @@
 hs_err_pid*
 replay_pid*
 /bin/
+
+
+# audio files
+*.mp3
+*.wav
+song.*
