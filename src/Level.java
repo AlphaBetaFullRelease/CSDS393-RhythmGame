@@ -39,6 +39,10 @@ public class Level {
     	return "00:00:00";
     }
 
+    public String getSongPath(){
+        return songPath;
+    }
+
 	//saves the level data to a json file
     public void saveToFile(String dest) {
 

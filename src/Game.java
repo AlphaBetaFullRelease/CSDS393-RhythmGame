@@ -20,9 +20,10 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // handles game input
     private final InputEventDriver inputHandler;
-
     // does all graphics
     private final GameGraphics graphicsHandler;
+    // plays sound
+    private final GameAudio gameAudio;
 
     // reference to the sceneRunner so scenes can be changed
     private SceneRunner sceneChanger;
@@ -54,6 +55,14 @@ public class Game extends JPanel implements ActionListener, Scene {
 
         // set up graphics handler
         graphicsHandler = new GameGraphics(gameState);
+
+        // set up audio
+        gameAudio = new GameAudio();
+        // load song
+        String pathToSong = level.getSongPath();
+        // play song if file exists
+        if(!pathToSong.isEmpty())
+            gameAudio.loadSong(level.getSongPath());
 
         // instantiate fields
         noteHits = 0;
