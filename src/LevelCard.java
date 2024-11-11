@@ -1,4 +1,6 @@
 public class LevelCard {
+	//level id
+	private int id;
     // level title
     private String title;
     // level creator

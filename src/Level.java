@@ -1,5 +1,7 @@
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
+	//store level id
+	private int id;
     //store note data
     private StoredNote[][] noteGrid;
     //store path to mp3
@@ -18,9 +20,15 @@ public class Level {
     private int difficulty;
 
     public Level(String title, String creator, StoredNote[][] noteGrid){
+    	//set unique id
+    	this.id = generateId(); //TO DO: use system time + random number to make id?
     	this.title = title;
     	this.creator = creator;
     	this.noteGrid = noteGrid;
+    }
+    //code that generates a unique id using the system clock
+    private static int generateId() {
+    	return 420;
     }
     
     public String getTitle() {

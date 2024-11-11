@@ -7,19 +7,20 @@ import java.awt.Color;
 //implementation copied from GameGraphics for the purposes of the demo
 public class LevelSelectGraphics {
 	
+	//level card list
 	private ArrayList<LevelCard> list;
 	
     //these variables control the layout of the level select (all in % of the screen)
     private static final double headerHeight = 0.1; // the height of the level select header
     private static final double listWidth = 0.75; // the width of the level list
-    private static final double cardHeight = 0.2; // height of a single card
+    private static final double cardHeight = 0.18; // height of a single card
     private static final double[] cardTextHeight = {cardHeight * 0.33, cardHeight * 0.66}; //height of card (top and bottom) text
     private static final double cardTextMargin = 0.05; //margin between card border and text
 
     //needs to be passed the displayList
-    public LevelSelectGraphics(ArrayList<LevelCard> l){
-        this.list = l;
-
+    public LevelSelectGraphics(){
+        //populate list
+    	updateList();
         //generate all dimensions for graphical objects
         Layout.initialize();
     }
@@ -42,7 +43,8 @@ public class LevelSelectGraphics {
     	
     	//draw header text
     	g.setColor(Colors.border);
-    	g.drawString("Level Select", 10, (int)Layout.headerH/2);
+    	g.drawString("Level Select " + Integer.toString(LevelSelect.getPage()) + "/" +
+    	Integer.toString(LevelSelect.getNumPages()), 10, (int)Layout.headerH/2);
     	
     	//draw header border
     	g.drawLine(0, Layout.headerH, getWidth(), Layout.headerH);
@@ -72,6 +74,10 @@ public class LevelSelectGraphics {
     	for(int i = 0; i < list.size(); i ++) {
     		drawCard(g, list.get(i), i);
     	}
+    }
+    //update display list
+    public void updateList() {
+    	list = LevelSelect.getPageCards();
     }
 
     public static int getWidth(){

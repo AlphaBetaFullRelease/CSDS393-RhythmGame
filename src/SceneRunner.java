@@ -2,7 +2,7 @@ import java.util.*;
 import javax.swing.JFrame;
 
 // this is the main class. it starts the game and handles all scenes
-public class SceneRunner extends JFrame{
+public class SceneRunner extends JFrame {
     // target frame rate
     private final double targetFPS = 60;
     private final long targetFrameMillis = (long)(1000 / targetFPS);
@@ -31,8 +31,11 @@ public class SceneRunner extends JFrame{
     	Level testLevel = new Level("Test", "Ricardo", ng);
     	
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(new Game(testLevel));
-
+        SceneRunner sceneRunner = new SceneRunner(new LevelSelect());
+        
+        //make JFrame visible
+        //sceneRunner.setVisible(true);
+        
         // main loop
         while(true){
             // update loaded scene
@@ -56,6 +59,9 @@ public class SceneRunner extends JFrame{
         changeScene(scene);
 
         // create the window
+        this.setSize(800, 450);
+        //this.setLayout(null);
+        //scene.getPanel().setBounds(0, 0, 800, 450);
         this.add(scene.getPanel());
         this.pack();
         this.setLocationRelativeTo(null);

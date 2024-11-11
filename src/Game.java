@@ -34,7 +34,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.001;
+    private double noteSpeed = 0.0005;
 
     // sets up the game
     public Game(Level level) {
@@ -88,7 +88,7 @@ public class Game extends JPanel implements ActionListener, Scene {
         	//iterate through notes
         	for (int i = 0; i < track.size(); i ++) {
         		Note n = track.get(i);
-        		if (n.getPos() > 2) {
+        		if (n.getPos() > 1) {
         			track.remove(i); //delete note
         			i --;
         		}  else n.updatePos(noteSpeed * delta); //move notes that aren't off-screen
