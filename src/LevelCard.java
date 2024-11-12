@@ -11,7 +11,7 @@ public class LevelCard {
     public LevelCard(Level l) {
     	this.title = l.getTitle();
     	this.creator = l.getCreator();
-    	this.duration = l.getDuration();
+    	this.duration = l.getDurationString();
     	this.difficulty = l.getDifficulty();
     }
     

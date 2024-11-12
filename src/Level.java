@@ -47,8 +47,12 @@ public class Level {
     	return difficulty;
     }
     
-    public String getDuration() {
-    	return "00:00:00";
+    public String getDurationString() {
+        int hrs = (int) (duration / 60 / 60);
+        int mins = (int) (duration / 60 % 60);
+        int secs = (int) (duration % 60);
+
+        return String.format("%2d:%2d:%2d", hrs, mins, secs);
     }
 
     public String getSongPath(){
@@ -71,10 +75,10 @@ public class Level {
         File file = new File(path);
         Scanner scanner = new Scanner(file);
         String openBrackets = "";
-        String title = "", author = "";
+        String title = "", author = "", audioPath = "";
         boolean colonSeen = false, inString = false;
         String key = "", value = "";
-        int lane = -1, tempo = -1;
+        int lane = -1, tempo = -1, difficulty = -1;
         double time = -1, duration = -1, delay = -1;
         long pos = -1;
         ArrayList<ArrayList<StoredNote>> notes = new ArrayList<>(4);
@@ -130,8 +134,12 @@ public class Level {
                 author = value;
             } else if (key.equals("delay")) {
                 delay = Integer.parseInt(value);
+            } else if (key.equals("difficulty")) {
+                difficulty = Integer.parseInt(value);
             } else if (key.equals("tempo")) {
                 tempo = Integer.parseInt(value);
+            } else if (key.equals("audio")) {
+                audioPath = value;
             } else if (key.equals("time")) {
                 time = Double.parseDouble(value);
                 pos = (int) ((60 / tempo * time + delay) * 1000);
@@ -150,7 +158,14 @@ public class Level {
             }
         }
 
-        return new Level(title, author, tracks);
+        Level level = new Level(title, author, tracks);
+        level.setDifficulty(difficulty);
+        level.setSongPath(audioPath);
+        level.setStartDelay((long) (delay * 1000));
+        level.setTempo(tempo);
+        level.calculateDuration();
+
+        return level;
     }
     
     //get the size of noteGrid[i]
@@ -184,9 +199,42 @@ public class Level {
         return null;
     }
 
+    public void setSongPath(String songPath) {
+        this.songPath = songPath;
+    }
+
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
+    }
+
+    public void setStartDelay(long startDelay) {
+        this.startDelay = startDelay;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    private void calculateDuration() {
+        int lastNoteTime = (int) (noteGrid[0][noteGrid[0].length - 1].getNote().getPos() / 1000);
+
+        for (int i = 1; i < 4; i++) {
+            if (noteGrid[i].length > 0) {
+                if (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000 > lastNoteTime) {
+                    lastNoteTime = (int) (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000);
+                }
+            }
+        }
+
+        this.duration = lastNoteTime;
+    }
+
+    // remove this main method once all testing of the file is complete
     public static void main(String[] args) {
         try {
-            loadFromFile("src\\test.json");
+            Level level = loadFromFile("src\\test.json");
+            System.out.println(level.duration);
+            System.out.println(level.getDurationString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
