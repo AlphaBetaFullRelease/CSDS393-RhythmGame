@@ -148,5 +148,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
             cardList.add(new LevelCard(level));
         //calculate the number of pages
         numPages = (int) Math.ceil((double) (cardList.size() + 1) / pageMax);
+        //sort cards by Title A-Z
+        sortCardsTitle();
     }
 }

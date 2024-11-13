@@ -51,6 +51,42 @@ public class LevelSelectGraphics {
         pBody.setLayout(null);
         pBody.setBounds(0, contButtonHeight, width, height - contButtonHeight);
         pBody.setBackground(cBody);
+        //dropdown
+        JComboBox bSort = new JComboBox(new String[]{"Title A-Z","Author A-Z","Diff Asc", "Diff Desc", "Dur Asc", "Dur Desc"});
+        bSort.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        String s = (String) bSort.getSelectedItem();
+                        //TODO: just call the specific methods from levelselect here
+                        switch (s) {
+                            case "Title A-Z":
+                                levelSelect.sortCardsTitle();
+                                break;
+                            case "Author A-Z":
+                                levelSelect.sortCardsAuthor();
+                                break;
+                            case "Diff Asc":
+                                levelSelect.sortCardsDiff(true);
+                                break;
+                            case "Diff Desc":
+                                levelSelect.sortCardsDiff(false);
+                                break;
+                            case "Dur Asc":
+                                //
+                                break;
+                            case "Dur Desc":
+                                //
+                                break;
+                        }
+                        //refresh graphics
+                        refreshList();
+                    }
+                }
+        );
+        bSort.setBackground(cButton);
+        bSort.setBorder(BorderFactory.createTitledBorder("Sort"));
+        bSort.setBounds(width - contButtonWidth, 0, contButtonWidth, contButtonHeight);
+        pHeader.add(bSort);
         //buttons
         //only draw them if there is more than one page
         if (levelSelect.getNumPages() > 1) {
@@ -111,7 +147,7 @@ public class LevelSelectGraphics {
                         //reload levels
                         levelSelect.loadLevelsCards();
                         //reset sort method to reflect changes
-
+                        bSort.setSelectedIndex(0);
                         //refresh list graphics
                         refreshList();
                     }
@@ -131,42 +167,6 @@ public class LevelSelectGraphics {
         pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
         pageNumberWidth, contButtonHeight);
         pHeader.add(pageDisplay);
-        //dropdown
-        JComboBox bSort = new JComboBox(new String[]{"Title A-Z","Author A-Z","Diff Asc", "Diff Desc", "Dur Asc", "Dur Desc"});
-        bSort.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        String s = (String) bSort.getSelectedItem();
-                        //TODO: just call the specific methods from levelselect here
-                        switch (s) {
-                            case "Title A-Z":
-                                levelSelect.sortCardsTitle();
-                                break;
-                            case "Author A-Z":
-                                levelSelect.sortCardsAuthor();
-                                break;
-                            case "Diff Asc":
-                                levelSelect.sortCardsDiff(true);
-                                break;
-                            case "Diff Desc":
-                                levelSelect.sortCardsDiff(false);
-                                break;
-                            case "Dur Asc":
-                                //
-                                break;
-                            case "Dur Desc":
-                                //
-                                break;
-                        }
-                        //refresh graphics
-                        refreshList();
-                    }
-                }
-        );
-        bSort.setBackground(cButton);
-        bSort.setBorder(BorderFactory.createTitledBorder("Sort"));
-        bSort.setBounds(width - contButtonWidth, 0, contButtonWidth, contButtonHeight);
-        pHeader.add(bSort);
         //level list
         listDisplay = new ListDisplay();
         listDisplay.setBounds(contButtonWidth, 0, cardWidth, height - contButtonHeight);
@@ -198,6 +198,62 @@ public class LevelSelectGraphics {
             //set list border
             this.setBorder(BorderFactory.createLoweredBevelBorder());
     	}
+        //method to draw level cards
+        private JPanel cardgetDisplay(LevelCard card) {
+            //initialize display panel
+            JPanel display = new JPanel();
+            //set layout to null and set dimensions
+            display.setLayout(null);
+            display.setBounds(0, 0, 600, 80);
+            //make background transparent
+            display.setOpaque(false);
+            //initialize header
+            JPanel header = new JPanel();
+            header.setLayout(null);
+            header.setBounds(0, 0, 480, 80);
+            header.setOpaque(false);
+            display.add(header);
+            //initialize score area
+            JPanel scoreArea = new JPanel();
+            scoreArea.setLayout(null);
+            scoreArea.setBounds(480, 0, 120, 80);
+            scoreArea.setOpaque(false);
+            display.add(scoreArea);
+            //text
+            JLabel score = new JLabel("No Highscore");
+            score.setBounds(0, 0, 120, 20);
+            scoreArea.add(score);
+
+            JLabel grade = new JLabel("-");
+            grade.setBounds(0, 20, 120, 40);
+            scoreArea.add(grade);
+
+            JLabel title = new JLabel(card.getTitle());
+            title.setBounds(0, 0, 252, 27);
+            header.add(title);
+
+            JLabel author = new JLabel(card.getCreator());
+            author.setBounds(0, 27, 360, 26);
+            header.add(author);
+
+            JLabel duration = new JLabel(card.getDuration());
+            duration.setBounds(0, 53, 360, 26);
+            header.add(duration);
+
+            for (int i = 1; i <= 4; i ++) {
+                //create star panel (this can be changed to an icon later)
+                JPanel star = new JPanel();
+                //position panel
+                star.setBounds(252 + 27 * (i-1), 0, 27, 27);
+                //set color
+                if (i <= card.getDifficulty()) star.setBackground(Color.yellow);
+                else star.setBackground(Color.gray);
+                //add to difficulty display
+                header.add(star);
+            }
+
+            return display;
+        }
     	//method to draw the list
     	private void drawList(ArrayList<LevelCard> list) {
     		//clear list
@@ -211,7 +267,7 @@ public class LevelSelectGraphics {
                 cardButton.setBackground(cCard);
     			cardButton.setBounds(0, cardHeight * (i -1), cardWidth, cardHeight);
                 //get level card display panel and add it to the button
-    			cardButton.add(list.get(i - 1).getDisplay());
+    			cardButton.add(cardgetDisplay(list.get(i - 1)));
                 //add card button to the listDisplay
     			this.add(cardButton);
     		}
