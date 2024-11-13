@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
+    private int id;
     //store note data (kept in order by spawn time)
     private StoredNote[][] noteGrid;
     //store path to mp3
@@ -36,7 +37,7 @@ public class Level {
         for(int i = 0; i < spawnIndex.length; i++)
             spawnIndex[i] = 0;
     }
-    //code that generates a unique id using the system clock
+    //TODO: code that generates a unique id using the system clock
     private static int generateId() {
     	return 420;
     }

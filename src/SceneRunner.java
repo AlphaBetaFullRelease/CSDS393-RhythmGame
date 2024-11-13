@@ -34,7 +34,7 @@ public class SceneRunner extends JFrame {
         Game game = new Game(testLevel);
         
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(game);
+        SceneRunner sceneRunner = new SceneRunner(new LevelSelect());
 
         // main loop
         while(true){

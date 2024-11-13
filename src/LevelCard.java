@@ -19,11 +19,11 @@ public class LevelCard {
     	this.duration = l.getDurationString();
     	this.difficulty = l.getDifficulty();
     }
-    
+    //method that creates a JPanel display of the level card
     public JPanel getDisplay() {
     	//initialize display panel
     	JPanel display = new JPanel();
-    	//set layout to null
+    	//set layout to null and set dimensions
     	display.setLayout(null);
     	display.setBounds(0, 0, 600, 80);
     	//make background transparent

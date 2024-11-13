@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 //does all of the graphical work for the level select
@@ -47,6 +48,7 @@ public class LevelSelectGraphics {
         pBody.setBackground(Color.orange);
         //buttons
         JButton bPrev = new JButton("<");
+        //add action listener to go to previous page
         bPrev.addActionListener(
         	new ActionListener() {
         		public void actionPerformed(ActionEvent e) {
@@ -58,6 +60,7 @@ public class LevelSelectGraphics {
         pBody.add(bPrev);
         
         JButton bNext = new JButton(">");
+        //add action listener to go to next page
         bNext.addActionListener(
         	new ActionListener() {
         		public void actionPerformed(ActionEvent e) {
@@ -73,7 +76,19 @@ public class LevelSelectGraphics {
         pHeader.add(bExit);
         
         JButton bOpen = new JButton("level folder");
-        bOpen.setBounds(0, height - contButtonHeight, contButtonWidth, contButtonHeight);
+        //add action listener to open level folder path in file explorer
+        bOpen.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            Desktop.getDesktop().open(levelSelect.getLevelsPath());
+                        } catch (IOException e1) {
+                            //TODO: idk what to do here
+                        }
+                    }
+                }
+        );
+        bOpen.setBounds(0, height -  2 * contButtonHeight, contButtonWidth, contButtonHeight);
         pBody.add(bOpen);
         //labels
         JLabel lHeader = new JLabel("Level Select");
@@ -122,10 +137,14 @@ public class LevelSelectGraphics {
     		this.removeAll();
     		//draw list
     		for (int i = 1; i <= list.size(); i ++) {
+                //create button
     			JButton cardButton = new JButton();
+                //set layout and position
     			cardButton.setLayout(null);
     			cardButton.setBounds(0, cardHeight * (i -1), cardWidth, cardHeight);
+                //get level card display panel and add it to the button
     			cardButton.add(list.get(i - 1).getDisplay());
+                //add card button to the listDisplay
     			this.add(cardButton);
     		}
     	}

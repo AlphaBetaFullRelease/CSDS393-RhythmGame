@@ -2,10 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.*;
+import java.io.*;
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
+    //DEBUG temp level folder path
+    private final File levelsPath = new File("C:\\\\Users\\ricar\\Documents\\github\\CSDS393-RhythmGame\\levels");
 	//level list
     private ArrayList<Level> levels = new ArrayList<Level>();
     //level card list
@@ -13,28 +17,21 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     //cards shown per page
     private final int pageMax = 5;
     //number of pages in use
-    private int numPages;
+    private int numPages = 1;
     //current page number
     private int page;
     //graphics handler for level select
     private final LevelSelectGraphics graphicsHandler;
     
     public LevelSelect() {
-    	//DEBUG generate test level data
-    	StoredNote[][] ng = {
-    			{new StoredNote(600, 0), new StoredNote(1000, 0)},
-    			{new StoredNote(800, 1), new StoredNote(1200, 1)},
-    			{new StoredNote(600, 2), new StoredNote(1000, 2)},
-    			{new StoredNote(800, 3), new StoredNote(1200, 3)}
-    	};
-    	for (int i = 1; i <= 20; i ++)
-    		levels.add(new Level("Test " + i, "Ricardo", ng));
+    	//load level data
+        loadLevels();
         //create cardList
-        for (int i = 0; i < levels.size() - 1; i ++)
+        for (int i = 0; i < levels.size(); i ++)
         	cardList.add(new LevelCard(levels.get(i)));
         //sort cardList
-        
-        //calculate number of pages
+        //sortCards();
+        //calculate the number of pages
         numPages = (int) Math.ceil((double) cardList.size() / pageMax);
         //start at first page
         page = 1;
@@ -48,7 +45,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     }
     
     @Override
-    public void changeScene(Scene scene) {
+    public void setSceneRunner(SceneRunner sr) {
     	//No implementation so far...
     }
     
@@ -86,15 +83,33 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     	graphicsHandler.refreshList();
     }
     //get current page number
-    public int getPage() {
-    	return page;
-    }
+    public int getPage() { return page; }
     //get number of pages
-    public int getNumPages() {
-    	return numPages;
-    }
+    public int getNumPages() { return numPages; }
     //get max number of cards per page
-    public int getPageMax() {
-    	return pageMax;
+    public int getPageMax() { return pageMax; }
+    //get level folder path
+    public File getLevelsPath() { return levelsPath; }
+    //method to sort levelCard list
+    public void sortCards() {
+        //no implementation...
+    }
+    //load levels from level folder
+    public void loadLevels() {
+        //iterate through folders in levelsPath
+        for (final File entry : levelsPath.listFiles()) {
+            //ignore entry if it is not a folder
+            if (entry.isDirectory()) {
+                //get json file path, assumes all json files are named 'level.json'
+                File jsonPath = new File(entry.getPath() + "\\level.json");
+                //attempt to read json file
+                try {
+                    levels.add(Level.loadFromFile(jsonPath.getPath()));
+                } catch (java.io.FileNotFoundException e) {
+                    //TODO: how to handle this exception?
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
