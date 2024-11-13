@@ -5,9 +5,9 @@ public class StoredNote {
     // note object
     private Note note;
     // create a StoredNote
-    public StoredNote(long pos, int col) {
+    public StoredNote(long pos, int col, int dur) {
         this.posMillis = pos;
-        this.note = new Note(col);
+        this.note = new Note(col, dur);
     }
     
     // get the position of the StoredNote

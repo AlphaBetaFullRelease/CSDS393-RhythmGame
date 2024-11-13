@@ -52,7 +52,7 @@ public class Level {
         int mins = (int) (duration / 60 % 60);
         int secs = (int) (duration % 60);
 
-        return String.format("%2d:%2d:%2d", hrs, mins, secs);
+        return String.format("%02d:%02d:%02d", hrs, mins, secs);
     }
 
     public String getSongPath(){
@@ -142,12 +142,12 @@ public class Level {
                 audioPath = value;
             } else if (key.equals("time")) {
                 time = Double.parseDouble(value);
-                pos = (int) ((60 / tempo * time + delay) * 1000);
+                pos = (int) ((60.0 / tempo * time + delay) * 1000);
             } else if (key.equals("lane")) {
                 lane = Integer.parseInt(value);
             } else if (key.equals("duration")) {
                 duration = Double.parseDouble(value);
-                notes.get(lane).add(new StoredNote(pos, lane));
+                notes.get(lane).add(new StoredNote(pos, lane, (int) duration));
             }
         }
 
@@ -216,17 +216,17 @@ public class Level {
     }
 
     private void calculateDuration() {
-        int lastNoteTime = (int) (noteGrid[0][noteGrid[0].length - 1].getNote().getPos() / 1000);
+        double lastNoteTime = (noteGrid[0][noteGrid[0].length - 1].getPos() + noteGrid[0][noteGrid[0].length - 1].getNote().getDur()) / 1000.0;
 
         for (int i = 1; i < 4; i++) {
             if (noteGrid[i].length > 0) {
-                if (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000 > lastNoteTime) {
-                    lastNoteTime = (int) (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000);
+                if ((noteGrid[i][noteGrid[i].length - 1].getPos() + noteGrid[i][noteGrid[i].length - 1].getNote().getDur()) / 1000.0 > lastNoteTime) {
+                    lastNoteTime = (noteGrid[i][noteGrid[i].length - 1].getPos() + noteGrid[i][noteGrid[i].length - 1].getNote().getDur()) / 1000.0;
                 }
             }
         }
 
-        this.duration = lastNoteTime;
+        this.duration = (int) lastNoteTime;
     }
 
     // remove this main method once all testing of the file is complete
