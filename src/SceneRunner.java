@@ -105,7 +105,7 @@ public class SceneRunner extends JFrame{
     }
 
     // updates the loaded scene and delta time
-    private void update() {
+    public void update() {
         // check if frame count should be reset
         if(numFrames == resetTrackEveryN){
             numFrames = 0; // reset frame count
@@ -125,7 +125,7 @@ public class SceneRunner extends JFrame{
     }
 
     // waits until the next frame (or doesn't wait at all if more than one frame's worth of time has passed)
-    private void waitUntilNextFrame(){
+    public void waitUntilNextFrame(){
         // get diff between time passed and target amount of time
         long diff = targetFrameMillis - deltaTime();
 
