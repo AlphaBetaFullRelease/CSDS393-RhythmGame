@@ -66,6 +66,10 @@ public class Level {
         return songPath;
     }
 
+    public String getSongPath(){
+        return songPath;
+    }
+
 	//saves the level data to a json file
     public void saveToFile(String dest) {
 
