@@ -21,13 +21,8 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     private final LevelSelectGraphics graphicsHandler;
     
     public LevelSelect() {
-    	//load level data
-        loadLevels();
-        //create cardList
-        for (Level level : levels)
-        	cardList.add(new LevelCard(level));
-        //calculate the number of pages
-        numPages = (int) Math.ceil((double) (cardList.size() + 1) / pageMax);
+    	//load level data and populate card list
+        loadLevelsCards();
         //start at first page
         page = 1;
         //initialize GUI, pass this object as parameter
@@ -85,24 +80,54 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     public int getPageMax() { return pageMax; }
     //get level folder path
     public File getLevelsPath() { return levelsPath; }
-    //method to sort levelCard list
-    public void sortCards(int type) {
-        switch (type) {
-            case 0:
-                //Title A-Z
-            break;
-            case 1:
-                //Author A-Z
-            break;
-            default:
-                //default
-            break;
+    //method to sort levelCard list by Title A-Z
+    public void sortCardsTitle() {
+        for (int i = 0; i < cardList.size() - 1; i ++) {
+            for (int j = i + 1; j < cardList.size(); j ++) {
+                String str1 = cardList.get(i).getTitle();
+                String str2 = cardList.get(j).getTitle();
+                if (str1.compareTo(str2) > 0) {
+                    LevelCard temp = cardList.get(i);
+                    cardList.set(i, cardList.get(j));
+                    cardList.set(j, temp);
+                }
+            }
         }
-        //refresh graphics
-        graphicsHandler.refreshList();
+    }
+    //method to sort levelCard list by Author A-Z
+    public void sortCardsAuthor() {
+        for (int i = 0; i < cardList.size() - 1; i ++) {
+            for (int j = i + 1; j < cardList.size(); j ++) {
+                String str1 = cardList.get(i).getCreator();
+                String str2 = cardList.get(j).getCreator();
+                if (str1.compareTo(str2) > 0) {
+                    LevelCard temp = cardList.get(i);
+                    cardList.set(i, cardList.get(j));
+                    cardList.set(j, temp);
+                }
+            }
+        }
+    }
+    //method to sort levelCard list by Difficulty, asc determines sort order
+    public void sortCardsDiff(boolean asc) {
+        for (int i = 0; i < cardList.size() - 1; i ++) {
+            for (int j = i + 1; j < cardList.size(); j ++) {
+                Integer int1 = cardList.get(i).getDifficulty();
+                Integer int2 = cardList.get(j).getDifficulty();
+                if (asc ? (int1.compareTo(int2) > 0) : (int1.compareTo(int2) < 0)) {
+                    LevelCard temp = cardList.get(i);
+                    cardList.set(i, cardList.get(j));
+                    cardList.set(j, temp);
+                }
+            }
+        }
     }
     //load levels from level folder
-    public void loadLevels() {
+    public void loadLevelsCards() {
+        //clear level list
+        levels.clear();
+        //clear level card list
+        cardList.clear();
         //iterate through folders in levelsPath
         for (final File entry : levelsPath.listFiles()) {
             //ignore entry if it is not a folder
@@ -118,5 +143,10 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
                 }
             }
         }
+        //create cardList
+        for (Level level : levels)
+            cardList.add(new LevelCard(level));
+        //calculate the number of pages
+        numPages = (int) Math.ceil((double) (cardList.size() + 1) / pageMax);
     }
 }

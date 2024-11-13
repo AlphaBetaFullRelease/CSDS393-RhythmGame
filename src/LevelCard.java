@@ -43,7 +43,7 @@ public class LevelCard {
     	scoreArea.setOpaque(false);
     	display.add(scoreArea);
     	//text
-    	JLabel score = new JLabel("------");
+    	JLabel score = new JLabel("No Highscore");
     	score.setBounds(0, 0, 120, 20);
     	scoreArea.add(score);
     	
@@ -52,7 +52,7 @@ public class LevelCard {
     	scoreArea.add(grade);
     	
     	JLabel title = new JLabel(getTitle());
-    	title.setBounds(0, 0, 360 - 20, 27);
+    	title.setBounds(0, 0, 252, 27);
     	header.add(title);
     	
     	JLabel author = new JLabel(getCreator());
@@ -63,19 +63,18 @@ public class LevelCard {
     	duration.setBounds(0, 53, 360, 26);
     	header.add(duration);
 
-		//draw difficulty
 		for (int i = 1; i <= 4; i ++) {
-			//create panel
+			//create star panel (this can be changed to an icon later)
 			JPanel star = new JPanel();
 			//position panel
-			star.setBounds(340 + 27 * (i-1), 0, 27, 27);
+			star.setBounds(252 + 27 * (i-1), 0, 27, 27);
 			//set color
 			if (i <= getDifficulty()) star.setBackground(Color.yellow);
 			else star.setBackground(Color.gray);
-			//add to header
+			//add to difficulty display
 			header.add(star);
 		}
-    	
+
     	return display;
     }
     

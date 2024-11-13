@@ -104,6 +104,19 @@ public class LevelSelectGraphics {
         pBody.add(bOpen);
 
         JButton bRefresh = new JButton("refresh");
+        //add action listener to refresh level data
+        bRefresh.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        //reload levels
+                        levelSelect.loadLevelsCards();
+                        //reset sort method to reflect changes
+
+                        //refresh list graphics
+                        refreshList();
+                    }
+                }
+        );
         bRefresh.setBackground(cButton);
         bRefresh.setBounds(contButtonWidth + cardWidth - 3 * pageNumberWidth, 0, contButtonWidth, contButtonHeight);
         pHeader.add(bRefresh);
@@ -119,7 +132,37 @@ public class LevelSelectGraphics {
         pageNumberWidth, contButtonHeight);
         pHeader.add(pageDisplay);
         //dropdown
-        JComboBox bSort = new JComboBox(new String[]{"Name A-Z","Author A-Z","Diff Asc", "Diff Desc", "Dur Asc", "Dur Desc"});
+        JComboBox bSort = new JComboBox(new String[]{"Title A-Z","Author A-Z","Diff Asc", "Diff Desc", "Dur Asc", "Dur Desc"});
+        bSort.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        String s = (String) bSort.getSelectedItem();
+                        //TODO: just call the specific methods from levelselect here
+                        switch (s) {
+                            case "Title A-Z":
+                                levelSelect.sortCardsTitle();
+                                break;
+                            case "Author A-Z":
+                                levelSelect.sortCardsAuthor();
+                                break;
+                            case "Diff Asc":
+                                levelSelect.sortCardsDiff(true);
+                                break;
+                            case "Diff Desc":
+                                levelSelect.sortCardsDiff(false);
+                                break;
+                            case "Dur Asc":
+                                //
+                                break;
+                            case "Dur Desc":
+                                //
+                                break;
+                        }
+                        //refresh graphics
+                        refreshList();
+                    }
+                }
+        );
         bSort.setBackground(cButton);
         bSort.setBorder(BorderFactory.createTitledBorder("Sort"));
         bSort.setBounds(width - contButtonWidth, 0, contButtonWidth, contButtonHeight);
