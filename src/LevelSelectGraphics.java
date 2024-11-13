@@ -26,6 +26,11 @@ public class LevelSelectGraphics {
     private final int contButtonWidth = 100;
     private final int contButtonHeight = 50;
     private final int pageNumberWidth = 50;
+    //colors
+    private final Color cHeader = Color.cyan;
+    private final Color cButton = Color.pink;
+    private final Color cBody = Color.blue;
+    private final Color cCard = Color.white;
     
     public LevelSelectGraphics(LevelSelect s) {
     	//get level select
@@ -40,38 +45,44 @@ public class LevelSelectGraphics {
         JPanel pHeader = new JPanel();
         pHeader.setLayout(null);
         pHeader.setBounds(0, 0, width, contButtonHeight);
-        pHeader.setBackground(Color.green);
+        pHeader.setBackground(cHeader);
         
         JPanel pBody = new JPanel();
         pBody.setLayout(null);
         pBody.setBounds(0, contButtonHeight, width, height - contButtonHeight);
-        pBody.setBackground(Color.orange);
+        pBody.setBackground(cBody);
         //buttons
-        JButton bPrev = new JButton("<");
-        //add action listener to go to previous page
-        bPrev.addActionListener(
-        	new ActionListener() {
-        		public void actionPerformed(ActionEvent e) {
-        			levelSelect.changePage(false);
-        		}
-        	}
-        );
-        bPrev.setBounds(0, navButtonY, navButtonWidth, navButtonHeight);
-        pBody.add(bPrev);
-        
-        JButton bNext = new JButton(">");
-        //add action listener to go to next page
-        bNext.addActionListener(
-        	new ActionListener() {
-        		public void actionPerformed(ActionEvent e) {
-        			levelSelect.changePage(true);
-        		}
-        	}
-        );
-        bNext.setBounds(width - navButtonWidth, navButtonY, navButtonWidth, navButtonHeight);
-        pBody.add(bNext);
-        
+        //only draw them if there is more than one page
+        if (levelSelect.getNumPages() > 1) {
+            JButton bPrev = new JButton("<");
+            //add action listener to go to previous page
+            bPrev.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            levelSelect.changePage(false);
+                        }
+                    }
+            );
+            bPrev.setBackground(cButton);
+            bPrev.setBounds(0, navButtonY, navButtonWidth, navButtonHeight);
+            pBody.add(bPrev);
+
+            JButton bNext = new JButton(">");
+            //add action listener to go to next page
+            bNext.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            levelSelect.changePage(true);
+                        }
+                    }
+            );
+            bNext.setBackground(cButton);
+            bNext.setBounds(width - navButtonWidth, navButtonY, navButtonWidth, navButtonHeight);
+            pBody.add(bNext);
+        }
+
         JButton bExit = new JButton("main menu");
+        bExit.setBackground(cButton);
         bExit.setBounds(0, 0, contButtonWidth, contButtonHeight);
         pHeader.add(bExit);
         
@@ -88,25 +99,34 @@ public class LevelSelectGraphics {
                     }
                 }
         );
+        bOpen.setBackground(cButton);
         bOpen.setBounds(0, height -  2 * contButtonHeight, contButtonWidth, contButtonHeight);
         pBody.add(bOpen);
+
+        JButton bRefresh = new JButton("refresh");
+        bRefresh.setBackground(cButton);
+        bRefresh.setBounds(contButtonWidth + cardWidth - 3 * pageNumberWidth, 0, contButtonWidth, contButtonHeight);
+        pHeader.add(bRefresh);
         //labels
         JLabel lHeader = new JLabel("Level Select");
         lHeader.setBounds(contButtonWidth, 0, cardWidth - pageNumberWidth, contButtonHeight);
         pHeader.add(lHeader);
         
         pageDisplay = new JLabel("1");
+        pageDisplay.setBackground(cButton);
+        pageDisplay.setBorder(BorderFactory.createTitledBorder("#"));
         pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
         pageNumberWidth, contButtonHeight);
         pHeader.add(pageDisplay);
         //dropdown
-        JComboBox bSort = new JComboBox(new String[]{"Name A-Z","Author A-Z","Diff Asc"});
+        JComboBox bSort = new JComboBox(new String[]{"Name A-Z","Author A-Z","Diff Asc", "Diff Desc", "Dur Asc", "Dur Desc"});
+        bSort.setBackground(cButton);
+        bSort.setBorder(BorderFactory.createTitledBorder("Sort"));
         bSort.setBounds(width - contButtonWidth, 0, contButtonWidth, contButtonHeight);
         pHeader.add(bSort);
         //level list
         listDisplay = new ListDisplay();
         listDisplay.setBounds(contButtonWidth, 0, cardWidth, height - contButtonHeight);
-        listDisplay.setBackground(Color.blue);
         pBody.add(listDisplay);
         
         mainPanel.add(pHeader);
@@ -130,6 +150,10 @@ public class LevelSelectGraphics {
     	public ListDisplay() {
     		//set layout
     		this.setLayout(null);
+            //make list transparent
+            this.setOpaque(false);
+            //set list border
+            this.setBorder(BorderFactory.createLoweredBevelBorder());
     	}
     	//method to draw the list
     	private void drawList(ArrayList<LevelCard> list) {
@@ -141,6 +165,7 @@ public class LevelSelectGraphics {
     			JButton cardButton = new JButton();
                 //set layout and position
     			cardButton.setLayout(null);
+                cardButton.setBackground(cCard);
     			cardButton.setBounds(0, cardHeight * (i -1), cardWidth, cardHeight);
                 //get level card display panel and add it to the button
     			cardButton.add(list.get(i - 1).getDisplay());

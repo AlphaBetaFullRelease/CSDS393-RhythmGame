@@ -32,9 +32,11 @@ public class SceneRunner extends JFrame {
 
         // create game
         Game game = new Game(testLevel);
+        // create level select
+        LevelSelect levelSelect = new LevelSelect();
         
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(new LevelSelect());
+        SceneRunner sceneRunner = new SceneRunner(levelSelect);
 
         // main loop
         while(true){
@@ -60,8 +62,6 @@ public class SceneRunner extends JFrame {
 
         // create the window
         this.setSize(800, 450);
-        //this.setLayout(null);
-        //scene.getPanel().setBounds(0, 0, 800, 450);
         this.add(scene.getPanel());
         this.pack();
         this.setLocationRelativeTo(null);
