@@ -78,13 +78,18 @@ public class GameGraphics {
     }
 
     // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
-    public static double getTargetStart(){
-        return targetPlace - noteWidth / getWidth();
+    public double getTargetStart(){
+        return targetPlace - noteWidth;
     }
 
     // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
-    public static double getTargetEnd(){
-        return targetPlace + noteWidth / getWidth();
+    public double getTargetEnd(){
+        return targetPlace + noteWidth;
+    }
+
+    // returns the center position of the target
+    public double getTargetCenter(){
+        return targetPlace;
     }
 
     public static int getWidth(){

@@ -20,27 +20,28 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // handles game input
     private final InputEventDriver inputHandler;
-
     // does all graphics
     private final GameGraphics graphicsHandler;
+    // plays sound
+    private final GameAudio gameAudio;
+
+    // reference to the sceneRunner so scenes can be changed
+    private SceneRunner sceneChanger;
 
     // current level
     private Level level;
-
-    // current level note grid indexes
-    private int[] noteIndex;
 
     // time elapsed
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.0005;
+    private double noteSpeed = 0.0001;
 
     // sets up the game
     public Game(Level level) {
     	// set level to play
     	this.level = level;
-    	
+
         // JPanel properties
         this.setPreferredSize(new Dimension(800, 450)); // screen size/resolution can be changed later, I just picked one to start
         this.setFocusable(true);
@@ -52,59 +53,76 @@ public class Game extends JPanel implements ActionListener, Scene {
         // set up graphics handler
         graphicsHandler = new GameGraphics(gameState);
 
+        // set up audio
+        gameAudio = new GameAudio();
+        // load song
+        String pathToSong = level.getSongPath();
+        // play song if file exists
+        if(!pathToSong.isEmpty())
+            gameAudio.loadSong(level.getSongPath());
+
         // instantiate fields
         noteHits = 0;
         noteMisses = 0;
         health = 0;
         score = 0;
-
-        //initialize noteGrid index
-        this.noteIndex = new int[numTracks];
     }
 
     // this is the frame update function
     @Override
     public void update(long delta) {
         elapsedTime += delta; //update elapsed time
-        // check for new notes to spawn
-        for (int i = 0; i <= noteIndex.length - 1; i ++){ //iterate through notegrid tracks
-        	double diff = 0;
-        	for (int y = noteIndex[i]; y < level.getTrackLength(i) && diff >= 0; y ++) {
-        		StoredNote sNote = level.getStoredNote(i, y);
-        		diff = elapsedTime - sNote.getPos();
-        		if (diff >= 0) {
-        			Note n = sNote.getNote();
-        			n.updatePos(noteSpeed * diff);
-        			gameState.spawnNote(i, n);
-        			noteIndex[i] ++;
-        		} else diff = -1;
-        	}
+
+        // check for new notes to spawn (only checks once per track bc why would 2 notes spawn in one frame)
+        // spawnTime is current time - the amount of time it takes for a note to travel to the target line
+        long spawnTime = elapsedTime - (long)(graphicsHandler.getTargetCenter() / noteSpeed);
+        for(int track = 0; track < numTracks; track++){ // iterate through tracks
+            // get next note
+            StoredNote nextNote = level.getNextNote(track, spawnTime);
+
+            // check that next note is not null (null means no notes can spawn on this track right now)
+            if(nextNote != null){
+                // calculate precise spawn location / offset (in ms)
+                float spawnOffset = spawnTime - nextNote.getPos();
+                
+                // get note object
+                Note note = nextNote.getNote();
+
+                // set initial spawn position
+                note.updatePos(spawnOffset * noteSpeed);
+
+                // add note to the list of active notes
+                gameState.spawnNote(track, note);
+            }
         }
-        // check for notes that have moved off screen
+
+        // iterate through active notes
         ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
         //iterate through tracks
-        for(Iterator<ArrayList<Note>> it = tracks.iterator(); it.hasNext();) {
-        	ArrayList<Note> track = it.next();
-        	//iterate through notes
-        	for (int i = 0; i < track.size(); i ++) {
-        		Note n = track.get(i);
-        		if (n.getPos() > 1) {
-        			track.remove(i); //delete note
-        			i --;
-        		}  else n.updatePos(noteSpeed * delta); //move notes that aren't off-screen
-        	}
+        for (ArrayList<Note> track : tracks) {
+            //iterate through notes in the track
+            for (int i = 0; i < track.size(); i ++) {
+                Note n = track.get(i);
+                // check if note should despawn
+                if (n.getPos() > 1) {
+                    // despawn note
+                    track.remove(i);
+                    i--;
+                } else
+                    n.updatePos(noteSpeed * delta); // move note
+            }
         }
-        gameState.setTracks(tracks);
+
         // check for end of song
 
         // draw frame
         repaint();
     }
 
-    // signals a scene swap to the SceneRunner
+    // sets reference for the sceneChanger
     @Override
-    public void changeScene(Scene scene) {
-        // unimplemented for now becasue the demo only uses one scene
+    public void setSceneRunner(SceneRunner sceneRunner){
+        sceneChanger = sceneRunner;
     }
 
     @Override
