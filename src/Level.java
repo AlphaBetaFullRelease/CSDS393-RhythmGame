@@ -50,6 +50,10 @@ public class Level {
         return songPath;
     }
 
+    public int getTempo(){
+        return tempo;
+    }
+
 	//saves the level data to a json file
     public void saveToFile(String dest) {
 
