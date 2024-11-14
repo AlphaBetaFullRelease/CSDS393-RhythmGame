@@ -56,6 +56,25 @@ public class LevelEditorGraphics {
 
     }
 
+    // getter methods for preview window
+    public int getPreviewX(){
+        return previewX;
+    }
+    public int getPreviewY(){
+        return previewY;
+    }
+    public int getPreviewWidth(){
+        return previewWidth;
+    }
+    public int getPreviewHeight(){
+        return previewHeight;
+    }
+
+    // returns reference to GameGraphics object for layout concerns
+    public GameGraphics getPreview(){
+        return previewGraphics;
+    }
+
     // holds color information for graphics
     private static class Colors {
         // border of preview

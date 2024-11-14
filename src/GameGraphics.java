@@ -114,6 +114,21 @@ public class GameGraphics {
         return targetPlace;
     }
 
+
+    // getter methods for layout values needed for arranging the level editor UI
+    public double getTrackCenter(int track){
+        return transposeX + layout.trackCenter[track];
+    }
+    public int getNoteY(double pos){
+        return layout.getNoteY(pos);
+    }
+    public int getNoteWid(){
+        return layout.noteWid;
+    }
+    public int getYOffset(){
+        return (int)transposeY;
+    }
+
     public int getWidth(){
         return (int)width;
     }
