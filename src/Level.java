@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
+    //store unique level id
     private int id;
     //store note data (kept in order by spawn time)
     private StoredNote[][] noteGrid;
@@ -39,20 +40,16 @@ public class Level {
     }
     //TODO: code that generates a unique id using the system clock
     private static int generateId() {
-    	return 420;
+    	return 0;
     }
+
+    public int getId() { return id; }
+
+    public String getTitle() { return title; }
     
-    public String getTitle() {
-    	return title;
-    }
+    public String getCreator() { return creator; }
     
-    public String getCreator() {
-    	return creator;
-    }
-    
-    public int getDifficulty() {
-    	return difficulty;
-    }
+    public int getDifficulty() { return difficulty; }
     
     public String getDurationString() {
         int hrs = (int) (duration / 60 / 60);
@@ -62,9 +59,7 @@ public class Level {
         return String.format("%2d:%2d:%2d", hrs, mins, secs);
     }
 
-    public String getSongPath(){
-        return songPath;
-    }
+    public String getSongPath(){ return songPath; }
 
 	//saves the level data to a json file
     public void saveToFile(String dest) {

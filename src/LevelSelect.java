@@ -6,7 +6,7 @@ import java.io.*;
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
     //DEBUG temp level folder path
-    private final File levelsPath = new File("C:\\\\Users\\ricar\\Documents\\github\\CSDS393-RhythmGame\\levels");
+    //private final File levelsPath = new File("C:\\\\Users\\ricar\\Documents\\github\\CSDS393-RhythmGame\\data\\levels");
 
     //level list
     private ArrayList<Level> levels = new ArrayList<>();
@@ -28,6 +28,9 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
 
     //reference to the sceneRunner so scenes can be changed
     private SceneRunner sceneChanger;
+
+    //user data object for reading files
+    private UserData userData = new UserData();
 
     public LevelSelect() {
     	//load level data and populate card list
@@ -88,7 +91,9 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     //get max number of cards per page
     public int getPageMax() { return pageMax; }
     //get level folder path
-    public File getLevelsPath() { return levelsPath; }
+    //public File getLevelsPath() { return levelsPath; }
+    //get user data
+    public UserData getUserData() { return userData; }
     //method to sort levelCard list by Title A-Z
     public void sortCardsTitle() {
         for (int i = 0; i < cardList.size() - 1; i ++) {
@@ -133,28 +138,11 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     }
     //load levels from level folder
     public void loadLevelsCards() {
-        //clear level list
-        levels.clear();
-        //clear level card list
-        cardList.clear();
-        //iterate through folders in levelsPath
-        for (final File entry : levelsPath.listFiles()) {
-            //ignore entry if it is not a folder
-            if (entry.isDirectory()) {
-                //get json file path, assumes all json files are named 'level.json'
-                File jsonPath = new File(entry.getPath() + "\\level.json");
-                //attempt to read json file
-                try {
-                    levels.add(Level.loadFromFile(jsonPath.getPath()));
-                } catch (java.io.FileNotFoundException e) {
-                    //TODO: how to handle this exception?
-                    e.printStackTrace();
-                }
-            }
-        }
+        //have userData load the level and score data
+        userData.loadLevelData();
         //create cardList
-        for (Level level : levels)
-            cardList.add(new LevelCard(level));
+        for (Level level : userData.getLevels())
+            cardList.add(new LevelCard(level, userData.getLevelScore(level)));
         //calculate the number of pages
         numPages = (int) Math.ceil((double) (cardList.size() + 1) / pageMax);
         //sort cards by Title A-Z

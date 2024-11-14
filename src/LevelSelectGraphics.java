@@ -135,7 +135,7 @@ public class LevelSelectGraphics {
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            Desktop.getDesktop().open(levelSelect.getLevelsPath());
+                            Desktop.getDesktop().open(levelSelect.getUserData().getLevelPath());
                         } catch (IOException e1) {
                             //TODO: idk what to do here
                         }
@@ -206,7 +206,7 @@ public class LevelSelectGraphics {
             this.setBorder(BorderFactory.createLoweredBevelBorder());
     	}
         //method to draw level cards
-        private JPanel cardgetDisplay(LevelCard card) {
+        private JPanel cardGetDisplay(LevelCard card) {
             //initialize display panel
             JPanel display = new JPanel();
             //set layout to null and set dimensions
@@ -226,12 +226,13 @@ public class LevelSelectGraphics {
             scoreArea.setBounds(480, 0, 120, 80);
             scoreArea.setOpaque(false);
             display.add(scoreArea);
+            //get level score
             //text
-            JLabel score = new JLabel("No Highscore");
+            JLabel score = new JLabel("" + card.getHighScore());
             score.setBounds(0, 0, 120, 20);
             scoreArea.add(score);
 
-            JLabel grade = new JLabel("-");
+            JLabel grade = new JLabel("" + card.getGrade());
             grade.setBounds(0, 20, 120, 40);
             scoreArea.add(grade);
 
@@ -282,7 +283,7 @@ public class LevelSelectGraphics {
                 cardButton.setBackground(cCard);
     			cardButton.setBounds(0, cardHeight * (list.indexOf(card)), cardWidth, cardHeight);
                 //get level card display panel and add it to the button
-    			cardButton.add(cardgetDisplay(card));
+    			cardButton.add(cardGetDisplay(card));
                 //add card button to the listDisplay
     			this.add(cardButton);
     		}
