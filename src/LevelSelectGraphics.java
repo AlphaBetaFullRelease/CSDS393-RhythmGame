@@ -259,15 +259,23 @@ public class LevelSelectGraphics {
     		//clear list
     		this.removeAll();
     		//draw list
-    		for (int i = 1; i <= list.size(); i ++) {
+    		for (final LevelCard card : list) {
                 //create button
     			JButton cardButton = new JButton();
+                //add actionlistener to open level selected
+                cardButton.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            System.out.println(card.getLevel());
+                        }
+                    }
+                );
                 //set layout and position
     			cardButton.setLayout(null);
                 cardButton.setBackground(cCard);
-    			cardButton.setBounds(0, cardHeight * (i -1), cardWidth, cardHeight);
+    			cardButton.setBounds(0, cardHeight * (list.indexOf(card)), cardWidth, cardHeight);
                 //get level card display panel and add it to the button
-    			cardButton.add(cardgetDisplay(list.get(i - 1)));
+    			cardButton.add(cardgetDisplay(card));
                 //add card button to the listDisplay
     			this.add(cardButton);
     		}

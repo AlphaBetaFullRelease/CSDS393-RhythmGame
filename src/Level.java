@@ -66,10 +66,6 @@ public class Level {
         return songPath;
     }
 
-    public String getSongPath(){
-        return songPath;
-    }
-
 	//saves the level data to a json file
     public void saveToFile(String dest) {
 
@@ -241,7 +237,7 @@ public class Level {
     }
 
     // remove this main method once all testing of the file is complete
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             Level level = loadFromFile("src\\test.json");
             System.out.println(level.duration);
@@ -249,5 +245,5 @@ public class Level {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

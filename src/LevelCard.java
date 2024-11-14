@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LevelCard {
-	//level id
-	private int id;
+	//reference to level file
+	private Level level;
     // level title
     private String title;
     // level creator
@@ -14,6 +14,7 @@ public class LevelCard {
     private int difficulty;
     
     public LevelCard(Level l) {
+        this.level = l;
     	this.title = l.getTitle();
     	this.creator = l.getCreator();
     	this.duration = l.getDurationString();
@@ -22,7 +23,7 @@ public class LevelCard {
 		getUserScore();
     }
     
-    public int getId() { return id; }
+    public Level getLevel() { return level; }
     
     public String getTitle() { return title; }
     
