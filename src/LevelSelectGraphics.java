@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-
 //does all of the graphical work for the level select
 public class LevelSelectGraphics {
 	//reference to level select object
@@ -118,6 +117,14 @@ public class LevelSelectGraphics {
         }
 
         JButton bExit = new JButton("main menu");
+        //add event listener to return to main menu
+        bExit.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        levelSelect.exitToMenu();
+                    }
+                }
+        );
         bExit.setBackground(cButton);
         bExit.setBounds(0, 0, contButtonWidth, contButtonHeight);
         pHeader.add(bExit);
@@ -266,7 +273,7 @@ public class LevelSelectGraphics {
                 cardButton.addActionListener(
                     new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println(card.getLevel());
+                            levelSelect.playLevel(card.getLevel());
                         }
                     }
                 );

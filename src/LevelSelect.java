@@ -7,24 +7,35 @@ import java.io.*;
 public class LevelSelect extends JPanel implements ActionListener, Scene {
     //DEBUG temp level folder path
     private final File levelsPath = new File("C:\\\\Users\\ricar\\Documents\\github\\CSDS393-RhythmGame\\levels");
-	//level list
+
+    //level list
     private ArrayList<Level> levels = new ArrayList<>();
+
     //level card list
     private ArrayList<LevelCard> cardList = new ArrayList<>();
+
     //cards shown per page
     private final int pageMax = 5;
+
     //number of pages in use
     private int numPages = 1;
+
     //current page number
     private int page;
+
     //graphics handler for level select
     private final LevelSelectGraphics graphicsHandler;
-    
+
+    //reference to the sceneRunner so scenes can be changed
+    private SceneRunner sceneChanger;
+
     public LevelSelect() {
     	//load level data and populate card list
         loadLevelsCards();
+
         //start at first page
         page = 1;
+
         //initialize GUI, pass this object as parameter
         graphicsHandler = new LevelSelectGraphics(this);
     }
@@ -35,10 +46,8 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     }
     
     @Override
-    public void setSceneRunner(SceneRunner sr) {
-    	//No implementation so far...
-    }
-    
+    public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
+
     //cast this object as JPanel and return it
     @Override
     public JPanel getPanel() {
@@ -150,5 +159,14 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
         numPages = (int) Math.ceil((double) (cardList.size() + 1) / pageMax);
         //sort cards by Title A-Z
         sortCardsTitle();
+    }
+    //change scene to main menu
+    public void exitToMenu() {
+        System.out.println("return to main menu");
+    }
+    //change scene to game
+    public void playLevel(Level l) {
+        //pass level to new game scene and change scenes
+        sceneChanger.changeScene(new Game(l));
     }
 }
