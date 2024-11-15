@@ -5,53 +5,39 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
-    //DEBUG temp level folder path
-    //private final File levelsPath = new File("C:\\\\Users\\ricar\\Documents\\github\\CSDS393-RhythmGame\\data\\levels");
-
-    //level list
-    private ArrayList<Level> levels = new ArrayList<>();
-
-    //level card list
+    // level card list
     private ArrayList<LevelCard> cardList = new ArrayList<>();
-
-    //cards shown per page
+    // number of cards shown per page
     private final int pageMax = 5;
-
-    //number of pages in use
+    // number of pages in use, minimum is always 1
     private int numPages = 1;
-
-    //current page number
+    // current page number
     private int page;
-
     //graphics handler for level select
     private final LevelSelectGraphics graphicsHandler;
-
-    //reference to the sceneRunner so scenes can be changed
+    // reference to the sceneRunner (so that scenes can be changed)
     private SceneRunner sceneChanger;
-
-    //user data object for reading files
+    //user data object for reading level & score files
     private UserData userData = new UserData();
-
+    // constructor, create level cards from level data and draw the graphics
     public LevelSelect() {
-    	//load level data and populate card list
+    	// load level data and populate card list
         loadLevelsCards();
-
-        //start at first page
+        // set current page as first page
         page = 1;
-
-        //initialize GUI, pass this object as parameter
+        // initialize the GUI, pass this object as parameter
         graphicsHandler = new LevelSelectGraphics(this);
     }
     
     @Override
     public void update(long delta) {
-    	//do nothing
+    	// does nothing since we are not using frames for this UI
     }
     
     @Override
     public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
 
-    //cast this object as JPanel and return it
+    // cast this object as JPanel and return it
     @Override
     public JPanel getPanel() {
     	return (JPanel)this;
@@ -61,7 +47,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     public void actionPerformed(ActionEvent e) {
         //No implementation...
     }
-    //get level cards in current page
+    // get level cards in current page
     public ArrayList<LevelCard> getPageCards() {
     	//create arraylist of size pageMax
     	ArrayList<LevelCard> pageCards = new ArrayList<>(pageMax);
@@ -71,9 +57,9 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     		pageCards.add(cardList.get(i));
     	return pageCards;
     }
-    //change cardList pages (true = next page, false = prev page)
+    // change cardList pages (true = next page, false = prev page)
     public void changePage(boolean nextP) {
-    	//page logic
+    	// page logic
     	if (nextP) {
     		page += 1;
     		if (page > numPages) page = 1;
@@ -81,20 +67,18 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     		page -= 1;
     		if (page < 1) page = numPages;
     	}
-    	//refresh graphics
+    	// refresh graphics
     	graphicsHandler.refreshList();
     }
-    //get current page number
+    // get current page number
     public int getPage() { return page; }
-    //get number of pages
+    // get number of pages
     public int getNumPages() { return numPages; }
-    //get max number of cards per page
+    // get max number of cards per page
     public int getPageMax() { return pageMax; }
-    //get level folder path
-    //public File getLevelsPath() { return levelsPath; }
-    //get user data
+    // get user data
     public UserData getUserData() { return userData; }
-    //method to sort levelCard list by Title A-Z
+    // method to sort levelCard list by Title A-Z
     public void sortCardsTitle() {
         for (int i = 0; i < cardList.size() - 1; i ++) {
             for (int j = i + 1; j < cardList.size(); j ++) {
@@ -108,7 +92,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
             }
         }
     }
-    //method to sort levelCard list by Author A-Z
+    // method to sort levelCard list by Author A-Z
     public void sortCardsAuthor() {
         for (int i = 0; i < cardList.size() - 1; i ++) {
             for (int j = i + 1; j < cardList.size(); j ++) {
@@ -122,7 +106,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
             }
         }
     }
-    //method to sort levelCard list by Difficulty, asc determines sort order
+    // method to sort levelCard list by Difficulty, asc determines sort order
     public void sortCardsDiff(boolean asc) {
         for (int i = 0; i < cardList.size() - 1; i ++) {
             for (int j = i + 1; j < cardList.size(); j ++) {
@@ -136,25 +120,25 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
             }
         }
     }
-    //load levels from level folder
+    // load levels from level folder
     public void loadLevelsCards() {
-        //have userData load the level and score data
+        // have userData load the level and score data
         userData.loadLevelData();
-        //create cardList
+        // create cardList
         for (Level level : userData.getLevels())
             cardList.add(new LevelCard(level, userData.getLevelScore(level)));
-        //calculate the number of pages
+        // calculate the number of pages
         numPages = (int) Math.ceil((double) (cardList.size() + 1) / pageMax);
-        //sort cards by Title A-Z
+        // sort cards by Title A-Z
         sortCardsTitle();
     }
-    //change scene to main menu
+    // change scene to main menu
     public void exitToMenu() {
         System.out.println("return to main menu");
     }
-    //change scene to game
+    // change scene to game
     public void playLevel(Level l) {
-        //pass level to new game scene and change scenes
+        // pass level to new game scene and change scenes
         sceneChanger.changeScene(new Game(l));
     }
 }

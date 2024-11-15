@@ -35,8 +35,6 @@ public class LevelCard {
     
     public String getCreator() { return creator; }
     
-    public String getHeader() { return title + " - " + creator; }
-    
     public String getDuration() { return duration; }
     
     public int getDifficulty() { return difficulty; }

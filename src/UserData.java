@@ -33,8 +33,7 @@ public class UserData {
                 try {
                     levels.add(Level.loadFromFile(jsonPath.getPath()));
                 } catch (java.io.FileNotFoundException e) {
-                    //TODO: how to handle this exception?
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
         }
@@ -82,7 +81,7 @@ public class UserData {
 
         }
     }
-
+    //TODO: write this class for retrieving and storing settings configs
     private class SettingsConfig {
 
     }
