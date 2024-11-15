@@ -124,6 +124,8 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     public void loadLevelsCards() {
         // have userData load the level and score data
         userData.loadLevelData();
+        // clear card list
+        cardList.clear();
         // create cardList
         for (Level level : userData.getLevels())
             cardList.add(new LevelCard(level, userData.getLevelScore(level)));
