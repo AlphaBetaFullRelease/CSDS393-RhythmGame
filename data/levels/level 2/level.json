@@ -1,0 +1,27 @@
+{
+  "level": {
+    "name": "Test song",
+    "author": "Ricardo",
+    "audio": "vseu.wav",
+    "tempo": "144",
+    "delay": "0",
+    "difficulty": "2",
+    "notes": [
+      {
+        "time": "0",
+        "lane": "0",
+        "duration": "0"
+      },
+      {
+        "time": "0.5",
+        "lane": "1",
+        "duration": "0"
+      },
+      {
+        "time": "0.5",
+        "lane": "3",
+        "duration": "0"
+      }
+    ]
+  }
+}
