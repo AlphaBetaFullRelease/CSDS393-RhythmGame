@@ -36,6 +36,8 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
     private Draggable currentlyDragging;
     // flag determining if something is being dragged
     private boolean isDragging = false;
+    // keeps track of which tool is currently active using an enumerated type
+    private Tool curTool = Tool.MOVE;
 
     // holds preview notes on screen
     private GameState previewNotes;
@@ -45,6 +47,8 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
     private double noteSpeed = 0.001;
     // the amount of time it takes for a note to move across the screen (in ms)
     private long trackDuration = (long)(1 / noteSpeed);
+    // the current scroll position on the screen
+    private long curTime = 0;
 
     // reference to sceneRunner (used to change scenes)
     private SceneRunner sceneChanger;
@@ -120,8 +124,13 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
 
     // function called when mouse pressed down
     public void mouseDown(){
-        // check for grabbing a note
-        checkGrabNote();
+        if(curTool == Tool.MOVE){
+            // check for grabbing a note
+            checkGrabNote();
+        }else if(curTool == Tool.ADD){
+            // try to add note
+            checkAddNote();
+        }
     }
 
     // function called when mouse released
@@ -156,6 +165,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         }
     }
 
+    // tries to add a note where the user is clicking
+    private void checkAddNote(){
+        System.out.println("try add note");
+    }
+
     // adds note to the stored notes list
     private void addNote(int track, StoredNote note){
         // get iterator for list
@@ -168,6 +182,25 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
                 // back up one index then add note
                 iter.previous();
                 iter.add(note);
+
+                // check if note should be on screen
+                if(note.getPos() < topTime() && note.getPos() > bottomTime()){
+                    // display note
+                    displayNote(track, note);
+
+                    // check if new note is above top note
+                    if(topIndex[track] == -1 || notes[track].get(topIndex[track]).getPos() < note.getPos()){
+                        // set new top index
+                        topIndex[track] = iter.previousIndex();
+                    }
+
+                    // check if new note is below bottom note
+                    if(bottomIndex[track] == -1 || notes[track].get(bottomIndex[track]).getPos() > note.getPos()){
+                        // set new bottom index
+                        bottomIndex[track] = iter.previousIndex();
+                    }
+                }
+
                 return;
             }
         }
@@ -187,6 +220,16 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
 
         // create draggable object for note
         notesDrag[track].add(createDraggableNote(track, noteObj));
+    }
+
+    // returns the highest time value (in ms) where notes can be displayed
+    private long topTime(){
+        return curTime + trackDuration;
+    }
+
+    // returns the lowest time value (in ms) where notes can be displayed on screen
+    private long bottomTime(){
+        return curTime;
     }
 
     // called when an action is performed
@@ -370,5 +413,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         public void mouseReleased(MouseEvent e){
             editor.mouseUp();
         }
+    }
+
+    private enum Tool {
+        MOVE,
+        ADD,
+        REMOVE
     }
 }
