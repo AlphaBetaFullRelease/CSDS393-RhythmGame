@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainMenuGraphics{
-  
+
   private MainMenu mainMenu;
+
+  private JPanel mainPanel;
 
   private final int width = 800;
   private final int height = 450;
@@ -24,6 +26,7 @@ public class MainMenuGraphics{
     mainPanel.setPreferredSize(new Dimension(width, height));
     mainPanel.setFocusable(true);
     mainPanel.setLayout(null);
+    
     //Title panel
     JPanel pTitle = new JPanel();
     pTitle.setLayout(null);
@@ -31,6 +34,7 @@ public class MainMenuGraphics{
     pTitle.setBackground(cBackground);
     JLabel title = new JLabel("I Can't Believe It's Not Boggle!");
     pTitle.add(title);
+    
     //Level select panel
     JPanel pLevelSelect = new JPanel();
     pLevelSelect.setLayout(null);
