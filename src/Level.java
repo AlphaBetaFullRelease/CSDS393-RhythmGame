@@ -9,10 +9,14 @@ import java.util.Scanner;
 
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
+    //store unique level id
+    private int id;
     //store note data (kept in order by spawn time)
     private StoredNote[][] noteGrid;
     //store path to mp3
     private String songPath = "";
+    //store path to level folder
+    private String levelPath = "";
     //level tempo (bpm)
     private int tempo = 130;
     //level start delay (ms)
@@ -30,28 +34,31 @@ public class Level {
     private int[] spawnIndex;
 
     public Level(String title, String creator, StoredNote[][] noteGrid){
+    	//set unique id
+    	this.id = generateId(); //TO DO: use system time + random number to make id?
     	this.title = title;
     	this.creator = creator;
     	this.noteGrid = noteGrid;
-        if (noteGrid != null) {
+      if (noteGrid != null) {
             spawnIndex = new int[noteGrid.length];
             // initialize all indices to 0
             for (int i = 0; i < spawnIndex.length; i++)
                 spawnIndex[i] = 0;
         }
     }
-    
-    public String getTitle() {
-    	return title;
+
+    //TODO: code that generates a unique id using the system clock
+    private static int generateId() {
+    	return 0;
     }
+
+    public int getId() { return id; }
+
+    public String getTitle() { return title; }
     
-    public String getCreator() {
-    	return creator;
-    }
+    public String getCreator() { return creator; }
     
-    public int getDifficulty() {
-    	return difficulty;
-    }
+    public int getDifficulty() { return difficulty; }
     
     public String getDurationString() {
         int hrs = (int) (duration / 60 / 60);
@@ -61,9 +68,7 @@ public class Level {
         return String.format("%02d:%02d:%02d", hrs, mins, secs);
     }
 
-    public String getSongPath(){
-        return songPath;
-    }
+    public String getSongPath(){ return songPath; }
 
 	//saves the level data to a json file
     public void saveToFile(String dest) throws IOException {
@@ -85,17 +90,25 @@ public class Level {
     }
 
     //loads a level from a json file
-    public static Level loadFromFile(String path) throws FileNotFoundException {
+    public static Level loadFromFile(String levelPath) throws FileNotFoundException {
         // do you think dr chaudhary would kill me if he saw this jerry-rigged json parser??
 
         // i think under this current implementation a json file with { [ } or ] inside a
         // string value will cause this to throw a parse error. however i don't see any
         // reason for that scenario to arise in normal use unless the end user specifically
         // messes with the level files after creation
+        String path = levelPath + "\\level.json";
         File file = new File(path);
         Scanner scanner = new Scanner(file);
         String openBrackets = "";
-        String title = "", author = "", audioPath = "";
+        String title = "", author = "";
+        // set path to song if exists
+        String audioPath = levelPath + "\\song.wav";
+        File temp = new File(audioPath);
+        if(!temp.isFile()){
+            System.out.println("no song.wav found in " + levelPath);
+            audioPath = "";
+        }
         boolean colonSeen = false, inString = false;
         String key = "", value = "";
         int lane = -1, tempo = -1, difficulty = -1;
@@ -158,11 +171,9 @@ public class Level {
                 difficulty = Integer.parseInt(value);
             } else if (key.equals("tempo")) {
                 tempo = Integer.parseInt(value);
-            } else if (key.equals("audio")) {
-                audioPath = value;
             } else if (key.equals("time")) {
                 time = Double.parseDouble(value);
-                pos = (int) ((60.0 / tempo * time + delay) * 1000);
+                pos = (int) ((60.0 / tempo * time) * 1000 + delay);
             } else if (key.equals("lane")) {
                 lane = Integer.parseInt(value);
             } else if (key.equals("duration")) {
@@ -239,7 +250,7 @@ public class Level {
     }
 
     // remove this main method once all testing of the file is complete
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             Level level = loadFromFile("src\\test.json");
             level.saveToFile("writetest.json");
@@ -248,5 +259,5 @@ public class Level {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

@@ -35,7 +35,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.0001;
+    private double noteSpeed = 0.0005;
 
     // sets up the game
     public Game(Level level) {
@@ -60,7 +60,10 @@ public class Game extends JPanel implements ActionListener, Scene {
         // play song if file exists
         if(!pathToSong.isEmpty())
             gameAudio.loadSong(level.getSongPath());
-
+        else{
+            System.out.println("no song found");
+        }
+        
         // instantiate fields
         noteHits = 0;
         noteMisses = 0;
@@ -184,17 +187,12 @@ public class Game extends JPanel implements ActionListener, Scene {
 
     // checks if there is a note within the target zone of a specified lane
     private Note getTargetNote(int lane){
-        ArrayList<ArrayList<Note>> tracks = gameState.getTracks();
-        for(Note note : tracks.get(lane)){
+        ArrayList<Note> track = gameState.getTracks().get(lane);
+        for(Note note : track){
             if(note.getPos() >= graphicsHandler.getTargetStart() && note.getPos() <= graphicsHandler.getTargetEnd())
                 return note;
         }
         return null;
-    }
-
-    // this function is called when a note passes off screen without being hit
-    private void notePassed(Note note){
-        
     }
 
     private void hitSuccess(){

@@ -3,11 +3,12 @@ import java.util.ArrayList;
 // stores dynamic information about the game's state to communicate between Game and GraphicsRenderer
 public class GameState {
     // stores the notes that are on each track
-    private ArrayList<ArrayList<Note>> tracks = new ArrayList<ArrayList<Note>>();
+    public ArrayList<ArrayList<Note>> tracks;
 
-    public GameState(int tracks){
-    	for (int i = 0; i < tracks; i ++) {
-    		this.tracks.add(new ArrayList<Note>());
+    public GameState(int lanes){
+    	this.tracks = new ArrayList<ArrayList<Note>>(lanes);
+    	for (int i = 0; i < lanes; i ++) {
+    		this.tracks.add(new ArrayList<Note>(1));
     	}
     }
 
@@ -20,7 +21,7 @@ public class GameState {
         this.tracks = t;
     }
 
-    public void spawnNote(int track, Note n){
-        tracks.get(track).add(n);
+    public void spawnNote(int lane, Note n){
+    	tracks.get(lane).add(n);
     }
 }
