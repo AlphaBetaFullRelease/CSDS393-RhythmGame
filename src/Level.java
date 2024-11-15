@@ -1,5 +1,3 @@
-import org.junit.jupiter.api.extension.ExtensionContext;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
