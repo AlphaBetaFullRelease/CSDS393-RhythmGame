@@ -1,5 +1,9 @@
+import org.junit.jupiter.api.extension.ExtensionContext;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,11 +39,12 @@ public class Level {
     	this.title = title;
     	this.creator = creator;
     	this.noteGrid = noteGrid;
-        spawnIndex = new int[noteGrid.length];
-        // initialize all indices to 0
-        for(int i = 0; i < spawnIndex.length; i++)
-            spawnIndex[i] = 0;
-        
+      if (noteGrid != null) {
+            spawnIndex = new int[noteGrid.length];
+            // initialize all indices to 0
+            for (int i = 0; i < spawnIndex.length; i++)
+                spawnIndex[i] = 0;
+        }
     }
 
     //TODO: code that generates a unique id using the system clock
@@ -60,14 +65,28 @@ public class Level {
         int mins = (int) (duration / 60 % 60);
         int secs = (int) (duration % 60);
 
-        return String.format("%2d:%2d:%2d", hrs, mins, secs);
+        return String.format("%02d:%02d:%02d", hrs, mins, secs);
     }
 
     public String getSongPath(){ return songPath; }
 
 	//saves the level data to a json file
-    public void saveToFile(String dest) {
+    public void saveToFile(String dest) throws IOException {
+        File file = new File(dest);
+        file.createNewFile();
 
+        FileWriter writer = new FileWriter(dest);
+        writer.write("{\n\t\"level\": {\n\t\t\"name\": \"" + title + "\",\n\t\t\"author\": \"" + creator + "\",\n\t\t\"audio\": \"" + songPath + "\",\n\t\t\"tempo\": \"" + tempo + "\",\n\t\t\"delay\": \"" + startDelay + "\",\n\t\t\"difficulty\": \"" + difficulty + "\",\n\t\t\"notes\": [");
+
+        for (int i = 0; i < noteGrid.length; i++) {
+            for (StoredNote note : noteGrid[i]) {
+                writer.write("\n\t\t\t{\n\t\t\t\t\"time\": \"" + (tempo * (note.getPos() / 1000.0 - startDelay)) / 60.0 + "\",\n\t\t\t\t\"lane\": \"" + i + "\",\n\t\t\t\t\"duration\": \"" + tempo * note.getNote().getDur() / 1000.0 / 60.0 + "\"\n\t\t\t},");
+            }
+        }
+
+        writer.write("\n\t\t]\n\t}\n}");
+
+        writer.close();
     }
 
     //loads a level from a json file
@@ -159,7 +178,7 @@ public class Level {
                 lane = Integer.parseInt(value);
             } else if (key.equals("duration")) {
                 duration = Double.parseDouble(value);
-                notes.get(lane).add(new StoredNote(pos, lane));
+                notes.get(lane).add(new StoredNote(pos, lane, (int) ((60.0 / tempo * duration) * 1000)));
             }
         }
 
@@ -175,7 +194,6 @@ public class Level {
         level.setSongPath(audioPath);
         level.setStartDelay((long) (delay * 1000));
         level.setTempo(tempo);
-        level.calculateDuration();
 
         return level;
     }
@@ -227,27 +245,18 @@ public class Level {
         this.difficulty = difficulty;
     }
 
-    private void calculateDuration() {
-        int lastNoteTime = (int) (noteGrid[0][noteGrid[0].length - 1].getNote().getPos() / 1000);
-
-        for (int i = 1; i < 4; i++) {
-            if (noteGrid[i].length > 0) {
-                if (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000 > lastNoteTime) {
-                    lastNoteTime = (int) (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000);
-                }
-            }
-        }
-
-        this.duration = lastNoteTime;
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     // remove this main method once all testing of the file is complete
     /*public static void main(String[] args) {
         try {
             Level level = loadFromFile("src\\test.json");
-            System.out.println(level.duration);
-            System.out.println(level.getDurationString());
-        } catch (FileNotFoundException e) {
+            level.saveToFile("writetest.json");
+            level = loadFromFile("writetest.json");
+            level.saveToFile("writetest2.json");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }*/
