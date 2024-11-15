@@ -69,7 +69,7 @@ public class Level {
     	return noteGrid[track].length;
     }
     
-    //get StoredNote from noteGrid
+    // get StoredNote from noteGrid
     public StoredNote getStoredNote(int track, int index) {
         return noteGrid[track][index];
     }

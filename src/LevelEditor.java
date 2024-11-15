@@ -6,7 +6,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.Point;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class LevelEditor extends JPanel implements ActionListener, Scene {
 
@@ -14,6 +16,12 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
     private Level level;
     // number of tracks
     private int numTracks = 4;
+    // notes for the level (in linked list for more efficient access)
+    private LinkedList<StoredNote>[] notes = new LinkedList[numTracks];
+    // index always points to the topmost note on screen (or -1 if none on screen)
+    private int[] topIndex = new int[numTracks];
+    // index always points to the bottommost note on screen (or -1 if none on screen)
+    private int[] bottomIndex = new int[numTracks];
 
     // graphics for the level editor
     private LevelEditorGraphics graphicsHandler;
@@ -60,20 +68,34 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         // create graphics
         graphicsHandler = new LevelEditorGraphics(previewNotes);
 
-        // load starting preview notes (a well designed level should have no notes on screen at time=0 but we should still account for it)
-        // iterate through each track
+        // load all notes from level into the notes linkedList
+        // iterate through tracks
         for(int track = 0; track < numTracks; track++){
             // create draggable container list for each track
             notesDrag[track] = new ArrayList<>();
+            // create notes list
+            notes[track] = new LinkedList<>();
+            // instantiate indices
+            topIndex[track] = -1;
+            bottomIndex[track] = -1;
 
-            // while there are still notes to add, add them
-            StoredNote next = level.getNextNote(track, trackDuration);
-            while(next != null){
+            // iterate through all the notes in the track
+            for(int noteIndex = 0; noteIndex < level.getTrackLength(track); noteIndex++){
                 // add note
-                addNote(track, next);
+                addNote(track, level.getStoredNote(track, noteIndex));
+            }
 
-                // get next note in track
-                next = level.getNextNote(track, trackDuration);
+            // display initial notes
+            ListIterator<StoredNote> iter = notes[track].listIterator();
+            while(iter.hasNext()){
+                // get next note
+                StoredNote next = iter.next();
+
+                // check if on screen
+                if(next.getPos() <= trackDuration){
+                    // display note
+                    displayNote(track, next);
+                }
             }
         }
     }
@@ -123,7 +145,6 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
             for(DraggableNote note : notesDrag[track]){
                 // check for collision
                 if(note.isTouching(mousePos)){
-                    System.out.println("dragging");
                     // grab note
                     isDragging = true;
                     currentlyDragging = note;
@@ -135,8 +156,27 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         }
     }
 
-    // adds a note to the preview & creates a draggable object for it
+    // adds note to the stored notes list
     private void addNote(int track, StoredNote note){
+        // get iterator for list
+        ListIterator<StoredNote> iter = notes[track].listIterator();
+        
+        // try to find the point to insert the note
+        while(iter.hasNext()){
+            // check if next note comes after this note
+            if(iter.next().compareTo(note) > 0){
+                // back up one index then add note
+                iter.previous();
+                iter.add(note);
+                return;
+            }
+        }
+        // list iterated through, add to end
+        iter.add(note);
+    }
+
+    // adds a note to the preview & creates a draggable object for it
+    private void displayNote(int track, StoredNote note){
         // calculate & set position offset
         float spawnOffset = trackDuration - note.getPos();
         Note noteObj = note.getNote();
