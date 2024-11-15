@@ -33,10 +33,12 @@ public class Level {
     	this.title = title;
     	this.creator = creator;
     	this.noteGrid = noteGrid;
-        spawnIndex = new int[noteGrid.length];
-        // initialize all indices to 0
-        for(int i = 0; i < spawnIndex.length; i++)
-            spawnIndex[i] = 0;
+        if (noteGrid != null) {
+            spawnIndex = new int[noteGrid.length];
+            // initialize all indices to 0
+            for (int i = 0; i < spawnIndex.length; i++)
+                spawnIndex[i] = 0;
+        }
     }
     
     public String getTitle() {
@@ -144,7 +146,7 @@ public class Level {
                 }
             }
 
-            System.out.printf("%s: %s\n", key, value);
+            //System.out.printf("%s: %s\n", key, value);
 
             if (key.equals("name")) {
                 title = value;
@@ -230,6 +232,10 @@ public class Level {
 
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
     }
 
     // remove this main method once all testing of the file is complete
