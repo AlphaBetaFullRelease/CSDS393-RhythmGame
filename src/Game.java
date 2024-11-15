@@ -35,7 +35,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.0001;
+    private double noteSpeed = 0.0005;
 
     // sets up the game
     public Game(Level level) {
@@ -60,7 +60,10 @@ public class Game extends JPanel implements ActionListener, Scene {
         // play song if file exists
         if(!pathToSong.isEmpty())
             gameAudio.loadSong(level.getSongPath());
-
+        else{
+            System.out.println("no song found");
+        }
+        
         // instantiate fields
         noteHits = 0;
         noteMisses = 0;

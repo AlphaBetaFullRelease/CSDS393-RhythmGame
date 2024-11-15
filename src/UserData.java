@@ -4,7 +4,7 @@ import java.util.ArrayList;
 //class to read user data from the data folder
 public class UserData {
     //PATH (this DEFINITELY needs to be changed later)
-    private final File LOCAL_PATH = new File("C:\\\\Users\\ricar\\Documents\\github\\CSDS393-RhythmGame\\data");
+    private final File LOCAL_PATH = new File("./data");
     private final File LEVEL_PATH = new File(LOCAL_PATH.getPath() + "\\levels\\");
     //level data
     private static ArrayList<Level> levels = new ArrayList<>();
@@ -28,7 +28,7 @@ public class UserData {
             //ignore entry if it is not a folder
             if (entry.isDirectory()) {
                 //get json file path, assumes all json files are named 'level.json'
-                File jsonPath = new File(entry.getPath() + "\\level.json");
+                File jsonPath = new File(entry.getPath());
                 //attempt to read json file
                 try {
                     levels.add(Level.loadFromFile(jsonPath.getPath()));

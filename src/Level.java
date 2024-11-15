@@ -11,6 +11,8 @@ public class Level {
     private StoredNote[][] noteGrid;
     //store path to mp3
     private String songPath = "";
+    //store path to level folder
+    private String levelPath = "";
     //level tempo (bpm)
     private int tempo = 130;
     //level start delay (ms)
@@ -37,7 +39,9 @@ public class Level {
         // initialize all indices to 0
         for(int i = 0; i < spawnIndex.length; i++)
             spawnIndex[i] = 0;
+        
     }
+
     //TODO: code that generates a unique id using the system clock
     private static int generateId() {
     	return 0;
@@ -67,17 +71,25 @@ public class Level {
     }
 
     //loads a level from a json file
-    public static Level loadFromFile(String path) throws FileNotFoundException {
+    public static Level loadFromFile(String levelPath) throws FileNotFoundException {
         // do you think dr chaudhary would kill me if he saw this jerry-rigged json parser??
 
         // i think under this current implementation a json file with { [ } or ] inside a
         // string value will cause this to throw a parse error. however i don't see any
         // reason for that scenario to arise in normal use unless the end user specifically
         // messes with the level files after creation
+        String path = levelPath + "\\level.json";
         File file = new File(path);
         Scanner scanner = new Scanner(file);
         String openBrackets = "";
-        String title = "", author = "", audioPath = "";
+        String title = "", author = "";
+        // set path to song if exists
+        String audioPath = levelPath + "\\song.wav";
+        File temp = new File(audioPath);
+        if(!temp.isFile()){
+            System.out.println("no song.wav found in " + levelPath);
+            audioPath = "";
+        }
         boolean colonSeen = false, inString = false;
         String key = "", value = "";
         int lane = -1, tempo = -1, difficulty = -1;
@@ -128,7 +140,7 @@ public class Level {
                 }
             }
 
-            System.out.printf("%s: %s\n", key, value);
+            //System.out.printf("%s: %s\n", key, value);
 
             if (key.equals("name")) {
                 title = value;
@@ -140,11 +152,9 @@ public class Level {
                 difficulty = Integer.parseInt(value);
             } else if (key.equals("tempo")) {
                 tempo = Integer.parseInt(value);
-            } else if (key.equals("audio")) {
-                audioPath = value;
             } else if (key.equals("time")) {
                 time = Double.parseDouble(value);
-                pos = (int) ((60 / tempo * time + delay) * 1000);
+                pos = (int) ((60.0 / tempo * time) * 1000 + delay);
             } else if (key.equals("lane")) {
                 lane = Integer.parseInt(value);
             } else if (key.equals("duration")) {

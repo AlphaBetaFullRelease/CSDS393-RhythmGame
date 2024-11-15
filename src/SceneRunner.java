@@ -21,6 +21,7 @@ public class SceneRunner extends JFrame {
     // starts the game with the main menu open
     // for now, launches straight into Game since there is no main menu
     public static void main(String[] args){
+        
         // DEBUG create placeholder level data
         StoredNote[][] ng = {
                 {new StoredNote(600, 0)},
