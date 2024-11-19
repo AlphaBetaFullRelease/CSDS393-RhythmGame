@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.io.*;
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
     // level card list
@@ -17,10 +16,12 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     private final LevelSelectGraphics graphicsHandler;
     // reference to the sceneRunner (so that scenes can be changed)
     private SceneRunner sceneChanger;
-    //user data object for reading level & score files
-    private UserData userData = new UserData();
+    // user data object for reading level & score files
+    private UserData userData;
     // constructor, create level cards from level data and draw the graphics
     public LevelSelect() {
+        // initialize user data object
+        userData = new UserData();
     	// load level data and populate card list
         loadLevelsCards();
         // set current page as first page

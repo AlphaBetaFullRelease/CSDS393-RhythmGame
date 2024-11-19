@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.*;
 import javax.swing.JFrame;
 
@@ -34,10 +35,15 @@ public class SceneRunner extends JFrame {
         Game game = new Game(testLevel);
         // create level select
         LevelSelect levelSelect = new LevelSelect();
-
+        // create settings
+        Settings settings = null;
+        try {
+            settings = new Settings();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(levelSelect);
-
+        SceneRunner sceneRunner = new SceneRunner(settings);
         // main loop
         while(true){
             // update loaded scene

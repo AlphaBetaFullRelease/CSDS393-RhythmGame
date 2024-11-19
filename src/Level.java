@@ -69,13 +69,15 @@ public class Level {
     //loads a level from a json file
     public static Level loadFromFile(String path) throws FileNotFoundException {
         // do you think dr chaudhary would kill me if he saw this jerry-rigged json parser??
-
         // i think under this current implementation a json file with { [ } or ] inside a
         // string value will cause this to throw a parse error. however i don't see any
         // reason for that scenario to arise in normal use unless the end user specifically
         // messes with the level files after creation
+        // get the file
         File file = new File(path);
+        // intialize scanner
         Scanner scanner = new Scanner(file);
+        // initialize parsing values
         String openBrackets = "";
         String title = "", author = "", audioPath = "";
         boolean colonSeen = false, inString = false;
@@ -87,7 +89,7 @@ public class Level {
         for (int i = 0; i < 4; i++) {
             notes.add(new ArrayList<>());
         }
-
+        // iterate through lines of the file
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             colonSeen = false;
