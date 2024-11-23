@@ -1,17 +1,17 @@
 // class for storing note and position data in the Level class' noteGrid
 public class StoredNote {
     // position of the note in milliseconds
-    private long posMillis;
+    private float posMillis;
     // note object
     private Note note;
     // create a StoredNote
-    public StoredNote(long pos, int col) {
+    public StoredNote(float pos, int col) {
         this.posMillis = pos;
         this.note = new Note(col);
     }
     
     // get the position of the StoredNote
-    public long getPos() {
+    public float getPos() {
         return posMillis;
     }
     // get the note of the StoredNote

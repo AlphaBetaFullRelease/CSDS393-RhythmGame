@@ -1,5 +1,9 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 // ui template class for the creation of settings page and level editor stuff
 public class SettingsGraphics {
@@ -44,6 +48,13 @@ public class SettingsGraphics {
         bExit.setBounds(0, 0, headerButtonWidth, headerHeight);
         // create apply button
         JButton bNext = new JButton("Next");
+        // add action listener to tell settings to save the config
+        bNext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                settings.saveConfig();
+            }
+        });
         bNext.setBackground(cButton);
         bNext.setBounds(width - headerButtonWidth, 0, headerButtonWidth, headerHeight);
         // add buttons to header panel
@@ -70,15 +81,34 @@ public class SettingsGraphics {
             // add banner to body panel
             pBody.add(pBanners[i]);
         }
-        // sfx and music volume
-        //TODO: make the initial slider volumes based on settings file
+        // sfx and music volume sliders
+        // sfx volume slider properties
         JSlider slider_sfx = new JSlider(JSlider.HORIZONTAL, 0, 100, config.getVolumeSfx());
-        slider_sfx.setOpaque(false);
         slider_sfx.setMajorTickSpacing(10);
         slider_sfx.setSnapToTicks(true);
+        // save changes to the config through this change listener
+        slider_sfx.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                config.setVolumeSfx(slider_sfx.getValue());
+            }
+        });
+        // sfx slider styling
+        slider_sfx.setOpaque(false);
         slider_sfx.setBorder(BorderFactory.createTitledBorder("Sound Effects"));
         slider_sfx.setBounds(0, 0, (int) width / 2, bannerHeight);
+        // music volume slider properties
         JSlider slider_music = new JSlider(JSlider.HORIZONTAL, 0, 100, config.getVolumeMusic());
+        slider_music.setMajorTickSpacing(10);
+        slider_music.setSnapToTicks(true);
+        // save changes to the config w this change listener
+        slider_music.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                config.setVolumeMusic(slider_music.getValue());
+            }
+        });
+        // music slider styling
         slider_music.setOpaque(false);
         slider_music.setBorder(BorderFactory.createTitledBorder("Music"));
         slider_music.setBounds((int) width / 2, 0, (int) width / 2, bannerHeight);

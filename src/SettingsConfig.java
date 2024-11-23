@@ -10,9 +10,6 @@ public class SettingsConfig {
     private char key2 = 'X';
     private char key3 = '.';
     private char key4 = '/';
-    private static String[] keys = {"sfx","music","rate",
-            "gTap","latency","key1","key2","key3","key4"};
-    // default constructor
     public SettingsConfig() {}
     // constructor with parameters
     public SettingsConfig(int sfx, int music, int frameRate, boolean ghostTap
@@ -37,5 +34,14 @@ public class SettingsConfig {
     public char getKey2() { return key2; }
     public char getKey3() { return key3; }
     public char getKey4() { return key4; }
-    public static String[] getKeys() { return keys; }
+    // setters
+    public void setVolumeSfx(int sfx) { this.volumeSfx = sfx; }
+    public void setVolumeMusic(int music) { this.volumeMusic = music; }
+    public void setFrameRate(int frameRate) { this.frameRate = frameRate; }
+    public void setGhostTap(boolean ghostTap) { this.ghostTap = ghostTap; }
+    public void setLatency(int latency) { this.latency = latency; }
+    public void setKey1(char key1) { this.key1 = key1; }
+    public void setKey2(char key2) { this.key2 = key2; }
+    public void setKey3(char key3) { this.key3 = key3; }
+    public void setKey4(char key4) { this.key4 = key4; }
 }

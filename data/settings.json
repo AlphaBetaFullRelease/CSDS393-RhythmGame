@@ -1,14 +1,1 @@
-{
-"settings":
-{
-"sfx":"80",
-"music":"90",
-"rate":"60",
-"gTap":"false",
-"latency":"0",
-"key1":"Z",
-"key2":"X",
-"key3":".",
-"key4":"/"
-}
-}
+{"volumeSfx":80,"volumeMusic":90,"frameRate":60,"ghostTap":false,"latency":0,"key1":"Z","key2":"X","key3":".","key4":"/"}

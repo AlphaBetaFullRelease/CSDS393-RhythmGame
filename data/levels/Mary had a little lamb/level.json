@@ -1,0 +1,272 @@
+{
+	"id": 0,
+	"noteGrid": [
+		[
+			{
+				"posMillis": 3.9,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 4.6,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 4.85,
+				"note": {
+					"pos": 0.0,
+					"col": 0,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 5.25,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 5.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 6.25,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 6.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 7.75,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 8.25,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 8.75,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 9.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 10.25,
+				"note": {
+					"pos": 0.0,
+					"col": 3,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 10.75,
+				"note": {
+					"pos": 0.0,
+					"col": 3,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 11.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 12.5,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 12.75,
+				"note": {
+					"pos": 0.0,
+					"col": 0,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 13.25,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 13.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 14.25,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 14.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 15.25,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 15.75,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 16.25,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 16.75,
+				"note": {
+					"pos": 0.0,
+					"col": 2,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 17.25,
+				"note": {
+					"pos": 0.0,
+					"col": 1,
+					"dur": 0
+				}
+			}
+		],
+		[
+			{
+				"posMillis": 17.75,
+				"note": {
+					"pos": 0.0,
+					"col": 0,
+					"dur": 0
+				}
+			}
+		]
+	],
+	"tempo": 95,
+	"startDelay": 65,
+	"title": "Mary had a little lamb",
+	"creator": "Developer",
+	"duration": 0,
+	"difficulty": 1,
+	"spawnIndex":[0,0,0,0]
+}

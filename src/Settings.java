@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.io.FileNotFoundException;
 
 public class Settings extends JPanel implements Scene {
@@ -21,16 +20,17 @@ public class Settings extends JPanel implements Scene {
         graphicsHandler = new SettingsGraphics(this);
     }
     @Override
-    public void paint(Graphics g) {
-
-    }
-    @Override
     public void update(long delta) {
 
     }
     @Override
     public void setSceneRunner(SceneRunner sr) {
 
+    }
+    // method to save current config, pass config to userData
+    public void saveConfig() {
+        // save config
+        userData.saveSettingsConfig(settingsConfig);
     }
     // getters
     @Override
