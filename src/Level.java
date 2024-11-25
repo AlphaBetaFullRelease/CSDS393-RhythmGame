@@ -20,7 +20,7 @@ public class Level {
     // keeps track of the last note spawned / next note that can be spawned
     private int[] spawnIndex;
 
-    public Level(String title, String creator, StoredNote[][] noteGrid){
+    public Level(String title, String creator, StoredNote[][] noteGrid) {
     	//set unique id
     	this.id = generateId(); //TO DO: use system time + random number to make id?
     	this.title = title;
@@ -33,8 +33,13 @@ public class Level {
     }
     //TODO: code that generates a unique id using the system clock
     private static int generateId() {
-    	return 0;
+        return 0;
     }
+    public void setTitle(String title) { this.title = title; }
+
+    public void setCreator(String creator) { this.creator = creator; }
+
+    public void setNoteGrid(StoredNote[][] noteGrid) { this.noteGrid = noteGrid; }
 
     public int getId() { return id; }
 
@@ -43,6 +48,12 @@ public class Level {
     public String getCreator() { return creator; }
     
     public int getDifficulty() { return difficulty; }
+
+    public int getTempo() { return tempo; }
+
+    public StoredNote[][] getNoteGrid() { return noteGrid; }
+
+    public int getDifficultyLevel() { return difficulty; }
     
     public String getDurationString() {
         int hrs = (int) (duration / 60 / 60);
@@ -83,21 +94,15 @@ public class Level {
         return null;
     }
 
-    public void setTempo(int tempo) {
-        this.tempo = tempo;
-    }
-
+    public void setTempo(int tempo) { this.tempo = tempo; }
+    // TO DO: delete this method, maybe level select passes the level path to game and then it uses user data to get stuff
     public String getSongPath() {
         return "./data\\levels\\Mary had a little lamb\\song.wav";
     }
 
-    public void setStartDelay(long startDelay) {
-        this.startDelay = startDelay;
-    }
+    public void setStartDelay(long startDelay) { this.startDelay = startDelay; }
 
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
-    }
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     private void calculateDuration() {
         int lastNoteTime = (int) (noteGrid[0][noteGrid[0].length - 1].getNote().getPos() / 1000);

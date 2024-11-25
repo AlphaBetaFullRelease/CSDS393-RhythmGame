@@ -4,14 +4,19 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Dictionary;
 
 // class to read user data from the data folder
 public class UserData {
-    // PATHS, temporary for testing
+    // PATHS
     private static final File LOCAL_PATH = new File("./data");
     private static final File LEVEL_PATH = new File(LOCAL_PATH.getPath() + "\\levels\\");
     private static final File SETTINGS_PATH = new File(LOCAL_PATH.getPath() + "\\settings.json");
     private static final File SCORE_PATH = new File(LOCAL_PATH.getPath() + "\\scores.json");
+    // level path dictionary
+    private static Dictionary<Integer, String> levelPathDict = new Hashtable<>();
     // level data
     private static ArrayList<Level> levels = new ArrayList<>();
     // player scores data
@@ -23,29 +28,33 @@ public class UserData {
         System.out.println("user data object created");
         //DEBUG: create test level and score data
         StoredNote[][] ng = {
-                {new StoredNote(600, 0)},
-                {new StoredNote(610, 1)},
-                {new StoredNote(620, 2)},
-                {new StoredNote(630, 3)}
+                {new StoredNote(0, 0)},
+                {new StoredNote(30, 1)},
+                {new StoredNote(30, 2)},
+                {new StoredNote(40, 3)}
         };
-        createLevelFile(new Level("song", "creator", ng));
+        Level level = new Level("song8", "creator", ng);
+        level.setNoteGrid(ng);
+        createLevelFile(level, false);
     }
     // basic getters
     public File getLevelPath() { return LEVEL_PATH; }
     public ArrayList<Level> getLevels() { return levels; }
-    // store level file
-    public boolean createLevelFile(Level level) {
+    // method to create or overwrite a Level json file
+    public boolean createLevelFile(Level level, boolean overwrite) {
+        // first check creation conditions for a file
         // get level title for folder name
         String title = level.getTitle();
-        // create file path using title
-        File levelPath = new File(LEVEL_PATH.getPath() + "\\" + title);
-        // return false if path already exists
-        if (levelPath.exists()) return false;
-        // create folder
-        levelPath.mkdir();
-        // create file path
-        levelPath = new File(levelPath.getPath() + "\\level.json");
-        // create file
+        // get folder and json file path
+        File folderPath = new File(LEVEL_PATH.getPath() + "\\" + title);
+        File levelPath = new File(folderPath.getPath() + "\\level.json");
+        // if a level file exists at the path, try to overwrite it
+        if (levelPath.exists()) {
+            // fail if we cannot overwrite file, otherwise delete old file
+            if (!overwrite) return false;
+            else levelPath.delete();
+        } else if (!folderPath.exists()) folderPath.mkdir(); // create level folder if nonexistent
+        // write file
         Gson gson = new Gson();
         try {
             Writer fileWriter = Files.newBufferedWriter(levelPath.toPath());
@@ -53,12 +62,58 @@ public class UserData {
             fileWriter.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            return false;
         }
         return true;
     }
+    //
+    public boolean deleteLevelFile(Level level) {
+        // get file and folder paths
+        File folderPath = new File(levelPathDict.get(level.getId()));
+        File levelPath = new File(folderPath.getPath() + "\\level.json");
+        // try to delete them
+        levelPath.delete();
+        folderPath.delete();
+        // reload level data
+        loadLevelData();
+        return true;
+        /*
+        System.out.println("attempting to delete level file");
+        //
+        Gson gson = new Gson();
+        // iterate through directory
+        for (final File entry : LEVEL_PATH.listFiles()) {
+            // ignore entry if it is not a folder
+            if (entry.isDirectory()) {
+                // get json file path, assumes all json files are named 'level.json'
+                File jsonPath = new File(entry.getPath() + "\\level.json");
+                // attempt to read json file
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(jsonPath);
+                    Level check = gson.fromJson(new InputStreamReader(fileInputStream), Level.class);
+                    if (level.getId() == check.getId()) {
+                        System.out.println("deleting level file!");
+                        try {
+                            fileInputStream.close();
+                            jsonPath.delete();
+                            entry.delete();
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
+                        }
+                        return true;
+                    }
+                } catch (java.io.FileNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        System.out.println("could not find level file to delete!");
+        return false;*/
+    }
     // method that loads the level data
     public void loadLevelData() {
-        // clear previous data
+        // clear previous level data and dictionary
+        levelPathDict = new Hashtable<>();
         levels.clear();
         // intialize gson
         Gson gson = new Gson();
@@ -72,6 +127,7 @@ public class UserData {
                 try {
                     Level level = gson.fromJson(new InputStreamReader(new FileInputStream(jsonPath)), Level.class);
                     levels.add(level);
+                    levelPathDict.put(level.getId(), entry.getPath());
                 } catch (java.io.FileNotFoundException e) {
                     System.out.println(e.getMessage());
                 }
@@ -87,11 +143,11 @@ public class UserData {
         File settingsPath = new File(SETTINGS_PATH.getPath());
         // if the file does not exist, save the default config
         if (!settingsPath.exists()) {
-            System.out.println(settingsPath.getPath() + " does not exist, creating new one");
+            System.out.println(settingsPath.getPath() + " does not exist, creating new one!");
             saveSettingsConfig(config);
         } else {
             // load config from json file
-            System.out.println("loading " + settingsPath.getPath());
+            System.out.println("loading " + settingsPath.getPath() + "!");
             Gson gson = new Gson();
             config = gson.fromJson(new InputStreamReader(new FileInputStream(settingsPath)), SettingsConfig.class);
         }

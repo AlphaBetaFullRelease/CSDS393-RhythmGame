@@ -9,7 +9,6 @@ public class StoredNote {
         this.posMillis = pos;
         this.note = new Note(col);
     }
-    
     // get the position of the StoredNote
     public float getPos() {
         return posMillis;

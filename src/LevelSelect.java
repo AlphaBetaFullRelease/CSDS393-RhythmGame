@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
@@ -125,6 +126,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     public void loadLevelsCards() {
         // have userData load the level and score data
         userData.loadLevelData();
+        userData.loadScoreData();
         // clear card list
         cardList.clear();
         // create cardList
@@ -138,10 +140,19 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     // change scene to main menu
     public void exitToMenu() {
         System.out.println("return to main menu");
+        Settings settings = null;
+        try {
+            settings = new Settings();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        sceneChanger.changeScene(settings);
+        //sceneChanger.changeScene(new LevelInfo());
     }
     // change scene to game
     public void playLevel(Level l) {
         // pass level to new game scene and change scenes
         sceneChanger.changeScene(new Game(l));
+        //sceneChanger.changeScene(new LevelInfo(l));
     }
 }

@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Game extends JPanel implements ActionListener, Scene {
     // player performance information
@@ -32,7 +31,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private Level level;
 
     // time elapsed
-    private long elapsedTime;
+    private long elapsedTime = 0;
     
     // note movement speed (%/Ms)
     private double noteSpeed = 0.0001;
@@ -61,7 +60,7 @@ public class Game extends JPanel implements ActionListener, Scene {
         if(!pathToSong.isEmpty())
             gameAudio.loadSong(level.getSongPath());
 
-        // instantiate fields
+        // initialize fields
         noteHits = 0;
         noteMisses = 0;
         health = 0;

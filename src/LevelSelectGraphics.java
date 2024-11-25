@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -82,7 +83,9 @@ public class LevelSelectGraphics {
                 }
         );
         bSort.setBackground(cButton);
-        bSort.setBorder(BorderFactory.createTitledBorder("Sort"));
+        TitledBorder sortBorder = BorderFactory.createTitledBorder("Sort");
+        sortBorder.setTitleColor(Color.white);
+        bSort.setBorder(sortBorder);
         bSort.setBounds(width - contButtonWidth, 0, contButtonWidth, contButtonHeight);
         pHeader.add(bSort);
         // navigation buttons, only drawn if there is more than one page of cards
@@ -176,7 +179,9 @@ public class LevelSelectGraphics {
         // page text
         pageDisplay = new JLabel("1");
         pageDisplay.setBackground(cButton);
-        pageDisplay.setBorder(BorderFactory.createTitledBorder("#"));
+        TitledBorder pageBorder = BorderFactory.createTitledBorder("#");
+        pageBorder.setTitleColor(Color.white);
+        pageDisplay.setBorder(pageBorder);
         pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
         pageNumberWidth, contButtonHeight);
         pHeader.add(pageDisplay);

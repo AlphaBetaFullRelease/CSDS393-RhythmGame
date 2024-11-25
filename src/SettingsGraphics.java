@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -28,7 +29,7 @@ public class SettingsGraphics {
     Color cButton = new Color(106, 65, 148);
     // constructor
     public SettingsGraphics(Settings settings) {
-        // get settings object
+        // get settings object and config
         this.settings = settings;
         this.config = settings.getSettingsConfig();
         // get settings as panel
@@ -39,15 +40,23 @@ public class SettingsGraphics {
         mainPanel.setLayout(null);
         // create header panel
         JPanel pHeader = new JPanel();
+        pHeader.setForeground(Color.white);
         pHeader.setBackground(cHeader);
         pHeader.setLayout(null);
         pHeader.setBounds(0, 0, width, headerHeight);
         // create back button
-        JButton bExit = new JButton("Exit");
+        JButton bExit = new JButton("main menu");
+        //
+        bExit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                settings.exitToMenu();
+            }
+        });
+        bExit.setForeground(Color.white);
         bExit.setBackground(cButton);
         bExit.setBounds(0, 0, headerButtonWidth, headerHeight);
         // create apply button
-        JButton bNext = new JButton("Next");
+        JButton bNext = new JButton("apply");
         // add action listener to tell settings to save the config
         bNext.addActionListener(new ActionListener() {
             @Override
@@ -55,6 +64,7 @@ public class SettingsGraphics {
                 settings.saveConfig();
             }
         });
+        bNext.setForeground(Color.white);
         bNext.setBackground(cButton);
         bNext.setBounds(width - headerButtonWidth, 0, headerButtonWidth, headerHeight);
         // add buttons to header panel
@@ -62,6 +72,7 @@ public class SettingsGraphics {
         pHeader.add(bExit);
         // add text to header panel
         JLabel lHeader = new JLabel("Settings");
+        lHeader.setForeground(Color.white);
         lHeader.setBounds(headerButtonWidth, 0, width - headerButtonWidth * 2, headerHeight);
         pHeader.add(lHeader);
         // create body panel
@@ -81,7 +92,7 @@ public class SettingsGraphics {
             // add banner to body panel
             pBody.add(pBanners[i]);
         }
-        // sfx and music volume sliders
+        // 0 sfx and music volume sliders
         // sfx volume slider properties
         JSlider slider_sfx = new JSlider(JSlider.HORIZONTAL, 0, 100, config.getVolumeSfx());
         slider_sfx.setMajorTickSpacing(10);
@@ -95,7 +106,9 @@ public class SettingsGraphics {
         });
         // sfx slider styling
         slider_sfx.setOpaque(false);
-        slider_sfx.setBorder(BorderFactory.createTitledBorder("Sound Effects"));
+        TitledBorder sfxBorder = BorderFactory.createTitledBorder("sound effects volume");
+        sfxBorder.setTitleColor(Color.white);
+        slider_sfx.setBorder(sfxBorder);
         slider_sfx.setBounds(0, 0, (int) width / 2, bannerHeight);
         // music volume slider properties
         JSlider slider_music = new JSlider(JSlider.HORIZONTAL, 0, 100, config.getVolumeMusic());
@@ -110,19 +123,58 @@ public class SettingsGraphics {
         });
         // music slider styling
         slider_music.setOpaque(false);
-        slider_music.setBorder(BorderFactory.createTitledBorder("Music"));
+        TitledBorder musicBorder = BorderFactory.createTitledBorder("music volume");
+        musicBorder.setTitleColor(Color.white);
+        slider_music.setBorder(musicBorder);
         slider_music.setBounds((int) width / 2, 0, (int) width / 2, bannerHeight);
         pBanners[0].add(slider_sfx);
         pBanners[0].add(slider_music);
-        // button mappings and input latency calibration
+        // 1 button mappings and input latency calibration
+        // button mappings
+        // latency spinner properties
         SpinnerModel latency_model = new SpinnerNumberModel(config.getLatency(), 0, 100, 1);
         JSpinner spinner_latency = new JSpinner(latency_model);
-        spinner_latency.setBounds(0, (int) width / 2, (int) width / 2, bannerHeight);
+        //
+        spinner_latency.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                config.setLatency((int) spinner_latency.getValue());
+            }
+        });
+        // latency spinner styling
+        spinner_latency.setOpaque(false);
+        TitledBorder latencyBorder = BorderFactory.createTitledBorder("input latency");
+        latencyBorder.setTitleColor(Color.white);
+        spinner_latency.setBorder(latencyBorder);
+        spinner_latency.setBounds(0, 0, (int) width / 2, bannerHeight);
         pBanners[1].add(spinner_latency);
-        // framerate
+        // ghost tapping
+        JToggleButton gTapButton = new JToggleButton();
+        if (config.getGhostTap()) {
+            gTapButton.setText("on");
+            gTapButton.setSelected(true);
+        } else {
+            gTapButton.setText("off");
+            gTapButton.setSelected(false);
+        }
 
-        // scroll direction (?) and ghost tapping
-        
+        //
+        gTapButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (gTapButton.isSelected()) {
+                    config.setGhostTap(true);
+                    gTapButton.setText("on");
+                } else {
+                    config.setGhostTap(false);
+                    gTapButton.setText("off");
+                }
+            }
+        });
+        gTapButton.setOpaque(false);
+        gTapButton.setBorder(BorderFactory.createTitledBorder("ghost tap"));
+        gTapButton.setBounds((int) width / 2, 0, (int) width / 2, bannerHeight);
+        pBanners[1].add(gTapButton);
         // add header and body panels to this panel
         mainPanel.add(pHeader);
         mainPanel.add(pBody);
@@ -137,8 +189,12 @@ public class SettingsGraphics {
         mainPanel.repaint();
     }
 
-    // method to add validation warning to a given panel
-    public static void warn(JPanel panel, String message) {
-        // change styling and add message
+    public class KeyBind {
+        private char value;
+        public KeyBind(char value) {
+            this.value = value;
+        }
+        public char getValue() { return value; }
+        public void setValue(char value) { this.value = value; }
     }
 }
