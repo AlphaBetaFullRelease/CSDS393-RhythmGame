@@ -133,8 +133,9 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
         sortCardsTitle();
     }
     // change scene to main menu
+    // change scene to main menu
     public void exitToMenu() {
-        System.out.println("return to main menu");
+        sceneChanger.changeScene(new MainMenu());
     }
     // change scene to game
     public void playLevel(Level l) {
