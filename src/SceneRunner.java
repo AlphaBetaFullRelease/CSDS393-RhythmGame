@@ -100,6 +100,9 @@ public class SceneRunner extends JFrame {
         // set the focus to the new scene
         loadedScene.getPanel().setFocusable(true);
         loadedScene.getPanel().requestFocusInWindow();
+
+        // reset delay time
+        initFrameStart();
     }
 
     // calculates and returns fps (using average number of frames passed since frameTrackStart)
