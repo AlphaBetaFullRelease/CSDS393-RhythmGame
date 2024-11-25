@@ -23,44 +23,7 @@ public class UserData {
     // settings data
     private SettingsConfig settingsConfig;
     // constructor
-    public UserData() {
-        System.out.println("user data object created");
-        /*
-        //DEBUG: create test level and score data
-        ArrayList<StoredNote> track0 = new ArrayList<>();
-        track0.add(new StoredNote(1000, 0));
-        track0.add(new StoredNote(9000, 0));
-        track0.add(new StoredNote(14000, 0));
-        ArrayList<StoredNote> track1 = new ArrayList<>();
-        track1.add(new StoredNote(750, 1));
-        track1.add(new StoredNote(1500, 1));
-        track1.add(new StoredNote(4000, 1));
-        track1.add(new StoredNote(4500, 1));
-        track1.add(new StoredNote(5000, 1));
-        track1.add(new StoredNote(8750, 1));
-        track1.add(new StoredNote(9500, 1));
-        track1.add(new StoredNote(12000, 1));
-        track1.add(new StoredNote(12500, 1));
-        track1.add(new StoredNote(13500, 1));
-        ArrayList<StoredNote> track2 = new ArrayList<>();
-        track2.add(new StoredNote(0, 2));
-        track2.add(new StoredNote(2000, 2));
-        track2.add(new StoredNote(2500, 2));
-        track2.add(new StoredNote(3000, 2));
-        track2.add(new StoredNote(6000, 2));
-        track2.add(new StoredNote(8000, 2));
-        track2.add(new StoredNote(10000, 2));
-        track2.add(new StoredNote(10500, 2));
-        track2.add(new StoredNote(11000, 2));
-        track2.add(new StoredNote(11500, 2));
-        track2.add(new StoredNote(13000, 2));
-        ArrayList<StoredNote> track3 = new ArrayList<>();
-        track3.add(new StoredNote(6500, 3));
-        track3.add(new StoredNote(7000, 3));
-        ArrayList<StoredNote>[] ng = new ArrayList[]{track0, track1, track2, track3};
-        Level level = new Level("Mary had no delay", "Ricardo", ng);
-        createLevelFile(level, true);*/
-    }
+    public UserData() {}
     // basic getters
     public File getLevelPath() { return LEVEL_PATH; }
     public ArrayList<Level> getLevels() { return levels; }
@@ -102,38 +65,6 @@ public class UserData {
         // reload level data
         loadLevelData();
         return true;
-        /*
-        System.out.println("attempting to delete level file");
-        //
-        Gson gson = new Gson();
-        // iterate through directory
-        for (final File entry : LEVEL_PATH.listFiles()) {
-            // ignore entry if it is not a folder
-            if (entry.isDirectory()) {
-                // get json file path, assumes all json files are named 'level.json'
-                File jsonPath = new File(entry.getPath() + "\\level.json");
-                // attempt to read json file
-                try {
-                    FileInputStream fileInputStream = new FileInputStream(jsonPath);
-                    Level check = gson.fromJson(new InputStreamReader(fileInputStream), Level.class);
-                    if (level.getId() == check.getId()) {
-                        System.out.println("deleting level file!");
-                        try {
-                            fileInputStream.close();
-                            jsonPath.delete();
-                            entry.delete();
-                        } catch (IOException e) {
-                            System.out.println(e.getMessage());
-                        }
-                        return true;
-                    }
-                } catch (java.io.FileNotFoundException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        }
-        System.out.println("could not find level file to delete!");
-        return false;*/
     }
     // method that loads the level data
     public void loadLevelData() {

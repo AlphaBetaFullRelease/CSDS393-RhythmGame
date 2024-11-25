@@ -7,7 +7,7 @@ public class StoredNote {
     // create a StoredNote
     public StoredNote(int pos, int col) {
         this.posMillis = pos;
-        this.note = new Note(col, dur);
+        this.note = new Note(col, 0);
     }
     // get the position of the StoredNote
     public int getPos() {

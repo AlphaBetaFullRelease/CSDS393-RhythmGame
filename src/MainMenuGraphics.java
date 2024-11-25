@@ -52,7 +52,7 @@ public class MainMenuGraphics{
     pLevelEditor.add(levelEditor);
     levelEditor.setVisible(true);
     //Settings panel
-    Jpanel pSettings = new JPanel();
+    JPanel pSettings = new JPanel();
     pSettings.setLayout(null);
     pSettings.setBounds(0, titleHeight+(2*buttonHeight), width, height);
     pSettings.setBackground(cButtons);

@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.io.*;
 
-public class MainMenu extends JPanel implements ActionListener, Scene {
+public class MainMenu extends JPanel implements Scene {
 
   private final MainMenuGraphics graphicsHandler;
 

@@ -24,15 +24,7 @@ public class SceneRunner extends JFrame {
     public static void main(String[] args){
         // create level select
         LevelSelect levelSelect = new LevelSelect();
-        // create settings
-        LevelInfo levelInfo = null;
-        Settings settings = null;
-        try {
-            levelInfo = new LevelInfo(null);
-            settings = new Settings();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
         // create a new scenerunner with the starting scene
         SceneRunner sceneRunner = new SceneRunner(levelSelect);
         // main loop
