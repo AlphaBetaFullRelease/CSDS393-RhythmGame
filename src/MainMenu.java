@@ -1,8 +1,6 @@
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.io.*;
+import javax.swing.*;
 
 public class MainMenu extends JPanel implements ActionListener, Scene {
 
@@ -10,7 +8,7 @@ public class MainMenu extends JPanel implements ActionListener, Scene {
 
   private SceneRunner sceneChanger;
 
-  public MainMenu(){
+  public MainMenu() {
     graphicsHandler = new MainMenuGraphics(this);
   }
 
@@ -19,13 +17,30 @@ public class MainMenu extends JPanel implements ActionListener, Scene {
   }
 
   @Override
-  public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
+  public void setSceneRunner(SceneRunner sceneRunner) {
+    sceneChanger = sceneRunner;
+  }
 
   @Override
   public JPanel getPanel() {
-      return (JPanel)this;
+    return (JPanel) this;
   }
 
-  
-  
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    // No implementation...
+  }
+
+  public void levelSelect() {
+    sceneChanger.changeScene(new LevelSelect());
+  }
+
+  public void levelEditor() {
+    System.out.println("(Go to level editor)");
+  }
+
+  public void settings() {
+    System.out.println("(Go to settings)");
+  }
+
 }
