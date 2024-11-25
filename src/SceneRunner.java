@@ -39,6 +39,9 @@ public class SceneRunner extends JFrame {
         // create a new scenerunner with the starting scene
         SceneRunner sceneRunner = new SceneRunner(levelSelect);
 
+        // initialize frame time
+        sceneRunner.initFrameStart();
+
         // main loop
         while(true){
             // update loaded scene
@@ -107,6 +110,11 @@ public class SceneRunner extends JFrame {
     // returns the time delta sice the last update() was called
     private long deltaTime() {
         return System.currentTimeMillis() - lastFrameCallTime;
+    }
+
+    // reset the frame counter
+    public void initFrameStart(){
+        lastFrameCallTime = System.currentTimeMillis();
     }
 
     // updates the loaded scene and delta time
