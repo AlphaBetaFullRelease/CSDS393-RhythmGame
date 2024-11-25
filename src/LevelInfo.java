@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class LevelInfo extends JPanel implements Scene {
     LevelInfoGraphics graphicsHandler;
@@ -11,12 +12,7 @@ public class LevelInfo extends JPanel implements Scene {
         userData = new UserData();
         userData.loadLevelData();
         newLevel = (level == null);
-        StoredNote[][] ng = {
-                {new StoredNote(0, 0)},
-                {new StoredNote(30, 1)},
-                {new StoredNote(30, 2)},
-                {new StoredNote(40, 3)}
-        };
+        ArrayList<StoredNote>[] ng = new ArrayList[]{new ArrayList<StoredNote>(), new ArrayList<StoredNote>(), new ArrayList<StoredNote>(), new ArrayList<StoredNote>()};
         if (newLevel) this.level = new Level("Title", "Creator", ng);
         else this.level = level;
         graphicsHandler = new LevelInfoGraphics(this);
@@ -33,7 +29,8 @@ public class LevelInfo extends JPanel implements Scene {
     public boolean isNewLevel() { return newLevel; }
     //
     public void save() {
-
+        userData.deleteLevelFile(level);
+        userData.createLevelFile(level, true);
     }
 
     public void exit() {

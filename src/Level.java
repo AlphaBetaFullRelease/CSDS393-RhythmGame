@@ -1,9 +1,12 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
     //store unique level id
     private int id;
     //store note data (kept in order by spawn time)
-    private StoredNote[][] noteGrid;
+    private ArrayList<StoredNote>[] noteGrid = new ArrayList[4];
     //level tempo (bpm)
     private int tempo = 130;
     //level start delay (ms)
@@ -13,14 +16,14 @@ public class Level {
     //level creator
     private String creator;
     //level duration
-    private long duration;
+    private long duration = 0;
     //level difficulty
-    private int difficulty;
+    private int difficulty = 1;
 
     // keeps track of the last note spawned / next note that can be spawned
     private int[] spawnIndex;
 
-    public Level(String title, String creator, StoredNote[][] noteGrid) {
+    public Level(String title, String creator, ArrayList<StoredNote>[] noteGrid) {
     	//set unique id
     	this.id = generateId(); //TO DO: use system time + random number to make id?
     	this.title = title;
@@ -33,13 +36,14 @@ public class Level {
     }
     //TODO: code that generates a unique id using the system clock
     private static int generateId() {
-        return 0;
+        int rand = (int) Math.random() * 1000;
+        return (int) System.currentTimeMillis() + rand;
     }
     public void setTitle(String title) { this.title = title; }
 
     public void setCreator(String creator) { this.creator = creator; }
 
-    public void setNoteGrid(StoredNote[][] noteGrid) { this.noteGrid = noteGrid; }
+    public void setNoteGrid(ArrayList<StoredNote>[] noteGrid) { this.noteGrid = noteGrid; }
 
     public int getId() { return id; }
 
@@ -51,7 +55,7 @@ public class Level {
 
     public int getTempo() { return tempo; }
 
-    public StoredNote[][] getNoteGrid() { return noteGrid; }
+    public ArrayList<StoredNote>[] getNoteGrid() { return noteGrid; }
 
     public int getDifficultyLevel() { return difficulty; }
     
@@ -65,12 +69,12 @@ public class Level {
 
     //get the size of noteGrid[i]
     public int getTrackLength(int track) {
-    	return noteGrid[track].length;
+    	return noteGrid[track].size();
     }
     
     //get StoredNote from noteGrid
     public StoredNote getStoredNote(int track, int index) {
-        return noteGrid[track][index];
+        return noteGrid[track].get(index);
     }
 
     // given a track and a time, will return the next note that can spawn in the track
@@ -78,16 +82,16 @@ public class Level {
     // this function will return null if no notes can spawn at this time
     public StoredNote getNextNote(int track, long targetTime){
         // check if there are any notes left to spawn
-        if(spawnIndex[track] >= noteGrid[track].length)
+        if(spawnIndex[track] >= getTrackLength(track))
             return null;
         
         // check if the next note to spawn can spawn
-        if(noteGrid[track][spawnIndex[track]].getPos() <= targetTime){
+        if(noteGrid[track].get(spawnIndex[track]).getPos() <= targetTime){
             // increment spawn index
             spawnIndex[track]++;
 
             // return the note
-            return noteGrid[track][spawnIndex[track]-1];
+            return noteGrid[track].get(spawnIndex[track] - 1);
         }
 
         // no note can be spawned
@@ -100,17 +104,19 @@ public class Level {
         return "./data\\levels\\Mary had a little lamb\\song.wav";
     }
 
+    public long getStartDelay() { return startDelay; }
+
     public void setStartDelay(long startDelay) { this.startDelay = startDelay; }
 
     public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     private void calculateDuration() {
-        int lastNoteTime = (int) (noteGrid[0][noteGrid[0].length - 1].getNote().getPos() / 1000);
+        int lastNoteTime = (int) (noteGrid[0].get(noteGrid[0].size() - 1).getNote().getPos() / 1000);
 
         for (int i = 1; i < 4; i++) {
-            if (noteGrid[i].length > 0) {
-                if (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000 > lastNoteTime) {
-                    lastNoteTime = (int) (noteGrid[i][noteGrid[i].length - 1].getNote().getPos() / 1000);
+            if (getTrackLength(i) > 0) {
+                if (noteGrid[i].get(noteGrid[i].size() - 1).getNote().getPos() / 1000 > lastNoteTime) {
+                    lastNoteTime = (int) (noteGrid[i].get(noteGrid[i].size() - 1).getNote().getPos() / 1000);
                 }
             }
         }

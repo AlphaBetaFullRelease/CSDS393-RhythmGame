@@ -31,10 +31,10 @@ public class Game extends JPanel implements ActionListener, Scene {
     private Level level;
 
     // time elapsed
-    private long elapsedTime = 0;
+    private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.0001;
+    private double noteSpeed = 0.001;
 
     // sets up the game
     public Game(Level level) {
@@ -65,6 +65,8 @@ public class Game extends JPanel implements ActionListener, Scene {
         noteMisses = 0;
         health = 0;
         score = 0;
+        // set start delay
+        elapsedTime = -level.getStartDelay();
     }
 
     // this is the frame update function
@@ -75,6 +77,7 @@ public class Game extends JPanel implements ActionListener, Scene {
         // check for new notes to spawn (only checks once per track bc why would 2 notes spawn in one frame)
         // spawnTime is current time - the amount of time it takes for a note to travel to the target line
         long spawnTime = elapsedTime - (long)(graphicsHandler.getTargetCenter() / noteSpeed);
+        System.out.println("" + elapsedTime);
         for(int track = 0; track < numTracks; track++){ // iterate through tracks
             // get next note
             StoredNote nextNote = level.getNextNote(track, spawnTime);
@@ -91,6 +94,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 note.updatePos(spawnOffset * noteSpeed);
 
                 // add note to the list of active notes
+                System.out.println("Spawned note at track " + track + ", pos " + (spawnOffset * noteSpeed));
                 gameState.spawnNote(track, note);
             }
         }
@@ -105,6 +109,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 // check if note should despawn
                 if (n.getPos() > 1) {
                     // despawn note
+                    System.out.println("Despawned note at track" + n.getCol());
                     track.remove(i);
                     i--;
                 } else

@@ -179,7 +179,9 @@ public class LevelInfoGraphics extends JPanel implements Scene {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // get index of button selected and pass to the update method
-                    updateDifficulty(Arrays.asList(difficultyButtons).indexOf(e.getSource()));
+                    int index = Arrays.asList(difficultyButtons).indexOf(e.getSource()) + 1;
+                    System.out.println("" + index);
+                    updateDifficulty(index);
                     // refresh graphics
                     refresh();
                 }
@@ -242,9 +244,12 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         emptyCreator = (creator.equals(""));
         if (emptyCreator) applyMessage(creatorLabel, emptyField);
         // check pass
-        pass = emptyTitle && emptyCreator;
-        if (pass) levelInfo.save();
-        else {
+        pass = !emptyTitle && !emptyCreator;
+        if (pass) {
+            level.setTitle(title);
+            level.setCreator(creator);
+            levelInfo.save();
+        } else {
             // refresh graphics
             refresh();
         }
@@ -258,11 +263,11 @@ public class LevelInfoGraphics extends JPanel implements Scene {
     public void updateDifficulty(int value) {
         // iterate through list and set radio buttons
         for (int i = 0; i < difficultyButtons.length; i ++) {
-            if (i <= value) difficultyButtons[i].setSelected(true);
+            if (i < value) difficultyButtons[i].setSelected(true);
             else difficultyButtons[i].setSelected(false);
         }
         // update level file
-        level.setDifficulty(value + 1);
+        level.setDifficulty(value);
     }
 
     // method to refresh graphics

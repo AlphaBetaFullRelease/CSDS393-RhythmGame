@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Dictionary;
 
 // class to read user data from the data folder
 public class UserData {
@@ -26,16 +25,41 @@ public class UserData {
     // constructor
     public UserData() {
         System.out.println("user data object created");
+        /*
         //DEBUG: create test level and score data
-        StoredNote[][] ng = {
-                {new StoredNote(0, 0)},
-                {new StoredNote(30, 1)},
-                {new StoredNote(30, 2)},
-                {new StoredNote(40, 3)}
-        };
-        Level level = new Level("song8", "creator", ng);
-        level.setNoteGrid(ng);
-        createLevelFile(level, false);
+        ArrayList<StoredNote> track0 = new ArrayList<>();
+        track0.add(new StoredNote(1000, 0));
+        track0.add(new StoredNote(9000, 0));
+        track0.add(new StoredNote(14000, 0));
+        ArrayList<StoredNote> track1 = new ArrayList<>();
+        track1.add(new StoredNote(750, 1));
+        track1.add(new StoredNote(1500, 1));
+        track1.add(new StoredNote(4000, 1));
+        track1.add(new StoredNote(4500, 1));
+        track1.add(new StoredNote(5000, 1));
+        track1.add(new StoredNote(8750, 1));
+        track1.add(new StoredNote(9500, 1));
+        track1.add(new StoredNote(12000, 1));
+        track1.add(new StoredNote(12500, 1));
+        track1.add(new StoredNote(13500, 1));
+        ArrayList<StoredNote> track2 = new ArrayList<>();
+        track2.add(new StoredNote(0, 2));
+        track2.add(new StoredNote(2000, 2));
+        track2.add(new StoredNote(2500, 2));
+        track2.add(new StoredNote(3000, 2));
+        track2.add(new StoredNote(6000, 2));
+        track2.add(new StoredNote(8000, 2));
+        track2.add(new StoredNote(10000, 2));
+        track2.add(new StoredNote(10500, 2));
+        track2.add(new StoredNote(11000, 2));
+        track2.add(new StoredNote(11500, 2));
+        track2.add(new StoredNote(13000, 2));
+        ArrayList<StoredNote> track3 = new ArrayList<>();
+        track3.add(new StoredNote(6500, 3));
+        track3.add(new StoredNote(7000, 3));
+        ArrayList<StoredNote>[] ng = new ArrayList[]{track0, track1, track2, track3};
+        Level level = new Level("Mary had no delay", "Ricardo", ng);
+        createLevelFile(level, true);*/
     }
     // basic getters
     public File getLevelPath() { return LEVEL_PATH; }
@@ -68,6 +92,7 @@ public class UserData {
     }
     //
     public boolean deleteLevelFile(Level level) {
+        System.out.println("deleting level " + level.getTitle());
         // get file and folder paths
         File folderPath = new File(levelPathDict.get(level.getId()));
         File levelPath = new File(folderPath.getPath() + "\\level.json");
@@ -115,7 +140,7 @@ public class UserData {
         // clear previous level data and dictionary
         levelPathDict = new Hashtable<>();
         levels.clear();
-        // intialize gson
+        // initialize gson
         Gson gson = new Gson();
         // iterate through directory
         for (final File entry : LEVEL_PATH.listFiles()) {
