@@ -3,52 +3,77 @@
 		"name": "Mary had a little lamb",
 		"author": "Developer",
 		"tempo": "95",
-		"delay": "65",
+		"delay": "3500",
 		"difficulty": "1",
 		"notes": [
 			{
-				"time": "3.9",
+				"time": "0",
 				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "4.6",
+				"time": "0.75",
 				"lane": "1",
 				"duration": "0"
 			},
 			{
-				"time": "4.85",
+				"time": "1",
 				"lane": "0",
 				"duration": "0"
 			},
 			{
-				"time": "5.25",
+				"time": "1.5",
 				"lane": "1",
 				"duration": "0"
 			},
 			{
-				"time": "5.75",
+				"time": "2",
 				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "6.25",
+				"time": "2.5",
 				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "6.75",
+				"time": "3",
 				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "7.75",
+				"time": "4",
 				"lane": "1",
 				"duration": "0"
 			},
 			{
-				"time": "8.25",
+				"time": "4.5",
 				"lane": "1",
+				"duration": "0"
+			},
+			{
+				"time": "5",
+				"lane": "1",
+				"duration": "0"
+			},
+			{
+				"time": "6",
+				"lane": "2",
+				"duration": "0"
+			},
+			{
+				"time": "6.5",
+				"lane": "3",
+				"duration": "0"
+			},			
+			{
+				"time": "7",
+				"lane": "3",
+				"duration": "0"
+			},
+			{
+				"time": "8",
+				"lane": "2",
 				"duration": "0"
 			},
 			{
@@ -57,23 +82,38 @@
 				"duration": "0"
 			},
 			{
-				"time": "9.75",
+				"time": "9",
+				"lane": "0",
+				"duration": "0"
+			},
+			{
+				"time": "9.5",
+				"lane": "1",
+				"duration": "0"
+			},
+			{
+				"time": "10",
 				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "10.25",
-				"lane": "3",
-				"duration": "0"
-			},			
-			{
-				"time": "10.75",
-				"lane": "3",
+				"time": "10.5",
+				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "11.75",
+				"time": "11",
 				"lane": "2",
+				"duration": "0"
+			},
+			{
+				"time": "11.5",
+				"lane": "2",
+				"duration": "0"
+			},
+			{
+				"time": "12",
+				"lane": "1",
 				"duration": "0"
 			},
 			{
@@ -82,57 +122,17 @@
 				"duration": "0"
 			},
 			{
-				"time": "12.75",
-				"lane": "0",
+				"time": "13",
+				"lane": "2",
 				"duration": "0"
 			},
 			{
-				"time": "13.25",
+				"time": "13.5",
 				"lane": "1",
 				"duration": "0"
 			},
 			{
-				"time": "13.75",
-				"lane": "2",
-				"duration": "0"
-			},
-			{
-				"time": "14.25",
-				"lane": "2",
-				"duration": "0"
-			},
-			{
-				"time": "14.75",
-				"lane": "2",
-				"duration": "0"
-			},
-			{
-				"time": "15.25",
-				"lane": "2",
-				"duration": "0"
-			},
-			{
-				"time": "15.75",
-				"lane": "1",
-				"duration": "0"
-			},
-			{
-				"time": "16.25",
-				"lane": "1",
-				"duration": "0"
-			},
-			{
-				"time": "16.75",
-				"lane": "2",
-				"duration": "0"
-			},
-			{
-				"time": "17.25",
-				"lane": "1",
-				"duration": "0"
-			},
-			{
-				"time": "17.75",
+				"time": "14",
 				"lane": "0",
 				"duration": "0"
 			}

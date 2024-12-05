@@ -40,7 +40,10 @@ public class GameGraphics {
         // draw the notes
         for(int lane = 0; lane < getNumTracks(); lane++)
             for(Note note : tracks.get(lane))
-                drawNote(g, lane, note);
+                if (note.getDur() == 0)
+                    drawNote(g, lane, note);
+                else
+                    drawHoldNote(g, lane, note);
 
         // draw the target line
         drawTarget(g);
@@ -69,6 +72,26 @@ public class GameGraphics {
         // actually draw the note
         g.setColor(Colors.noteColor);
         g.fillOval(Layout.trackLeft[lane], yPos, Layout.noteWid, Layout.noteWid);
+    }
+
+    // draws a held note in the specified lane
+    private void drawHoldNote(Graphics2D g, int lane, Note note) {
+        // draw end of hold note
+        int startYPos = Layout.getNoteY(note.getPos());
+        int endYPos = Layout.getNoteY(note.getPos() + note.getDur());
+        g.setColor(Colors.holdNoteColor);
+        g.fillOval(Layout.trackLeft[lane], endYPos, Layout.noteWid, Layout.noteWid);
+
+        // draw line between two note heads
+        g.setStroke(new BasicStroke(5));
+        g.drawLine(Layout.trackCenter[lane], startYPos, Layout.trackCenter[lane], endYPos);
+
+        // draw start of hold note
+        g.setColor(Colors.noteColor);
+        g.fillOval(Layout.trackLeft[lane], startYPos, Layout.noteWid, Layout.noteWid);
+
+        // reset stroke width
+        g.setStroke(new BasicStroke());
     }
 
     // draws the target line
@@ -159,6 +182,8 @@ public class GameGraphics {
         public static final Color trackFill = new Color(145, 145, 145);
         // note fill color
         public static final Color noteColor = new Color(24, 222, 163);
+        // end held note fill color
+        public static final Color holdNoteColor = new Color(12, 111, 81);
         // target color
         public static final Color targetColor = new Color(0, 0, 0);
     }

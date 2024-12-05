@@ -78,7 +78,7 @@ public class Game extends JPanel implements ActionListener, Scene {
 
         // check for new notes to spawn (only checks once per track bc why would 2 notes spawn in one frame)
         // spawnTime is current time - the amount of time it takes for a note to travel to the target line
-        long spawnTime = elapsedTime - (long)(graphicsHandler.getTargetCenter() / noteSpeed);
+        long spawnTime = elapsedTime/* - (long)(graphicsHandler.getTargetCenter() / noteSpeed)*/;
         for(int track = 0; track < numTracks; track++){ // iterate through tracks
             // get next note
             StoredNote nextNote = level.getNextNote(track, spawnTime);
