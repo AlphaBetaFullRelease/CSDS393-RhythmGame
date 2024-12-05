@@ -50,6 +50,10 @@ public class Level {
         return songPath;
     }
 
+    public int getTempo(){
+        return tempo;
+    }
+
 	//saves the level data to a json file
     public void saveToFile(String dest) {
 
@@ -65,7 +69,7 @@ public class Level {
     	return noteGrid[track].length;
     }
     
-    //get StoredNote from noteGrid
+    // get StoredNote from noteGrid
     public StoredNote getStoredNote(int track, int index) {
         return noteGrid[track][index];
     }
