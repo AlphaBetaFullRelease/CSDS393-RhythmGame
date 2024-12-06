@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.Point;
 import java.util.List;
@@ -10,7 +8,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-public class LevelEditor extends JPanel implements ActionListener, Scene {
+public class LevelEditor extends JPanel implements ActionListener, Scene, KeyListener {
 
     // level data
     private Level level;
@@ -50,6 +48,12 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
     // the current scroll position on the screen
     private long curTime = 0;
 
+    private UserData userData;
+
+    private JButton loadAduioSource;
+
+    private boolean isCtrlHeld;
+
     // reference to sceneRunner (used to change scenes)
     private SceneRunner sceneChanger;
 
@@ -63,14 +67,24 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         MouseClass listener = new MouseClass(this);
         addMouseMotionListener(listener);
         addMouseListener(listener);
+
+        addKeyListener(this);
+
+        loadAduioSource = new JButton("Select Music File");
+        loadAduioSource.setLocation(40, 40);
+        this.add(loadAduioSource);
         
         // set the level reference
         level = inpLevel;
+
+        userData = new UserData();
 
         previewNotes = new GameState(numTracks);
 
         // create graphics
         graphicsHandler = new LevelEditorGraphics(previewNotes);
+
+        isCtrlHeld = false;
 
         // load all notes from level into the notes linkedList
         // iterate through tracks
@@ -283,7 +297,12 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         //     {new StoredNote(900, 2)},
         //     {new StoredNote(300, 3)}
         // };
-        StoredNote[][] ng = {{},{},{},{new StoredNote(300, 3)}};
+        ArrayList[] ng = new ArrayList[4];
+        ng[0] = new ArrayList<StoredNote>();
+        ng[1] = new ArrayList<StoredNote>();
+        ng[2] = new ArrayList<StoredNote>();
+        ng[3] = new ArrayList<StoredNote>();
+        ng[3].add(new StoredNote(300, 3));
         Level testLevel = new Level("Test", "Sam", ng);
 
         // create level editor scene
@@ -299,6 +318,34 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
 
             // wait for the rest of the frame (if there is any time left)
             sceneRunner.waitUntilNextFrame();
+        }
+    }
+
+    private void saveLevel(Level level) {
+        userData.createLevelFile(level, true);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == 17) { // CTRL
+            isCtrlHeld = true;
+        }
+        if (e.getKeyCode() == 'S') {
+            if (isCtrlHeld) {
+                saveLevel(level);
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == 17) { // CTRL
+            isCtrlHeld = false;
         }
     }
 
@@ -413,6 +460,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene {
         public void mouseReleased(MouseEvent e){
             editor.mouseUp();
         }
+    }
+
+    private static class FileChooser extends JFileChooser {
+
     }
 
     private enum Tool {
