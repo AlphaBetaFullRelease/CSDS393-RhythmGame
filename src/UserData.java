@@ -51,20 +51,26 @@ public class UserData {
             System.out.println(e.getMessage());
             return false;
         }
+        levelPathDict.put(level.getId(), levelPath.getPath());
         return true;
     }
 
     public void addMusicFile(Level level, File audioFile) throws IOException {
-        File folderPath = new File(levelPathDict.get(level.getId()));
+        File folderPath = new File(LEVEL_PATH.getPath() + "\\" + level.getTitle());
         File sourceAudioFile = new File(folderPath.getPath() + "\\song.wav");
 
         FileInputStream fis = new FileInputStream(audioFile);
         FileOutputStream fos = new FileOutputStream(sourceAudioFile);
 
-        int n;
-        while ((n = fis.read()) != -1) {
+        System.out.println("started saving audio file " + System.currentTimeMillis() / 1000);
+
+        byte[] n = fis.readAllBytes();
+        fos.write(n);
+        /*while (n = fis.readAllBytes()) {
             fos.write(n);
-        }
+        }*/
+
+        System.out.println("finished saving audio file " + System.currentTimeMillis() / 1000);
     }
 
     //

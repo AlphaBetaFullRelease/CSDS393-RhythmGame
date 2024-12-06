@@ -1,15 +1,16 @@
 import java.awt.*;
-<<<<<<< Updated upstream
 import java.awt.event.*;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
-=======
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
->>>>>>> Stashed changes
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,12 +57,13 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     private long trackDuration = (long)(1 / noteSpeed);
     // the current scroll position on the screen
     private long curTime = 0;
-
     private UserData userData;
-
     private JButton loadAduioSource;
-
     private boolean isCtrlHeld;
+    private JFileChooser fileChooser;
+    private File audioFile;
+    private String title;
+    private String author;
 
     // reference to sceneRunner (used to change scenes)
     private SceneRunner sceneChanger;
@@ -94,6 +96,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         graphicsHandler = new LevelEditorGraphics(previewNotes);
 
         isCtrlHeld = false;
+
+        fileChooser = new JFileChooser();
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("WAV Files", "wav"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
 
         // load all notes from level into the notes linkedList
         // iterate through tracks
@@ -411,7 +417,6 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         ng[1] = new ArrayList<StoredNote>();
         ng[2] = new ArrayList<StoredNote>();
         ng[3] = new ArrayList<StoredNote>();
-        ng[3].add(new StoredNote(300, 3));
         Level testLevel = new Level("Test", "Sam", ng);
 
         // create level editor scene
@@ -430,7 +435,15 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
     }
 
-    private void saveLevel(Level level) {
+    private void saveLevel() {
+        ArrayList<StoredNote>[] _notes = new ArrayList[notes.length];
+        for (int i = 0; i < notes.length; i++) {
+            _notes[i] = new ArrayList<>();
+            for (StoredNote note : notes[i]) {
+                _notes[i].add(note);
+            }
+        }
+        level = new Level(title, author, _notes);
         userData.createLevelFile(level, true);
     }
 
@@ -444,9 +457,35 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         if (e.getKeyCode() == 17) { // CTRL
             isCtrlHeld = true;
         }
+        if (e.getKeyCode() == 'T') {
+            if (!isCtrlHeld) {
+                title = JOptionPane.showInputDialog(this, "Enter new title.", "Title", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
+        if (e.getKeyCode() == 'A') {
+            if (!isCtrlHeld) {
+                author = JOptionPane.showInputDialog(this, "Enter level author name.", "Author", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
         if (e.getKeyCode() == 'S') {
             if (isCtrlHeld) {
-                saveLevel(level);
+                saveLevel();
+                if (audioFile != null) {
+                    try {
+                        userData.addMusicFile(level, audioFile);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+        if (e.getKeyCode() == 'M') {
+            if (isCtrlHeld) {
+                int option = fileChooser.showOpenDialog(this);
+
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    audioFile = fileChooser.getSelectedFile();
+                }
             }
         }
     }
@@ -569,10 +608,6 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         public void mouseReleased(MouseEvent e){
             editor.mouseUp();
         }
-    }
-
-    private static class FileChooser extends JFileChooser {
-
     }
 
     private enum Tool {
