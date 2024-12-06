@@ -425,6 +425,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         // create a new scenerunner with the starting scene
         SceneRunner sceneRunner = new SceneRunner(editor);
 
+        editor.setTitle();
+        editor.setAuthor();
+        editor.setMusic();
+
         // main loop
         while(true){
             // update loaded scene
@@ -447,6 +451,22 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         userData.createLevelFile(level, true);
     }
 
+    private void setTitle() {
+        title = JOptionPane.showInputDialog(this, "Enter new title.", "Title", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void setAuthor() {
+        author = JOptionPane.showInputDialog(this, "Enter level author name.", "Author", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void setMusic() {
+        int option = fileChooser.showOpenDialog(this);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            audioFile = fileChooser.getSelectedFile();
+        }
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -459,12 +479,12 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
         if (e.getKeyCode() == 'T') {
             if (!isCtrlHeld) {
-                title = JOptionPane.showInputDialog(this, "Enter new title.", "Title", JOptionPane.PLAIN_MESSAGE);
+                setTitle();
             }
         }
         if (e.getKeyCode() == 'A') {
             if (!isCtrlHeld) {
-                author = JOptionPane.showInputDialog(this, "Enter level author name.", "Author", JOptionPane.PLAIN_MESSAGE);
+                setAuthor();
             }
         }
         if (e.getKeyCode() == 'S') {
@@ -481,11 +501,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
         if (e.getKeyCode() == 'M') {
             if (isCtrlHeld) {
-                int option = fileChooser.showOpenDialog(this);
-
-                if (option == JFileChooser.APPROVE_OPTION) {
-                    audioFile = fileChooser.getSelectedFile();
-                }
+                setMusic();
             }
         }
     }
