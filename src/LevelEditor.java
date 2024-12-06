@@ -179,6 +179,73 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
     }
 
+    // scrolls the preview window by the specified amount in milliseconds
+    private void scroll(long ms){
+        // bounds restriction
+        if(curTime + ms < 0)
+            ms = -curTime;
+
+        // increment curTime
+        curTime += ms;
+
+        // undisplay all notes
+        previewNotes = new GameState(numTracks);
+        notesDrag = new ArrayList[numTracks];
+
+        // iterate through each track
+        for(int track = 0; track < numTracks; track++) {
+            // reset index
+            bottomIndex[track] = -1;
+            topIndex[track] = -1;
+            // initialize notesDrag
+            notesDrag[track] = new ArrayList<>();
+
+            // get iterator starting at the bottom note
+            ListIterator<StoredNote> iter = notes[track].listIterator();
+
+            StoredNote note;
+
+            // iterate until no notes left or we reach the first note to be displayed
+            while(iter.hasNext()){
+                // get next note
+                note = iter.next();
+
+                // increment bottom index
+                bottomIndex[track]++;
+
+                // check if note should be undisplayed
+                if(note.getPos() > bottomTime()) {
+                    // set index one back
+                    iter.previous();
+                    break;
+                }
+            }
+
+            // iterate through all notes in the preview region
+            while(iter.hasNext()){
+                // get next note
+                note = iter.next();
+
+                // check if note is below top of screen
+                if(note.getPos() < topTime()){
+                    // set bottom index if this is first
+                    if(bottomIndex[track] == -1)
+                        bottomIndex[track] = iter.previousIndex();
+
+                    // set top index
+                    topIndex[track] = iter.previousIndex();
+
+                    // display note
+                    displayNote(track, note);
+                }else{
+                    // break once note is beyond top of screen
+                    break;
+                }
+            }
+        }
+
+    }
+
     // checks all notes and initiates a grab if the mouse is hovering above one
     private void checkGrabNote(){
         // iterate through all tracks
