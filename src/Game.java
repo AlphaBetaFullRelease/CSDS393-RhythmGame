@@ -5,12 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Game extends JPanel implements ActionListener, Scene {
-    // player performance information
-    private int noteHits;
-    private int noteMisses;
-    private int health;
-    private int score;
-
     // number of tracks
     private final int numTracks = 4;
     
@@ -71,11 +65,6 @@ public class Game extends JPanel implements ActionListener, Scene {
         if(!pathToSong.isEmpty())
             gameAudio.loadSong(level.getSongPath());
 
-        // initialize fields
-        noteHits = 0;
-        noteMisses = 0;
-        health = 0;
-        score = 0;
         // set start delay
         elapsedTime = -level.getStartDelay();
     }
@@ -118,6 +107,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 // check if note should despawn
                 if (n.getPos() > 1) {
                     // despawn note
+                    gameState.noteMiss();
                     track.remove(i);
                     i--;
                 } else
@@ -186,11 +176,11 @@ public class Game extends JPanel implements ActionListener, Scene {
         // check if note exists
         if(hitNote != null){
             // adjust score
-            hitSuccess();
+            gameState.noteHit();
             // remove note from notes list
             gameState.getTracks().get(lane).remove(hitNote);
         }else{
-            hitFail();
+            gameState.noteMiss();
         }
     }
 
@@ -202,15 +192,5 @@ public class Game extends JPanel implements ActionListener, Scene {
                 return note;
         }
         return null;
-    }
-
-    private void hitSuccess(){
-        noteHits += 1;
-        score += 1;
-    }
-
-    private void hitFail(){
-        noteMisses += 1;
-        health -= 5;
     }
 }
