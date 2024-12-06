@@ -1,12 +1,21 @@
-import javax.swing.*;
 import java.awt.*;
+<<<<<<< Updated upstream
 import java.awt.event.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.Point;
 import java.util.List;
 import java.util.LinkedList;
+=======
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+>>>>>>> Stashed changes
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 
 public class LevelEditor extends JPanel implements ActionListener, Scene, KeyListener {
 
@@ -138,12 +147,15 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
 
     // function called when mouse pressed down
     public void mouseDown(){
-        if(curTool == Tool.MOVE){
-            // check for grabbing a note
-            checkGrabNote();
-        }else if(curTool == Tool.ADD){
-            // try to add note
-            checkAddNote();
+        if(null != curTool)switch (curTool) {
+            case MOVE -> // check for grabbing a note
+                checkGrabNote();
+            case ADD -> // try to add note
+                checkAddNote();
+            case REMOVE -> // try to remove note
+                checkRemoveNote();
+            default -> {
+            }
         }
     }
 
@@ -174,6 +186,24 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
                     currentlyDragging = note;
                     note.startDragging(mousePos);
                     // also return bc we don't need to check any new notes after one is grabbed
+                    return;
+                }
+            }
+        }
+    }
+
+    // tries to remove a note where the user is clicking
+    private void checkRemoveNote(){
+        // iterate through all tracks
+        for(int track = 0; track < numTracks; track++){
+            // iterate through all visible notes in the track
+            for(int i = 0; i < previewNotes.getTracks().get(track).size(); i++){
+                Note note = previewNotes.getTracks().get(track).get(i);
+                // check for note collision with mouse
+                Point notePos = new Point((int)graphicsHandler.getPreview().getTrackCenter(track), graphicsHandler.getPreview().getNoteY(note.getPos()));
+                if(notePos.distance(mousePos) < graphicsHandler.getPreview().getNoteWid() / 2){
+                    // remove the note
+                    removeNote(track, note);
                     return;
                 }
             }
@@ -247,6 +277,52 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             // this note should be only note on screen, so update indices
             bottomIndex[track] = iter.previousIndex();
             topIndex[track] = iter.previousIndex();
+        }
+    }
+
+    // removes a note
+    private void removeNote(int track, Note note){
+        // remove note from notes list
+
+        // check if note is currently being displayed on screen
+
+        // un display note
+        unDisplayNote(track, note);
+    }
+
+    // un-displays a note
+    private void unDisplayNote(int track, Note note){
+        // remove note from previewNotes
+        ArrayList<Note> noteList = previewNotes.getTracks().get(track);
+        int noteIndex = -1;
+        for(int i = 0; i < noteList.size(); i++){
+            // check if note matches
+            if(note.getPos() == noteList.get(i).getPos()){
+                // remove note at index
+                noteList.remove(i);
+                noteIndex = i;
+                break;
+            }
+        }
+
+        // remove note from draggableNotes
+        for(int i = 0; i < notesDrag[track].size(); i++){
+            // check if note matches
+            if(Math.abs(note.getPos() - notesDrag[track].get(i).mapTo(0,1)) < .01){
+                // remove note at index
+                noteList.remove(i);
+                break;
+            }
+        }
+
+        // if note was at the top of the screen, decrement topIndex
+        if(noteIndex == topIndex[track]){
+            topIndex[track]--;
+            // if no notes are left on the screen, set topIndex and bottomIndex to -1
+            if(previewNotes.getTracks().get(track).isEmpty()){
+                bottomIndex[track] = -1;
+                topIndex[track] = -1;
+            }
         }
     }
 
