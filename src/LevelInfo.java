@@ -34,6 +34,6 @@ public class LevelInfo extends JPanel implements Scene {
     }
 
     public void exit() {
-        sceneChanger.changeScene(new LevelSelect());
+        sceneChanger.changeScene(new MainMenu());
     }
 }

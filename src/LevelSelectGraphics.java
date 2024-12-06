@@ -120,7 +120,7 @@ public class LevelSelectGraphics {
             pBody.add(bNext);
         }
         // main menu button
-        JButton bExit = new JButton("settings");
+        JButton bExit = new JButton("Main Menu");
         bExit.setForeground(Color.white);
         // add event listener to tell level select to switch scenes
         bExit.addActionListener(

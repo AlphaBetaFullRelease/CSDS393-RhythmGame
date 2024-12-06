@@ -56,7 +56,7 @@ public class SettingsGraphics extends JPanel {
         pHeader.setLayout(null);
         pHeader.setBounds(0, 0, width, headerHeight);
         // create back button
-        JButton bExit = new JButton("main menu");
+        JButton bExit = new JButton("Main Menu");
         //
         bExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

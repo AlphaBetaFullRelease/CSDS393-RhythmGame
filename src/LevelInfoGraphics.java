@@ -202,7 +202,7 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         mainPanel.add(pHeader);
         mainPanel.add(pBody);
         // create back button
-        JButton bExit = new JButton("back");
+        JButton bExit = new JButton("Main Menu");
         //
         bExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

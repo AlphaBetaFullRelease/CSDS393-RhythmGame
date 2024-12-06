@@ -26,6 +26,16 @@ public class MainMenu extends JPanel implements Scene {
       return (JPanel)this;
   }
 
-  
+  public void levelSelect() {
+    sceneChanger.changeScene(new LevelSelect());
+  }
+
+  public void levelEditor() {
+    sceneChanger.changeScene(new LevelInfo(null));
+  }
+
+  public void settings() {
+    sceneChanger.changeScene(new Settings());
+  }
   
 }

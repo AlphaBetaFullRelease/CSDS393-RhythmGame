@@ -24,9 +24,9 @@ public class SceneRunner extends JFrame {
     public static void main(String[] args){
         // create level select
         LevelSelect levelSelect = new LevelSelect();
-
+        MainMenu menu = new MainMenu();
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(levelSelect);
+        SceneRunner sceneRunner = new SceneRunner(menu);
         // main loop
         while(true){
             // update loaded scene

@@ -133,13 +133,8 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
         sortCardsTitle();
     }
     // change scene to main menu
-    // change scene to main menu
     public void exitToMenu() {
-        try {
-            sceneChanger.changeScene(new Settings());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        sceneChanger.changeScene(new MainMenu());
     }
     // change scene to game
     public void playLevel(Level l) {

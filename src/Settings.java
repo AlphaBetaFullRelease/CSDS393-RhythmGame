@@ -1,3 +1,5 @@
+import com.sun.tools.javac.Main;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +19,7 @@ public class Settings extends JPanel implements ActionListener, Scene {
     // listener
     private BindListener bindListener;
     // constructor
-    public Settings() throws FileNotFoundException {
+    public Settings() {
         // get focus
         this.setFocusable(true);
         this.requestFocus();
@@ -48,8 +50,7 @@ public class Settings extends JPanel implements ActionListener, Scene {
     public SettingsConfig getSettingsConfig() { return settingsConfig; }
     // change scene to main menu
     public void exitToMenu() {
-        System.out.println("return to main menu");
-        sceneChanger.changeScene(new LevelSelect());
+        sceneChanger.changeScene(new MainMenu());
     }
 
     @Override
