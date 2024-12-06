@@ -122,6 +122,9 @@ public class GameGraphics {
     public int getNoteY(double pos){
         return layout.getNoteY(pos);
     }
+    public float getNotePos(int y){
+        return layout.getNotePos(y);
+    }
     public int getNoteWid(){
         return layout.noteWid;
     }
@@ -153,7 +156,7 @@ public class GameGraphics {
         public int noteWid;
         // how many pixels a note's spawn & despawn should be offset by
         public int noteOffset;
-        // the length of the track (accounting for noteOffset)
+        // the length of the track in pixels (accounting for noteOffset)
         public int trackLen;
         // the pixel level for the target line
         public int targetLevel;
@@ -185,6 +188,11 @@ public class GameGraphics {
         // pos is the note's position (0-1)
         public int getNoteY(double pos){
             return (int)(pos * trackLen - noteOffset - noteWid/2);
+        }
+
+        // calculates a note's pos given the pixel value on screen
+        public float getNotePos(int y){
+            return ((float)y + noteOffset + noteWid/2) / trackLen;
         }
     }
 
