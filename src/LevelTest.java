@@ -1,7 +1,6 @@
-/*
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+/*
 import static org.junit.jupiter.api.Assertions.*;
 
 class LevelTest {
@@ -97,5 +96,4 @@ class LevelTest {
                 () -> assertEquals(208, level.getNextNote(2, 208).getPos())
         );
     }
-}
-*/
+}*/

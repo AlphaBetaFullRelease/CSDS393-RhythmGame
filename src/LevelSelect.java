@@ -1,8 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.io.*;
 
 public class LevelSelect extends JPanel implements ActionListener, Scene {
     // level card list
@@ -17,12 +17,10 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     private final LevelSelectGraphics graphicsHandler;
     // reference to the sceneRunner (so that scenes can be changed)
     private SceneRunner sceneChanger;
-    // user data object for reading level & score files
-    private UserData userData;
+    //user data object for reading level & score files
+    private UserData userData = new UserData();
     // constructor, create level cards from level data and draw the graphics
     public LevelSelect() {
-        // initialize user data object
-        userData = new UserData();
     	// load level data and populate card list
         loadLevelsCards();
         // set current page as first page
@@ -126,9 +124,6 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     public void loadLevelsCards() {
         // have userData load the level and score data
         userData.loadLevelData();
-        userData.loadScoreData();
-        // clear card list
-        cardList.clear();
         // create cardList
         for (Level level : userData.getLevels())
             cardList.add(new LevelCard(level, userData.getLevelScore(level)));
@@ -138,21 +133,17 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
         sortCardsTitle();
     }
     // change scene to main menu
+    // change scene to main menu
     public void exitToMenu() {
-        System.out.println("return to main menu");
-        Settings settings = null;
         try {
-            settings = new Settings();
+            sceneChanger.changeScene(new Settings());
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            e.printStackTrace();
         }
-        sceneChanger.changeScene(settings);
-        //sceneChanger.changeScene(new LevelInfo());
     }
     // change scene to game
     public void playLevel(Level l) {
         // pass level to new game scene and change scenes
         sceneChanger.changeScene(new Game(l));
-        //sceneChanger.changeScene(new LevelInfo(l));
     }
 }

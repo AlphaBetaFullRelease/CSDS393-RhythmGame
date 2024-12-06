@@ -5,28 +5,39 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.security.Key;
+import java.util.regex.Pattern;
 
 // ui template class for the creation of settings page and level editor stuff
-public class SettingsGraphics {
+public class SettingsGraphics extends JPanel {
     // reference to Settings object
-    Settings settings;
+    private Settings settings;
     // settings JPanel
     private JPanel mainPanel;
     // reference to settings config
-    SettingsConfig config;
+    private SettingsConfig config;
     // layout info
     private final int width = 800;
     private final int height = 450;
     private final int headerHeight = 50;
     private final int bannerHeight = 100;
     private final int headerButtonWidth = 100;
+    private final int keyBindWidth = 100;
     // body banner panels
     private JPanel[] pBanners = new JPanel[4];
     // colors
-    Color cHeader = new Color(151, 109, 194);
-    Color cBody = new Color(138, 121, 156);
-    Color cBanner = new Color(71, 49, 94);
-    Color cButton = new Color(106, 65, 148);
+    private Color cHeader = new Color(151, 109, 194);
+    private Color cBody = new Color(138, 121, 156);
+    private Color cBanner = new Color(71, 49, 94);
+    private Color cButton = new Color(106, 65, 148);
+    // initialize array of key bind buttons
+    private JButton[] bindButtons = new JButton[4];
+    // bind listener
+    private int keyListening = -1;
+    
+    private final JButton applyButton;
     // constructor
     public SettingsGraphics(Settings settings) {
         // get settings object and config
@@ -56,19 +67,20 @@ public class SettingsGraphics {
         bExit.setBackground(cButton);
         bExit.setBounds(0, 0, headerButtonWidth, headerHeight);
         // create apply button
-        JButton bNext = new JButton("apply");
+        applyButton = new JButton("apply");
+        applyButton.setFocusable(false);
         // add action listener to tell settings to save the config
-        bNext.addActionListener(new ActionListener() {
+        applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 settings.saveConfig();
             }
         });
-        bNext.setForeground(Color.white);
-        bNext.setBackground(cButton);
-        bNext.setBounds(width - headerButtonWidth, 0, headerButtonWidth, headerHeight);
+        applyButton.setForeground(Color.white);
+        applyButton.setBackground(cButton);
+        applyButton.setBounds(width - headerButtonWidth, 0, headerButtonWidth, headerHeight);
         // add buttons to header panel
-        pHeader.add(bNext);
+        pHeader.add(applyButton);
         pHeader.add(bExit);
         // add text to header panel
         JLabel lHeader = new JLabel("Settings");
@@ -95,6 +107,7 @@ public class SettingsGraphics {
         // 0 sfx and music volume sliders
         // sfx volume slider properties
         JSlider slider_sfx = new JSlider(JSlider.HORIZONTAL, 0, 100, config.getVolumeSfx());
+        slider_sfx.setFocusable(false);
         slider_sfx.setMajorTickSpacing(10);
         slider_sfx.setSnapToTicks(true);
         // save changes to the config through this change listener
@@ -112,6 +125,7 @@ public class SettingsGraphics {
         slider_sfx.setBounds(0, 0, (int) width / 2, bannerHeight);
         // music volume slider properties
         JSlider slider_music = new JSlider(JSlider.HORIZONTAL, 0, 100, config.getVolumeMusic());
+        slider_music.setFocusable(false);
         slider_music.setMajorTickSpacing(10);
         slider_music.setSnapToTicks(true);
         // save changes to the config w this change listener
@@ -131,9 +145,66 @@ public class SettingsGraphics {
         pBanners[0].add(slider_music);
         // 1 button mappings and input latency calibration
         // button mappings
+        // initialize keyBind buttons and set properties
+        for (int i = 0; i < bindButtons.length; i++) {
+            JButton keyBind = new JButton();
+            keyBind.setFocusable(false);
+            keyBind.setBackground(cButton);
+            keyBind.setForeground(Color.white);
+            // position on screen
+            keyBind.setBounds(i * keyBindWidth, 0, keyBindWidth, bannerHeight);
+            // get config value
+            char keyVal = ' ';
+            switch (i) {
+                case 0:
+                    keyVal = config.getKey1();
+                    break;
+                case 1:
+                    keyVal = config.getKey2();
+                    break;
+                case 2:
+                    keyVal = config.getKey3();
+                    break;
+                case 3:
+                    keyVal = config.getKey4();
+                    break;
+                default:
+                    System.out.println("Error with key mapper, invalid index into bindButtons array");
+                    break;
+            }
+            // set value of button to config value
+            keyBind.setText(String.valueOf(keyVal));
+            // set state to enabled
+            keyBind.setEnabled(true);
+            // add action listener
+            // get index
+            final int key_i = i;
+            keyBind.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!isListening()) {
+                        // disable keyBind button
+                        keyBind.setEnabled(false);
+                        keyBind.setText("...");
+                        // disable apply button
+                        applyButton.setEnabled(false);
+                        // set listening key
+                        keyListening = key_i;
+                        // initialize bind listener
+                        settings.requestFocus();
+                    }
+                }
+            });
+            // add button to banner
+            bindButtons[i] = keyBind;
+            pBanners[2].add(bindButtons[i]);
+        }
+
         // latency spinner properties
         SpinnerModel latency_model = new SpinnerNumberModel(config.getLatency(), 0, 100, 1);
         JSpinner spinner_latency = new JSpinner(latency_model);
+        spinner_latency.setFocusable(false);
+        ((JSpinner.DefaultEditor)spinner_latency.getEditor()).getTextField().setEnabled(false);
         //
         spinner_latency.addChangeListener(new ChangeListener() {
             @Override
@@ -150,6 +221,7 @@ public class SettingsGraphics {
         pBanners[1].add(spinner_latency);
         // ghost tapping
         JToggleButton gTapButton = new JToggleButton();
+        gTapButton.setFocusable(false);
         if (config.getGhostTap()) {
             gTapButton.setText("on");
             gTapButton.setSelected(true);
@@ -181,6 +253,65 @@ public class SettingsGraphics {
         // refresh graphics
         refresh();
     }
+    // listen for key input
+    public void setKeyBind(int val) {
+        // get current bind string
+        String curBinds = "" + (char)config.getKey1() + (char)config.getKey2() + (char)config.getKey3() + (char)config.getKey4();
+        // string of valid key inputs, remove current binds
+        String validateStr = "`1234567890-=QWERTYUIOP\\[]ASDFGHJKL;'ZXCVBNM,./";
+        for (char l : curBinds.toCharArray()) {
+            validateStr = validateStr.replace(String.valueOf(l), "");
+        }
+        // validate and update button at key index
+        char charVal = (char) val;
+        if (validateStr.indexOf(charVal) != -1) {
+            System.out.println("valid key: " + charVal);
+            // set config
+            switch (keyListening) {
+                case 0:
+                    config.setKey1(charVal);
+                    break;
+                case 1:
+                    config.setKey2(charVal);
+                    break;
+                case 2:
+                    config.setKey3(charVal);
+                    break;
+                case 3:
+                    config.setKey4(charVal);
+                    break;
+                default:
+                    System.out.println("Invalid keyListening");
+                    break;
+            }
+            bindButtons[keyListening].setText(String.valueOf(charVal));
+        } else {
+            System.out.println("Invalid key");
+            // restore old value text
+            char keyVal = ' ';
+            switch (keyListening) {
+                case 0:
+                    keyVal = config.getKey1();
+                    break;
+                case 1:
+                    keyVal = config.getKey2();
+                    break;
+                case 2:
+                    keyVal = config.getKey3();
+                    break;
+                case 3:
+                    keyVal = config.getKey4();
+                    break;
+                default:
+                    System.out.println("Invalid keyListening");
+                    break;
+            }
+            bindButtons[keyListening].setText(String.valueOf(keyVal));
+        }
+        bindButtons[keyListening].setEnabled(true);
+        applyButton.setEnabled(true);
+        keyListening = -1;
+    }
 
     // method to refresh graphics
     public void refresh() {
@@ -189,12 +320,7 @@ public class SettingsGraphics {
         mainPanel.repaint();
     }
 
-    public class KeyBind {
-        private char value;
-        public KeyBind(char value) {
-            this.value = value;
-        }
-        public char getValue() { return value; }
-        public void setValue(char value) { this.value = value; }
+    public boolean isListening() {
+        return keyListening != -1;
     }
 }

@@ -36,17 +36,28 @@ public class Game extends JPanel implements ActionListener, Scene {
     // note movement speed (%/Ms)
     private double noteSpeed = 0.001;
 
+    // user data class
+    private final UserData userData;
+
+    // settings config
+    private final SettingsConfig config;
+
     // sets up the game
     public Game(Level level) {
     	// set level to play
     	this.level = level;
+
+        // load settings config
+        userData = new UserData();
+        config = userData.getSettingsConfig();
+
 
         // JPanel properties
         this.setPreferredSize(new Dimension(800, 450)); // screen size/resolution can be changed later, I just picked one to start
         this.setFocusable(true);
 
         // set up the input handler
-        inputHandler = new InputEventDriver(this); // create input event driver
+        inputHandler = new InputEventDriver(this, config); // create input event driver
         addKeyListener(inputHandler); // tells JPanel where to send input events
 
         // set up graphics handler

@@ -91,7 +91,7 @@ public class UserData {
         }
     }
     // return settings config object from json
-    public static SettingsConfig getSettingsConfig() throws FileNotFoundException {
+    public static SettingsConfig getSettingsConfig() {
         System.out.println("getSettingsConfig called");
         // create default settings config
         SettingsConfig config = new SettingsConfig();
@@ -105,7 +105,11 @@ public class UserData {
             // load config from json file
             System.out.println("loading " + settingsPath.getPath() + "!");
             Gson gson = new Gson();
-            config = gson.fromJson(new InputStreamReader(new FileInputStream(settingsPath)), SettingsConfig.class);
+            try {
+                config = gson.fromJson(new InputStreamReader(new FileInputStream(settingsPath)), SettingsConfig.class);
+            } catch (java.io.FileNotFoundException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
         return config;
     }
