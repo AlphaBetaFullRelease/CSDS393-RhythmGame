@@ -58,7 +58,7 @@ public class Game extends JPanel implements ActionListener, Scene {
         graphicsHandler = new GameGraphics(gameState);
 
         // set up audio
-        gameAudio = new GameAudio();
+        gameAudio = new GameAudio(config.getVolumeMusic());
         // load song
         String pathToSong = level.getSongPath();
         // play song if file exists
