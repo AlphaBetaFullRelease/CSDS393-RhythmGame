@@ -35,7 +35,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // flag determining if something is being dragged
     private boolean isDragging = false;
     // keeps track of which tool is currently active using an enumerated type
-    private Tool curTool = Tool.MOVE;
+    private Tool curTool = Tool.ADD;
 
     // holds preview notes on screen
     private GameState previewNotes;
@@ -153,6 +153,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         if(isDragging){
             // if scrollbar being dragged, update each note's draggablePos
 
+            // if note being dragged, update pos in notes
 
             // release the object
             isDragging = false;
@@ -181,7 +182,26 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
 
     // tries to add a note where the user is clicking
     private void checkAddNote(){
-        System.out.println("try add note");
+        int track = -1;
+        // check if the mouse is hovering over a track & find out which track
+        for(int t = 0; t < numTracks; t++)
+            if(mousePos.x > graphicsHandler.getTrackStart(t) && mousePos.x < graphicsHandler.getTrackEnd(t))
+                track = t;
+            
+        // mouse not hovering over a track, abandon note add
+        if(track == -1)
+            return;
+
+        // calculate note pos value from mouse y coordinate
+        float pos = graphicsHandler.getPreview().getNotePos(mousePos.y);
+        // confirm that note is within bounds
+        if(pos < 0 || pos > 1)
+            return;
+        // calculate note millisecond value from pos value
+        long millis = getTimeFromPos(pos);
+
+        // add note
+        addNote(track, new StoredNote((long)millis, track));
     }
 
     // adds note to the stored notes list
@@ -220,6 +240,14 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
         // list iterated through, add to end
         iter.add(note);
+        // check if note should be on screen
+        if(note.getPos() < topTime() && note.getPos() > bottomTime()){
+            // display note
+            displayNote(track, note);
+            // this note should be only note on screen, so update indices
+            bottomIndex[track] = iter.previousIndex();
+            topIndex[track] = iter.previousIndex();
+        }
     }
 
     // adds a note to the preview & creates a draggable object for it
@@ -244,6 +272,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // returns the lowest time value (in ms) where notes can be displayed on screen
     private long bottomTime(){
         return curTime;
+    }
+
+    // returns the time in ms a note will have given a pos value on screen
+    private long getTimeFromPos(float pos){
+        return (long)(curTime + (1-pos) * trackDuration);
     }
 
     // called when an action is performed

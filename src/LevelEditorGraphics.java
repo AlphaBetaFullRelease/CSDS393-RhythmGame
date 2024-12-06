@@ -69,6 +69,14 @@ public class LevelEditorGraphics {
     public int getPreviewHeight(){
         return previewHeight;
     }
+    // returns the pixel where the track starts
+    public int getTrackStart(int track){
+        return (int)(previewGraphics.getTrackCenter(track) - previewGraphics.getNoteWid()/2);
+    }
+    // returns the pixel where the track ends
+    public int getTrackEnd(int track){
+        return (int)(previewGraphics.getTrackCenter(track) + previewGraphics.getNoteWid()/2);
+    }
 
     // returns reference to GameGraphics object for layout concerns
     public GameGraphics getPreview(){
