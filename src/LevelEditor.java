@@ -487,6 +487,15 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
                 setAuthor();
             }
         }
+        if (e.getKeyCode() == 'Q') {
+            curTool = Tool.ADD;
+        }
+        if (e.getKeyCode() == 'W') {
+            curTool = Tool.REMOVE;
+        }
+        if (e.getKeyCode() == 'E') {
+            curTool = Tool.MOVE;
+        }
         if (e.getKeyCode() == 'S') {
             if (isCtrlHeld) {
                 saveLevel();
