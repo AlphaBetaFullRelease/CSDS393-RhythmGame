@@ -1,8 +1,9 @@
+import java.io.FileNotFoundException;
 import java.util.*;
 import javax.swing.JFrame;
 
 // this is the main class. it starts the game and handles all scenes
-public class SceneRunner extends JFrame{
+public class SceneRunner extends JFrame {
     // target frame rate
     private final double targetFPS = 60;
     private final long targetFrameMillis = (long)(1000 / targetFPS);
@@ -21,21 +22,11 @@ public class SceneRunner extends JFrame{
     // starts the game with the main menu open
     // for now, launches straight into Game since there is no main menu
     public static void main(String[] args){
-        // DEBUG create placeholder level data
-        StoredNote[][] ng = {
-                {new StoredNote(600, 0)},
-                {new StoredNote(610, 1)},
-                {new StoredNote(620, 2)},
-                {new StoredNote(630, 3)}
-        };
-        Level testLevel = new Level("Test", "Ricardo", ng);
+        // create level select
+        LevelSelect levelSelect = new LevelSelect();
 
-        // create game
-        Game game = new Game(testLevel);
-        
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(game);
-
+        SceneRunner sceneRunner = new SceneRunner(levelSelect);
         // main loop
         while(true){
             // update loaded scene
@@ -59,6 +50,8 @@ public class SceneRunner extends JFrame{
         changeScene(scene);
 
         // create the window
+        this.setSize(800, 450);
+        this.add(scene.getPanel());
         this.pack();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -105,7 +98,7 @@ public class SceneRunner extends JFrame{
     }
 
     // updates the loaded scene and delta time
-    public void update() {
+    protected void update() {
         // check if frame count should be reset
         if(numFrames == resetTrackEveryN){
             numFrames = 0; // reset frame count
@@ -125,7 +118,7 @@ public class SceneRunner extends JFrame{
     }
 
     // waits until the next frame (or doesn't wait at all if more than one frame's worth of time has passed)
-    public void waitUntilNextFrame(){
+    protected void waitUntilNextFrame(){
         // get diff between time passed and target amount of time
         long diff = targetFrameMillis - deltaTime();
 

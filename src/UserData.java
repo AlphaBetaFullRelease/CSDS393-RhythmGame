@@ -53,6 +53,20 @@ public class UserData {
         }
         return true;
     }
+
+    public void addMusicFile(Level level, File audioFile) throws IOException {
+        File folderPath = new File(levelPathDict.get(level.getId()));
+        File sourceAudioFile = new File(folderPath.getPath() + "\\song.wav");
+
+        FileInputStream fis = new FileInputStream(audioFile);
+        FileOutputStream fos = new FileOutputStream(sourceAudioFile);
+
+        int n;
+        while ((n = fis.read()) != -1) {
+            fos.write(n);
+        }
+    }
+
     //
     public boolean deleteLevelFile(Level level) {
         System.out.println("deleting level " + level.getTitle());
