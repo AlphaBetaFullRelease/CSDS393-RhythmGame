@@ -61,6 +61,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     private File audioFile;
     private String title;
     private String author;
+    private int tempo;
 
     // reference to sceneRunner (used to change scenes)
     private SceneRunner sceneChanger;
@@ -491,6 +492,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
 
         editor.setTitle();
         editor.setAuthor();
+        editor.setTempo();
         editor.setMusic();
 
         // main loop
@@ -503,6 +505,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
     }
 
+    private void setTempo() {
+        tempo = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter new tempo in beats per minute.", "Tempo", JOptionPane.PLAIN_MESSAGE));
+    }
+
     private void saveLevel() {
         ArrayList<StoredNote>[] _notes = new ArrayList[notes.length];
         for (int i = 0; i < notes.length; i++) {
@@ -512,6 +518,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             }
         }
         level = new Level(title, author, _notes);
+        level.setTempo(tempo);
         userData.createLevelFile(level, true);
     }
 
@@ -580,6 +587,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         if (e.getKeyCode() == 'O') {
             if (isCtrlHeld) {
                 loadLevel();
+            }
+        }
+        if (e.getKeyCode() == 'B') {
+            if (!isCtrlHeld) {
+                setTempo();
             }
         }
         if (e.getKeyCode() == 38) { // up
