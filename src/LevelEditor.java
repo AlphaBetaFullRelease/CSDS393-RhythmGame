@@ -94,6 +94,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("WAV Files", "wav"));
         fileChooser.setAcceptAllFileFilterUsed(false);
 
+        initLevel();
+    }
+
+    private void initLevel() {
         // load all notes from level into the notes linkedList
         // iterate through tracks
         for(int track = 0; track < numTracks; track++){
@@ -606,6 +610,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
 
         audioFile = null;
+
+        initLevel();
+
+        title = level.getTitle();
+        author = level.getCreator();
 
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("WAV Files", "wav"));
         fileChooser.removeChoosableFileFilter(fileChooser.getChoosableFileFilters()[0]);
