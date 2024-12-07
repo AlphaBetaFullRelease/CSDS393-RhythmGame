@@ -112,17 +112,12 @@ public class Level {
         return null;
     }
 
-    public void setTempo(int tempo) { this.tempo = tempo; }
-    // TO DO: delete this method, maybe level select passes the level path to game and then it uses user data to get stuff
-    public String getSongPath() {
-        return "./data\\levels\\Mary had a little lamb\\song.wav";
+    public void setTempo(int tempo) { this.tempo = tempo;}
 
     // returns the path to the song file
     public String getSongPath() {
         return levelPath + "\\song.wav";
     }
-
-    public long getStartDelay() { return startDelay; }
 
     private void calculateDuration() {
         int lastNoteTime = (int) (noteGrid[0].get(noteGrid[0].size() - 1).getNote().getPos() / 1000);
@@ -148,19 +143,6 @@ public class Level {
 
     public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
-    private void calculateDuration() {
-        int lastNoteTime = (int) (noteGrid[0].get(noteGrid[0].size() - 1).getNote().getPos() / 1000);
-
-        for (int i = 1; i < 4; i++) {
-            if (getTrackLength(i) > 0) {
-                if (noteGrid[i].get(noteGrid[i].size() - 1).getNote().getPos() / 1000 > lastNoteTime) {
-                    lastNoteTime = (int) (noteGrid[i].get(noteGrid[i].size() - 1).getNote().getPos() / 1000);
-                }
-            }
-        }
-
-        this.duration = lastNoteTime;
-    }
     public void setDuration(long duration) {
         this.duration = duration;
     }

@@ -31,7 +31,11 @@ public class MainMenu extends JPanel implements Scene {
   }
 
   public void settings() {
-    sceneChanger.changeScene(new Settings());
+    try {
+      sceneChanger.changeScene(new Settings());
+    }catch(Exception e){
+
+    }
   }
   
 }

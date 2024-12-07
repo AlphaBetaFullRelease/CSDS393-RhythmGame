@@ -548,7 +548,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             }
         }
         level = new Level(title, author, _notes);
-        userData.createLevelFile(level);
+        userData.createLevelFile(level, true);
         level.setTempo(tempo);
     }
 

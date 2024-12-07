@@ -16,11 +16,12 @@ public class LevelInfo extends JPanel implements Scene {
         userData = new UserData();
         userData.loadLevelData();
         this.level = level;
-        try {
-            this.musicFile = userData.getLevelMusicFile(level);
-        } catch (FileNotFoundException e) {
-            this.musicFile = null;
-        }
+        this.musicFile = null;
+//        try {
+//            this.musicFile = userData.getLevelMusicFile(level);
+//        } catch (FileNotFoundException e) {
+//            this.musicFile = null;
+//        }
         graphicsHandler = new LevelInfoGraphics(this);
     }
     @Override
@@ -34,7 +35,7 @@ public class LevelInfo extends JPanel implements Scene {
     public UserData getUserData() { return userData; }
 
     public void edit() {
-        userData.createLevelFile(level);
+        userData.createLevelFile(level, true);
         try {
             userData.addMusicFile(level, musicFile);
             sceneChanger.changeScene(new LevelEditor(level));

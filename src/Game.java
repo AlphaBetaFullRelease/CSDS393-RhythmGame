@@ -36,7 +36,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private final UserData userData;
 
     // settings config
-    private final SettingsConfig config;
+    private SettingsConfig config;
 
     // sets up the game
     public Game(Level level) {
@@ -45,7 +45,11 @@ public class Game extends JPanel implements ActionListener, Scene {
 
         // load settings config
         userData = new UserData();
-        config = userData.getSettingsConfig();
+        try {
+            config = userData.getSettingsConfig();
+        }catch(Exception e){
+
+        }
 
 
         // JPanel properties
@@ -69,12 +73,6 @@ public class Game extends JPanel implements ActionListener, Scene {
         else{
             System.out.println("no song found");
         }
-        
-        // instantiate fields
-        noteHits = 0;
-        noteMisses = 0;
-        health = 0;
-        score = 0;
     }
 
     // this is the frame update function

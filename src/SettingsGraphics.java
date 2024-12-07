@@ -325,12 +325,3 @@ public class SettingsGraphics extends JPanel {
         return keyListening != -1;
     }
 }
-    public class KeyBind {
-        private char value;
-        public KeyBind(char value) {
-            this.value = value;
-        }
-        public char getValue() { return value; }
-        public void setValue(char value) { this.value = value; }
-    }
-}
