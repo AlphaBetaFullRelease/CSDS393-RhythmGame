@@ -182,7 +182,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         curTime += ms;
 
         // undisplay all notes
-        previewNotes = new GameState(numTracks);
+        previewNotes.resetTracks();
         notesDrag = new ArrayList[numTracks];
 
         // iterate through each track
@@ -395,9 +395,9 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // adds a note to the preview & creates a draggable object for it
     private void displayNote(int track, StoredNote note){
         // calculate & set position offset
-        float spawnOffset = trackDuration - note.getPos();
+        float spawnOffset = curTime + trackDuration - note.getPos();
         Note noteObj = note.getNote();
-        noteObj.updatePos(spawnOffset * noteSpeed);
+        noteObj.setPos(spawnOffset * noteSpeed);
 
         // add note to previewNotes
         previewNotes.spawnNote(track, noteObj);
