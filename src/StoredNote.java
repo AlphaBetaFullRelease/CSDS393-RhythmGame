@@ -14,6 +14,10 @@ public class StoredNote implements Comparable<StoredNote> {
     public long getPos() {
         return posMillis;
     }
+    // set the position of the storedNote
+    public void setPos(long pos){
+        posMillis = pos;
+    }
     // get the note of the StoredNote
     public Note getNote() {
         return note;
