@@ -44,7 +44,11 @@ public class Level {
         for(int i = 0; i < spawnIndex.length; i++)
             spawnIndex[i] = 0;
     }
-    //TODO: code that generates a unique id using the system clock
+
+    public void setPath(String path){
+        levelPath = path;
+    }
+
     private static int generateId() {
         int rand = (int) Math.random() * 1000;
         return (int) System.currentTimeMillis() + rand;
@@ -109,9 +113,9 @@ public class Level {
     }
 
 
-    // TO DO: delete this method, maybe level select passes the level path to game and then it uses user data to get stuff
+    // returns the path to the song file
     public String getSongPath() {
-        return "./data\\levels\\Mary had a little lamb\\song.wav";
+        return levelPath + "\\song.wav";
     }
 
     public long getStartDelay() { return startDelay; }

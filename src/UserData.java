@@ -102,6 +102,7 @@ public class UserData {
                 // attempt to read json file
                 try {
                     Level level = gson.fromJson(new InputStreamReader(new FileInputStream(jsonPath)), Level.class);
+                    level.setPath(entry.getPath());
                     levels.add(level);
                     levelPathDict.put(level.getId(), entry.getPath());
 /*
