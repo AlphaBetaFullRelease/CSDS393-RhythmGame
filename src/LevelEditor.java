@@ -262,7 +262,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             for(int i = 0; i < previewNotes.getTracks().get(track).size(); i++){
                 Note note = previewNotes.getTracks().get(track).get(i);
                 // check for note collision with mouse
-                Point notePos = new Point((int)graphicsHandler.getPreview().getTrackCenter(track), graphicsHandler.getPreview().getNoteY(note.getPos()));
+                Point notePos = new Point((int)graphicsHandler.getPreview().getTrackCenter(track), graphicsHandler.getPreview().getNoteY(note.getPos()) + graphicsHandler.getPreview().getNoteWid()/2);
                 if(notePos.distance(mousePos) < graphicsHandler.getPreview().getNoteWid() / 2){
                     // remove the note
                     removeNote(track, note);
@@ -345,8 +345,13 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // removes a note
     private void removeNote(int track, Note note){
         // remove note from notes list
-
-        // check if note is currently being displayed on screen
+        ListIterator<StoredNote> iter = notes[track].listIterator();
+        while(iter.hasNext()){
+            if(iter.next().getNote() == note){
+                iter.previous();
+                iter.remove();
+            }
+        }
 
         // un display note
         unDisplayNote(track, note);
@@ -455,7 +460,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         Point pos = new Point((int)preview.getTrackCenter(track), preview.getNoteY(linkedNote.getPos()));
 
         // calculate the bounds of the track
-        DraggableNote retVal = new DraggableNote(pos, preview.getNoteWid(), preview.getYOffset(), preview.getYOffset() + preview.getHeight(), linkedNote);
+        DraggableNote retVal = new DraggableNote(pos, preview.getNoteWid(), preview.getYOffset(), preview.getYOffset() + preview.getHeight() + 2*preview.getNoteOffset(), linkedNote);
         return retVal;
     }
 
