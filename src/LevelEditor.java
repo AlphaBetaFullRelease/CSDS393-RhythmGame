@@ -569,6 +569,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
                 setMusic();
             }
         }
+        if (e.getKeyCode() == 'O') {
+            if (isCtrlHeld) {
+
+            }
+        }
         if (e.getKeyCode() == 38) { // up
             scroll(200);
         }

@@ -27,17 +27,6 @@ public class LevelEditorGraphics {
     // draws all the elements to the screen
     public void drawFrame(Graphics2D g){
         drawPreview(g);
-
-        // draw scrollbar
-        // draw scroll buttons
-
-        // draw place button
-        // draw remove button
-        // draw move button
-
-        // draw play button
-
-        // draw cursor
     }
 
     public void drawPreview(Graphics2D g){
@@ -52,8 +41,9 @@ public class LevelEditorGraphics {
         g.drawLine(previewX+previewWidth, previewY, previewX+previewWidth, previewY+previewHeight);
         g.drawLine(previewX, previewY+previewHeight, previewX+previewWidth, previewY+previewHeight);
 
-        // draw bpm ticks
-
+        g.setColor(new Color(238, 238, 238));
+        g.setStroke(new BasicStroke(0));
+        g.fillRect(0, height * 3 / 4 + 1, width, height / 4);
     }
 
     // getter methods for preview window
