@@ -539,6 +539,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         tempo = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter new tempo in beats per minute.", "Tempo", JOptionPane.PLAIN_MESSAGE));
     }
 
+    private void levelInfo() {
+        sceneChanger.changeScene(new LevelInfo(level));
+    }
+
     private void saveLevel() {
         ArrayList<StoredNote>[] _notes = new ArrayList[notes.length];
         for (int i = 0; i < notes.length; i++) {
@@ -578,15 +582,8 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         if (e.getKeyCode() == 17) { // CTRL
             isCtrlHeld = true;
         }
-        if (e.getKeyCode() == 'T') {
-            if (!isCtrlHeld) {
-                setTitle();
-            }
-        }
-        if (e.getKeyCode() == 'A') {
-            if (!isCtrlHeld) {
-                setAuthor();
-            }
+        if (e.getKeyCode() == 'D') {
+            levelInfo();
         }
         if (e.getKeyCode() == 'Q') {
             curTool = Tool.ADD;
@@ -609,21 +606,23 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
                 }
             }
         }
+        /*
         if (e.getKeyCode() == 'M') {
             if (isCtrlHeld) {
                 setMusic();
             }
-        }
+        }*/
         if (e.getKeyCode() == 'O') {
             if (isCtrlHeld) {
                 loadLevel();
             }
         }
+        /*
         if (e.getKeyCode() == 'B') {
             if (!isCtrlHeld) {
                 setTempo();
             }
-        }
+        }*/
         if (e.getKeyCode() == 38) { // up
             scroll(200);
         }
