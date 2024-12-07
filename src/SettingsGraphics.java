@@ -18,6 +18,7 @@ public class SettingsGraphics extends JPanel {
     private JPanel mainPanel;
     // reference to settings config
     private SettingsConfig config;
+  
     // layout info
     private final int width = 800;
     private final int height = 450;
@@ -322,5 +323,14 @@ public class SettingsGraphics extends JPanel {
 
     public boolean isListening() {
         return keyListening != -1;
+    }
+}
+    public class KeyBind {
+        private char value;
+        public KeyBind(char value) {
+            this.value = value;
+        }
+        public char getValue() { return value; }
+        public void setValue(char value) { this.value = value; }
     }
 }

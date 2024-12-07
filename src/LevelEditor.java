@@ -6,6 +6,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import com.google.gson.Gson;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.event.ActionEvent;
@@ -17,6 +27,8 @@ import java.util.List;
 import java.util.ListIterator;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
+import java.util.ListIterator;
+import javax.swing.*;
 
 public class LevelEditor extends JPanel implements ActionListener, Scene, KeyListener {
 
@@ -41,7 +53,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // draggable object for the scroll bar
     private Draggable scrollDrag;
     // reference to current object being dragged
-    private Draggable currentlyDragging;
+    private DraggableNote currentlyDragging;
     // flag determining if something is being dragged
     private boolean isDragging = false;
     // keeps track of which tool is currently active using an enumerated type
@@ -64,6 +76,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     private File audioFile;
     private String title;
     private String author;
+    private int tempo;
 
     // reference to sceneRunner (used to change scenes)
     private SceneRunner sceneChanger;
@@ -100,7 +113,11 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("WAV Files", "wav"));
         fileChooser.setAcceptAllFileFilterUsed(false);
+      
+        initLevel();
+    }
 
+    private void initLevel() {
         // load all notes from level into the notes linkedList
         // iterate through tracks
         for(int track = 0; track < numTracks; track++){
@@ -169,9 +186,15 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     public void mouseUp(){
         // check if an object is being dragged
         if(isDragging){
-            // if scrollbar being dragged, update each note's draggablePos
-
             // if note being dragged, update pos in notes
+            Note targetNote = currentlyDragging.linkedNote;
+            ListIterator<StoredNote> iter = notes[targetNote.getCol()].listIterator();
+            while(iter.hasNext()){
+                if(iter.next().getNote() == targetNote) {
+                    iter.previous().setPos(getTimeFromPos((float) targetNote.getPos()));
+                    break;
+                }
+            }
 
             // release the object
             isDragging = false;
@@ -189,7 +212,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         curTime += ms;
 
         // undisplay all notes
-        previewNotes = new GameState(numTracks);
+        previewNotes.resetTracks();
         notesDrag = new ArrayList[numTracks];
 
         // iterate through each track
@@ -273,7 +296,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             for(int i = 0; i < previewNotes.getTracks().get(track).size(); i++){
                 Note note = previewNotes.getTracks().get(track).get(i);
                 // check for note collision with mouse
-                Point notePos = new Point((int)graphicsHandler.getPreview().getTrackCenter(track), graphicsHandler.getPreview().getNoteY(note.getPos()));
+                Point notePos = new Point((int)graphicsHandler.getPreview().getTrackCenter(track), graphicsHandler.getPreview().getNoteY(note.getPos()) + graphicsHandler.getPreview().getNoteWid()/2);
                 if(notePos.distance(mousePos) < graphicsHandler.getPreview().getNoteWid() / 2){
                     // remove the note
                     removeNote(track, note);
@@ -304,7 +327,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         long millis = getTimeFromPos(pos);
 
         // add note
-        addNote(track, new StoredNote(millis, track));
+        addNote(track, new StoredNote((long)millis, track, 0));
     }
 
     // adds note to the stored notes list
@@ -356,8 +379,13 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // removes a note
     private void removeNote(int track, Note note){
         // remove note from notes list
-
-        // check if note is currently being displayed on screen
+        ListIterator<StoredNote> iter = notes[track].listIterator();
+        while(iter.hasNext()){
+            if(iter.next().getNote() == note){
+                iter.previous();
+                iter.remove();
+            }
+        }
 
         // un display note
         unDisplayNote(track, note);
@@ -402,9 +430,9 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // adds a note to the preview & creates a draggable object for it
     private void displayNote(int track, StoredNote note){
         // calculate & set position offset
-        float spawnOffset = trackDuration - note.getPos();
+        float spawnOffset = curTime + trackDuration - note.getPos();
         Note noteObj = note.getNote();
-        noteObj.updatePos(spawnOffset * noteSpeed);
+        noteObj.setPos(spawnOffset * noteSpeed);
 
         // add note to previewNotes
         previewNotes.spawnNote(track, noteObj);
@@ -466,7 +494,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         Point pos = new Point((int)preview.getTrackCenter(track), preview.getNoteY(linkedNote.getPos()));
 
         // calculate the bounds of the track
-        DraggableNote retVal = new DraggableNote(pos, preview.getNoteWid(), preview.getYOffset(), preview.getYOffset() + preview.getHeight(), linkedNote);
+        DraggableNote retVal = new DraggableNote(pos, preview.getNoteWid(), preview.getYOffset(), preview.getYOffset() + preview.getHeight() + 2*preview.getNoteOffset(), linkedNote);
         return retVal;
     }
 
@@ -494,6 +522,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
 
         editor.setTitle();
         editor.setAuthor();
+        editor.setTempo();
         editor.setMusic();
 
         // main loop
@@ -504,6 +533,10 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             // wait for the rest of the frame (if there is any time left)
             sceneRunner.waitUntilNextFrame();
         }
+    }
+  
+    private void setTempo() {
+        tempo = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter new tempo in beats per minute.", "Tempo", JOptionPane.PLAIN_MESSAGE));
     }
 
     private void saveLevel() {
@@ -516,6 +549,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
         level = new Level(title, author, _notes);
         userData.createLevelFile(level);
+        level.setTempo(tempo);
     }
 
     private void setTitle() {
@@ -580,6 +614,52 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
                 setMusic();
             }
         }
+        if (e.getKeyCode() == 'O') {
+            if (isCtrlHeld) {
+                loadLevel();
+            }
+        }
+        if (e.getKeyCode() == 'B') {
+            if (!isCtrlHeld) {
+                setTempo();
+            }
+        }
+        if (e.getKeyCode() == 38) { // up
+            scroll(200);
+        }
+        if (e.getKeyCode() == 40) { // down
+            scroll(-200);
+        }
+    }
+
+    private void loadLevel() {
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
+        fileChooser.removeChoosableFileFilter(fileChooser.getChoosableFileFilters()[0]);
+
+        int option = fileChooser.showOpenDialog(this);
+        File levelFile;
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            levelFile = fileChooser.getSelectedFile();
+
+            Gson gson = new Gson();
+
+            try {
+                level = gson.fromJson(new InputStreamReader(new FileInputStream(levelFile)), Level.class);
+            } catch (java.io.FileNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        audioFile = null;
+
+        initLevel();
+
+        title = level.getTitle();
+        author = level.getCreator();
+
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("WAV Files", "wav"));
+        fileChooser.removeChoosableFileFilter(fileChooser.getChoosableFileFilters()[0]);
     }
 
     @Override

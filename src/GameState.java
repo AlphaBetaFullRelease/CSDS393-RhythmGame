@@ -51,5 +51,11 @@ public class GameState {
         noteHits ++;
         score += 1;
     }
-
+    // clears all tracks
+    public void resetTracks(){
+        int num = tracks.size();
+        tracks = new ArrayList<>();
+        for (int i = 0; i < num; i ++)
+            this.tracks.add(new ArrayList<>());
+    }
 }

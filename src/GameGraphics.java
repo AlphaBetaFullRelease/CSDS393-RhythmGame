@@ -167,6 +167,14 @@ public class GameGraphics {
         return 4;
     }
 
+    public float getTrackLenOffset(){
+        return layout.getTrackLenOffset();
+    }
+
+    public int getNoteOffset(){
+        return layout.getNoteOffset();
+    }
+
     // holds all coordinates that only need to be calculated once
     private class Layout {
         // coordinate for the center of each track
@@ -187,7 +195,7 @@ public class GameGraphics {
         public int healthBarH;
 
         public int scoreP;
-
+      
         // uses the variables in GameGraphics to generate coordinates for graphical elements
         public void initialize(){
             // comments assume all customization variables are in pixels for simplicity (they are actually in percent of screen width)
@@ -221,7 +229,15 @@ public class GameGraphics {
 
         // calculates a note's pos given the pixel value on screen
         public float getNotePos(int y){
-            return ((float)y + noteOffset + noteWid/2) / trackLen;
+            return ((float)y + noteOffset) / trackLen;
+        }
+
+        public float getTrackLenOffset(){
+            return trackLen + noteOffset*2;
+        }
+
+        public int getNoteOffset(){
+            return layout.noteOffset;
         }
     }
 

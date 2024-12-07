@@ -62,14 +62,19 @@ public class Game extends JPanel implements ActionListener, Scene {
         // set up audio
         gameAudio = new GameAudio(config.getVolumeMusic());
         // load song
-        try {
-            gameAudio.loadSong(userData.getLevelMusicFile(level).getPath());
-        } catch (IOException e) {
-            System.out.println("Error loading level music file");
+        String pathToSong = level.getSongPath();
+        // play song if file exists
+        if(!pathToSong.isEmpty())
+            gameAudio.loadSong(level.getSongPath());
+        else{
+            System.out.println("no song found");
         }
-
-        // set start delay
-        elapsedTime = -level.getStartDelay();
+        
+        // instantiate fields
+        noteHits = 0;
+        noteMisses = 0;
+        health = 0;
+        score = 0;
     }
 
     // this is the frame update function
@@ -93,7 +98,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 Note note = nextNote.getNote();
 
                 // set initial spawn position
-                note.updatePos(spawnOffset * noteSpeed);
+                note.setPos(spawnOffset * noteSpeed);
 
                 // add note to the list of active notes
                 gameState.spawnNote(track, note);

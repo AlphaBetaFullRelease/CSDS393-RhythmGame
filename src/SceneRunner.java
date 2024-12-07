@@ -84,6 +84,9 @@ public class SceneRunner extends JFrame {
         // set the focus to the new scene
         loadedScene.getPanel().setFocusable(true);
         loadedScene.getPanel().requestFocusInWindow();
+
+        // reset delay time
+        initFrameStart();
     }
 
     // calculates and returns fps (using average number of frames passed since frameTrackStart)
@@ -94,6 +97,11 @@ public class SceneRunner extends JFrame {
     // returns the time delta sice the last update() was called
     private long deltaTime() {
         return System.currentTimeMillis() - lastFrameCallTime;
+    }
+
+    // reset the frame counter
+    public void initFrameStart(){
+        lastFrameCallTime = System.currentTimeMillis();
     }
 
     // updates the loaded scene and delta time
