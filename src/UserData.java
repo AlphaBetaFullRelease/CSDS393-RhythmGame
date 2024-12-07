@@ -1,5 +1,9 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -203,5 +207,22 @@ public class UserData {
         scores.add(empty);
         saveScoreData();
         return empty;
+    }
+    // upload a song file for a level
+    public void uploadLevelSongFile(Level level) {
+        // file chooser
+        JFileChooser fileChooser = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("WAV files", "wav");
+        fileChooser.setFileFilter(filter);
+        // create dialogue
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            // copy selected song file to level path
+            copySongFile(fileChooser.getSelectedFile());
+        }
+    }
+    // copy song file to level folder
+    public void copySongFile(File filePath) {
+
     }
 }

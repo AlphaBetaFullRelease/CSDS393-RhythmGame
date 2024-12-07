@@ -3,6 +3,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,6 +21,7 @@ public class LevelInfoGraphics extends JPanel implements Scene {
     private LevelInfo levelInfo;
     private JPanel mainPanel;
     private Level level;
+    private String songName;
     // layout info
     private final int width = 800;
     private final int height = 450;
@@ -50,6 +54,7 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         this.levelInfo = info;
         this.mainPanel = info.getPanel();
         this.level = info.getLevel();
+        this.songName = level.getSongPath();
         // JPanel properties
         mainPanel.setPreferredSize(new Dimension(width, height));
         mainPanel.setFocusable(true);
@@ -146,7 +151,25 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         pBanners[0].add(creatorLabel);
         pBanners[0].add(creatorField);
         // banner 1 song
-
+        // get song path from file
+        UserData data = levelInfo.getUserData();
+        // path text field
+        JTextField pathField = new JTextField(level.getSongPath());
+        pathField.setBorder(BorderFactory.createTitledBorder("song file:"));
+        pathField.setBounds(0, 0, width - headerButtonWidth, bannerHeight);
+        // upload button
+        JButton uploadButton = new JButton("upload");
+        uploadButton.setBounds(width - headerButtonWidth, 0, headerButtonWidth, bannerHeight);
+        // add actionListener to open file dialogue
+        uploadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                data.uploadLevelSongFile(level);
+            }
+        });
+        // add to banner
+        pBanners[1].add(pathField);
+        pBanners[1].add(uploadButton);
         // banner 2 tempo and difficulty
         // label
         JLabel tempoLabel = new JLabel("tempo");

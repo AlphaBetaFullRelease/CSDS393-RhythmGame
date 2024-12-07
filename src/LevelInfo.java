@@ -17,6 +17,9 @@ public class LevelInfo extends JPanel implements Scene {
         else this.level = level;
         graphicsHandler = new LevelInfoGraphics(this);
     }
+    public void createLevelFile() {
+        userData.createLevelFile(level, true);
+    }
     @Override
     public void update(long delta) {
         // do nothing
@@ -25,6 +28,7 @@ public class LevelInfo extends JPanel implements Scene {
     public void setSceneRunner(SceneRunner sr) { this.sceneChanger = sr; }
     public JPanel getPanel() { return (JPanel) this; }
     public Level getLevel() { return level; }
+    public UserData getUserData() { return userData; }
     //
     public boolean isNewLevel() { return newLevel; }
     //

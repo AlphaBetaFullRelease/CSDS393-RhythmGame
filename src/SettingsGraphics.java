@@ -258,7 +258,7 @@ public class SettingsGraphics extends JPanel {
         // get current bind string
         String curBinds = "" + (char)config.getKey1() + (char)config.getKey2() + (char)config.getKey3() + (char)config.getKey4();
         // string of valid key inputs, remove current binds
-        String validateStr = "`1234567890-=QWERTYUIOP\\[]ASDFGHJKL;'ZXCVBNM,./";
+        String validateStr = "1234567890-=QWERTYUIOP\\[]ASDFGHJKL;ZXCVBNM,./";
         for (char l : curBinds.toCharArray()) {
             validateStr = validateStr.replace(String.valueOf(l), "");
         }
