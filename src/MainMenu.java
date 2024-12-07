@@ -1,46 +1,37 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class MainMenu extends JPanel implements ActionListener, Scene {
+public class MainMenu extends JPanel implements Scene {
 
-    private final MainMenuGraphics graphicsHandler;
+  private final MainMenuGraphics graphicsHandler;
 
-    private SceneRunner sceneChanger;
+  private SceneRunner sceneChanger;
 
-    public MainMenu() {
-        graphicsHandler = new MainMenuGraphics(this);
-    }
+  public MainMenu(){
+    graphicsHandler = new MainMenuGraphics(this);
+  }
 
-    @Override
-    public void update(long delta) {
-    }
+  @Override
+  public void update(long delta) {
+  }
 
-    @Override
-    public void setSceneRunner(SceneRunner sceneRunner) {
-        sceneChanger = sceneRunner;
-    }
+  @Override
+  public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
 
-    @Override
-    public JPanel getPanel() {
-        return (JPanel) this;
-    }
+  @Override
+  public JPanel getPanel() {
+      return (JPanel)this;
+  }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // No implementation...
-    }
+  public void levelSelect() {
+    sceneChanger.changeScene(new LevelSelect());
+  }
 
-    public void levelSelect() {
-        //sceneChanger.changeScene(new LevelSelect());
-    }
+  public void levelEditor() {
+    sceneChanger.changeScene(new LevelEditor(new Level(null, null, null)));
+  }
 
-    public void levelEditor() {
-        System.out.println("(Go to level editor)");
-    }
-
-    public void settings() {
-        System.out.println("(Go to settings)");
-    }
-
+  public void settings() {
+    sceneChanger.changeScene(new Settings());
+  }
+  
 }

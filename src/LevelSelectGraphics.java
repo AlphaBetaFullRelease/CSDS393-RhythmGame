@@ -120,10 +120,8 @@ public class LevelSelectGraphics {
             pBody.add(bNext);
         }
         // main menu button
-
-        //JButton bExit = new JButton("settings");
-
-        JButton bExit = new JButton("main menu");
+        JButton bExit = new JButton("Main Menu");
+      
         bExit.setForeground(Color.white);
         // add event listener to tell level select to switch scenes
         bExit.addActionListener(
@@ -182,17 +180,9 @@ public class LevelSelectGraphics {
         // page text
         pageDisplay = new JLabel("1");
         pageDisplay.setBackground(cButton);
-
         TitledBorder pageBorder = BorderFactory.createTitledBorder("#");
         pageBorder.setTitleColor(Color.white);
         pageDisplay.setBorder(pageBorder);
-        pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0,
-                pageNumberWidth, contButtonHeight);
-/*
-        pageDisplay.setBorder(BorderFactory.createTitledBorder("#"));
-        pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
-        pageNumberWidth, contButtonHeight);
-*/
         pHeader.add(pageDisplay);
         // level list
         listDisplay = new ListDisplay();

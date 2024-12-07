@@ -9,7 +9,6 @@ public class StoredNote implements Comparable<StoredNote> {
         this.posMillis = pos;
         this.note = new Note(col, dur);
     }
-    
     // get the position of the StoredNote
     public long getPos() {
         return posMillis;

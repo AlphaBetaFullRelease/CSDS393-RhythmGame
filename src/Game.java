@@ -2,16 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Game extends JPanel implements ActionListener, Scene {
-    // player performance information
-    private int noteHits;
-    private int noteMisses;
-    private int health;
-    private int score;
-
     // number of tracks
     private final int numTracks = 4;
     
@@ -35,26 +30,37 @@ public class Game extends JPanel implements ActionListener, Scene {
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.0005;
+    private double noteSpeed = 0.001;
+
+    // user data class
+    private final UserData userData;
+
+    // settings config
+    private final SettingsConfig config;
 
     // sets up the game
     public Game(Level level) {
     	// set level to play
     	this.level = level;
 
+        // load settings config
+        userData = new UserData();
+        config = userData.getSettingsConfig();
+
+
         // JPanel properties
         this.setPreferredSize(new Dimension(800, 450)); // screen size/resolution can be changed later, I just picked one to start
         this.setFocusable(true);
 
         // set up the input handler
-        inputHandler = new InputEventDriver(this); // create input event driver
+        inputHandler = new InputEventDriver(this, config); // create input event driver
         addKeyListener(inputHandler); // tells JPanel where to send input events
 
         // set up graphics handler
         graphicsHandler = new GameGraphics(gameState);
 
         // set up audio
-        gameAudio = new GameAudio();
+        gameAudio = new GameAudio(config.getVolumeMusic());
         // load song
         String pathToSong = level.getSongPath();
         // play song if file exists
@@ -109,6 +115,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 // check if note should despawn
                 if (n.getPos() > 1) {
                     // despawn note
+                    gameState.noteMiss();
                     track.remove(i);
                     i--;
                 } else
@@ -177,11 +184,11 @@ public class Game extends JPanel implements ActionListener, Scene {
         // check if note exists
         if(hitNote != null){
             // adjust score
-            hitSuccess();
+            gameState.noteHit();
             // remove note from notes list
             gameState.getTracks().get(lane).remove(hitNote);
         }else{
-            hitFail();
+            gameState.noteMiss();
         }
     }
 
@@ -193,15 +200,5 @@ public class Game extends JPanel implements ActionListener, Scene {
                 return note;
         }
         return null;
-    }
-
-    private void hitSuccess(){
-        noteHits += 1;
-        score += 1;
-    }
-
-    private void hitFail(){
-        noteMisses += 1;
-        health -= 5;
     }
 }

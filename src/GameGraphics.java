@@ -16,6 +16,8 @@ public class GameGraphics {
     private static final double noteWidth = 0.055; // width of a note
     private static final double noteSpawnOffset = 0.5; // in units of noteWidth, allows the note to spawn off screen
     private static final double targetPlace = 0.8; // where the target line is displayed
+    private static final double healthBarHeight = 0.05;
+    private static final double scorePos = 0.9;
     private final Layout layout; // holds various dimensions that should only get calculated once
 
     // variables to set the display box
@@ -66,6 +68,27 @@ public class GameGraphics {
 
         // draw the target line
         drawTarget(g);
+
+        // draw hp bar if health above 0
+        if (gameState.getHealth() > 0) drawHealthBar(g);
+
+        //draw score
+        drawScore(g);
+    }
+
+    private void drawScore(Graphics2D g){
+        g.setColor(Color.BLACK);
+        g.drawString("" + gameState.getScore(), layout.scoreP, layout.targetLevel);
+    }
+
+    private void drawHealthBar(Graphics2D g){
+        g.setColor(Colors.healthBarColor);
+        double diff = ((gameState.getMaxHealth() - gameState.getHealth())/100) * getWidth();
+        diff /= 2;
+        System.out.println(diff);
+        g.fillRect((int)diff, 0, getWidth() - (int)(diff * 2), layout.healthBarH);
+        g.setColor(Color.WHITE);
+        g.drawString("" + (int) gameState.getHealth(), getWidth()/2, layout.healthBarH);
     }
 
     // draws a track at the desired x coordinate (where x is the left side of the track)
@@ -169,6 +192,10 @@ public class GameGraphics {
         // the pixel level for the target line
         public int targetLevel;
 
+        public int healthBarH;
+
+        public int scoreP;
+      
         // uses the variables in GameGraphics to generate coordinates for graphical elements
         public void initialize(){
             // comments assume all customization variables are in pixels for simplicity (they are actually in percent of screen width)
@@ -190,6 +217,8 @@ public class GameGraphics {
             trackLen = getHeight() + 2 * noteOffset;
             // target level needs to account for note offset
             targetLevel = (int)(trackLen * targetPlace - noteOffset);
+            healthBarH = (int)(healthBarHeight * getHeight());
+            scoreP = (int)(scorePos * getWidth());
         }
 
         // calculates the y position of a note on screen
@@ -222,5 +251,7 @@ public class GameGraphics {
         public static final Color noteColor = new Color(24, 222, 163);
         // target color
         public static final Color targetColor = new Color(0, 0, 0);
+
+        public static final Color healthBarColor = new Color(255, 0, 0);
     }
 }
