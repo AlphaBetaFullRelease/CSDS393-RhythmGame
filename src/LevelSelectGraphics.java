@@ -314,7 +314,7 @@ public class LevelSelectGraphics {
             return display;
         }
     	// method to actually draw the card list, takes the list as input (provided from level select)
-    	private void drawList(ArrayList<LevelCard> list) {
+    	/*private void drawList(ArrayList<LevelCard> list) {
     		// clear all elements from the list panel
     		this.removeAll();
     		// draw the card list iterating on each card from the list
@@ -338,6 +338,6 @@ public class LevelSelectGraphics {
                 // add card button to the list panel
     			this.add(cardButton);
     		}
-    	}
+    	}*/
     }
 }

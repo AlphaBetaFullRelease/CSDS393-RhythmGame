@@ -308,7 +308,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         long millis = getTimeFromPos(pos);
 
         // add note
-        addNote(track, new StoredNote((long)millis, track));
+        addNote(track, new StoredNote((long)millis, track, 0));
     }
 
     // adds note to the stored notes list
