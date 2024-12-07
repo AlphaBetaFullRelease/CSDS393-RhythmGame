@@ -1,3 +1,5 @@
+// 7 lines
+
 // class for storing note and position data in the Level class' noteGrid
 public class StoredNote implements Comparable<StoredNote> {
     // position of the note in milliseconds

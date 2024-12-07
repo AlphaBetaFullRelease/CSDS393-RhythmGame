@@ -1,3 +1,5 @@
+// 272 lines
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.MouseInputAdapter;

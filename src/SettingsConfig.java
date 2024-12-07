@@ -1,3 +1,5 @@
+// 38 lines
+
 // class to store users settings configurations
 public class SettingsConfig {
     // these should be set to defaults
