@@ -71,7 +71,7 @@ public class Level {
     public int getTrackLength(int track) {
     	return noteGrid[track].size();
     }
-    
+
     //get StoredNote from noteGrid
     public StoredNote getStoredNote(int track, int index) {
         return noteGrid[track].get(index);
@@ -84,7 +84,7 @@ public class Level {
         // check if there are any notes left to spawn
         if(spawnIndex[track] >= getTrackLength(track))
             return null;
-        
+
         // check if the next note to spawn can spawn
         if(noteGrid[track].get(spawnIndex[track]).getPos() <= targetTime){
             // increment spawn index

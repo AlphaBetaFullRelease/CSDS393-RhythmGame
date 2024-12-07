@@ -1,5 +1,5 @@
 // class for storing note and position data in the Level class' noteGrid
-public class StoredNote {
+public class StoredNote implements Comparable<StoredNote> {
     // position of the note in milliseconds
     private int posMillis;
     // note object
@@ -16,5 +16,11 @@ public class StoredNote {
     // get the note of the StoredNote
     public Note getNote() {
         return note;
+    }
+
+    // compare function to sort stored notes by pos
+    @Override
+    public int compareTo(StoredNote o) {
+        return Long.compare(getPos(), o.getPos());
     }
 }

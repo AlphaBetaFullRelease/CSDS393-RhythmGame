@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.io.*;
 
@@ -33,16 +34,20 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     public void update(long delta) {
     	// does nothing since we are not using frames for this UI
     }
-    
+
+    @Override
+    public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
+
+    // cast this object as JPanel and return it
     @Override
     public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
 
     // cast this object as JPanel and return it
     @Override
     public JPanel getPanel() {
-    	return (JPanel)this;
+        return (JPanel)this;
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         //No implementation...

@@ -29,4 +29,8 @@ public class Note {
     public void updatePos(double val){
         this.pos += val;
     }
+
+    public void setPos(double val){
+        this.pos = val;
+    }
 }

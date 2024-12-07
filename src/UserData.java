@@ -1,9 +1,5 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -55,8 +51,28 @@ public class UserData {
             System.out.println(e.getMessage());
             return false;
         }
+        levelPathDict.put(level.getId(), levelPath.getPath());
         return true;
     }
+
+    public void addMusicFile(Level level, File audioFile) throws IOException {
+        File folderPath = new File(LEVEL_PATH.getPath() + "\\" + level.getTitle());
+        File sourceAudioFile = new File(folderPath.getPath() + "\\song.wav");
+
+        FileInputStream fis = new FileInputStream(audioFile);
+        FileOutputStream fos = new FileOutputStream(sourceAudioFile);
+
+        System.out.println("started saving audio file " + System.currentTimeMillis() / 1000);
+
+        byte[] n = fis.readAllBytes();
+        fos.write(n);
+        /*while (n = fis.readAllBytes()) {
+            fos.write(n);
+        }*/
+
+        System.out.println("finished saving audio file " + System.currentTimeMillis() / 1000);
+    }
+
     //
     public boolean deleteLevelFile(Level level) {
         System.out.println("deleting level " + level.getTitle());
@@ -207,22 +223,5 @@ public class UserData {
         scores.add(empty);
         saveScoreData();
         return empty;
-    }
-    // upload a song file for a level
-    public void uploadLevelSongFile(Level level) {
-        // file chooser
-        JFileChooser fileChooser = new JFileChooser();
-        FileFilter filter = new FileNameExtensionFilter("WAV files", "wav");
-        fileChooser.setFileFilter(filter);
-        // create dialogue
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            // copy selected song file to level path
-            copySongFile(fileChooser.getSelectedFile());
-        }
-    }
-    // copy song file to level folder
-    public void copySongFile(File filePath) {
-
     }
 }

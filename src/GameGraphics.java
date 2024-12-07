@@ -18,13 +18,35 @@ public class GameGraphics {
     private static final double targetPlace = 0.8; // where the target line is displayed
     private static final double healthBarHeight = 0.05;
     private static final double scorePos = 0.9;
+    private final Layout layout; // holds various dimensions that should only get calculated once
+
+    // variables to set the display box
+    private double width = 800;
+    private double height = 450;
+    private int transposeX = 0;
+    private int transposeY = 0;
 
     // needs to be passed a GameState object that is linked to the Game
     public GameGraphics(GameState gs){
         gameState = gs;
 
         // generate all dimensions for graphical objects
-        Layout.initialize();
+        layout = new Layout();
+        layout.initialize();
+    }
+
+    // initialize game graphics transposed and with new dimensions
+    public GameGraphics(GameState gs, int offsetX, int offsetY, int newWidth, int newHeight){
+        width = newWidth;
+        height = newHeight;
+        transposeX = offsetX;
+        transposeY = offsetY;
+        
+        gameState = gs;
+
+        // generate all dimensions for graphical objects
+        layout = new Layout();
+        layout.initialize();
     }
 
     // draws all the elements to the screen
@@ -37,7 +59,7 @@ public class GameGraphics {
 
         // draw the tracks
         for(int i = 0; i < getNumTracks(); i++)
-            drawTrack(g, Layout.trackLeft[i]);
+            drawTrack(g, layout.trackLeft[i]);
         
         // draw the notes
         for(int lane = 0; lane < getNumTracks(); lane++)
@@ -76,28 +98,28 @@ public class GameGraphics {
 
         // fill in background of track
         g.setColor(Colors.trackFill);
-        g.fillRect(x, 0, Layout.trackWid, getHeight());
+        g.fillRect(transposeX+x, transposeY, layout.trackWid, getHeight());
 
         // draw border lines to the left and right of the track
         g.setColor(Colors.trackBorder);
-        g.drawLine(x, 0, x, getHeight());
-        g.drawLine(x+Layout.trackWid, 0, x+Layout.trackWid, getHeight());
+        g.drawLine(transposeX+x, transposeY, x+transposeX, getHeight()+transposeY);
+        g.drawLine(transposeX+x+layout.trackWid, transposeY, transposeX+x+layout.trackWid, transposeY+getHeight());
     }
 
     // draws a note in the specified lane
     private void drawNote(Graphics2D g, int lane, Note note){
         // calculate the y position of the note on the screen
-        int yPos = Layout.getNoteY(note.getPos());
+        int yPos = layout.getNoteY(note.getPos());
 
         // actually draw the note
         g.setColor(Colors.noteColor);
-        g.fillOval(Layout.trackLeft[lane], yPos, Layout.noteWid, Layout.noteWid);
+        g.fillOval(transposeX+layout.trackLeft[lane], transposeY+yPos, layout.noteWid, layout.noteWid);
     }
 
     // draws the target line
     public void drawTarget(Graphics2D g){
         g.setColor(Colors.targetColor);
-        g.drawLine(0, Layout.targetLevel, getWidth(), Layout.targetLevel);
+        g.drawLine(transposeX, transposeY+layout.targetLevel, transposeX+getWidth(), transposeY+layout.targetLevel);
     }
 
     // assuming that the note can only be hit when it is touching the target line, this function returns the value (0-1) when the note can first be hit
@@ -115,12 +137,30 @@ public class GameGraphics {
         return targetPlace;
     }
 
-    public static int getWidth(){
-        return 800;
+
+    // getter methods for layout values needed for arranging the level editor UI
+    public double getTrackCenter(int track){
+        return transposeX + layout.trackCenter[track];
+    }
+    public int getNoteY(double pos){
+        return layout.getNoteY(pos);
+    }
+    public float getNotePos(int y){
+        return layout.getNotePos(y);
+    }
+    public int getNoteWid(){
+        return layout.noteWid;
+    }
+    public int getYOffset(){
+        return (int)transposeY;
     }
 
-    public static int getHeight(){
-        return 450;
+    public int getWidth(){
+        return (int)width;
+    }
+
+    public int getHeight(){
+        return (int)height;
     }
 
     public static int getNumTracks(){
@@ -128,28 +168,28 @@ public class GameGraphics {
     }
 
     // holds all coordinates that only need to be calculated once
-    private static class Layout {
+    private class Layout {
         // coordinate for the center of each track
-        public static int[] trackCenter = new int[getNumTracks()];
+        public int[] trackCenter = new int[getNumTracks()];
         // coordinate for the left border of each track
-        public static int[] trackLeft = new int[getNumTracks()];
+        public int[] trackLeft = new int[getNumTracks()];
         // precalculated track width
-        public static int trackWid;
+        public int trackWid;
         // how wide a note is
-        public static int noteWid;
+        public int noteWid;
         // how many pixels a note's spawn & despawn should be offset by
-        public static int noteOffset;
-        // the length of the track (accounting for noteOffset)
-        public static int trackLen;
+        public int noteOffset;
+        // the length of the track in pixels (accounting for noteOffset)
+        public int trackLen;
         // the pixel level for the target line
-        public static int targetLevel;
+        public int targetLevel;
 
         public static int healthBarH;
 
         public static int scoreP;
 
         // uses the variables in GameGraphics to generate coordinates for graphical elements
-        public static void initialize(){
+        public void initialize(){
             // comments assume all customization variables are in pixels for simplicity (they are actually in percent of screen width)
 
             // calculate the distance between the center of each track ((trackSpan - trackWidth) / (numTracks-1))
@@ -175,8 +215,13 @@ public class GameGraphics {
 
         // calculates the y position of a note on screen
         // pos is the note's position (0-1)
-        public static int getNoteY(double pos){
+        public int getNoteY(double pos){
             return (int)(pos * trackLen - noteOffset - noteWid/2);
+        }
+
+        // calculates a note's pos given the pixel value on screen
+        public float getNotePos(int y){
+            return ((float)y + noteOffset + noteWid/2) / trackLen;
         }
     }
 
