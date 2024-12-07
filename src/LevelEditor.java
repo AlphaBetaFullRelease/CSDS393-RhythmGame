@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Point;
 import java.io.File;
@@ -12,11 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ListIterator;
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 
 public class LevelEditor extends JPanel implements ActionListener, Scene, KeyListener {
 
@@ -49,8 +45,6 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
 
     // holds preview notes on screen
     private GameState previewNotes;
-    // current time of the preview frame (ms)
-    private long previewTime = 0;
     // speed of the level preview (used to determine note spacing) (%/Ms)
     private double noteSpeed = 0.001;
     // the amount of time it takes for a note to move across the screen (in ms)
@@ -58,7 +52,6 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // the current scroll position on the screen
     private long curTime = 0;
     private UserData userData;
-    private JButton loadAduioSource;
     private boolean isCtrlHeld;
     private JFileChooser fileChooser;
     private File audioFile;
@@ -80,10 +73,6 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         addMouseListener(listener);
 
         addKeyListener(this);
-
-        loadAduioSource = new JButton("Select Music File");
-        loadAduioSource.setLocation(40, 40);
-        this.add(loadAduioSource);
         
         // set the level reference
         level = inpLevel;
@@ -579,6 +568,12 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
             if (isCtrlHeld) {
                 setMusic();
             }
+        }
+        if (e.getKeyCode() == 38) { // up
+            scroll(200);
+        }
+        if (e.getKeyCode() == 40) { // down
+            scroll(-200);
         }
     }
 
