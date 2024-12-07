@@ -1,3 +1,5 @@
+// 23 lines
+
 import java.util.ArrayList;
 
 // stores dynamic information about the game's state to communicate between Game and GraphicsRenderer

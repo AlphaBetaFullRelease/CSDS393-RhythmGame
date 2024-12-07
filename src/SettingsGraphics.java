@@ -1,3 +1,5 @@
+// 184 lines
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
