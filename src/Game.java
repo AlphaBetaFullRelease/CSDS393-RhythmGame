@@ -30,7 +30,7 @@ public class Game extends JPanel implements ActionListener, Scene {
     private long elapsedTime;
     
     // note movement speed (%/Ms)
-    private double noteSpeed = 0.001;
+    private double noteSpeed = 0.0004;
 
     // user data class
     private final UserData userData;

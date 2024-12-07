@@ -85,7 +85,7 @@ public class GameGraphics {
         g.setColor(Colors.healthBarColor);
         double diff = ((gameState.getMaxHealth() - gameState.getHealth())/100) * getWidth();
         diff /= 2;
-        System.out.println(diff);
+        //System.out.println(diff);
         g.fillRect((int)diff, 0, getWidth() - (int)(diff * 2), layout.healthBarH);
         g.setColor(Color.WHITE);
         g.drawString("" + (int) gameState.getHealth(), getWidth()/2, layout.healthBarH);

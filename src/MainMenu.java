@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class MainMenu extends JPanel implements Scene {
 
@@ -27,7 +28,13 @@ public class MainMenu extends JPanel implements Scene {
   }
 
   public void levelEditor() {
-    sceneChanger.changeScene(new LevelEditor(new Level(null, null, null)));
+    ArrayList[] ng = new ArrayList[4];
+    ng[0] = new ArrayList<StoredNote>();
+    ng[1] = new ArrayList<StoredNote>();
+    ng[2] = new ArrayList<StoredNote>();
+    ng[3] = new ArrayList<StoredNote>();
+    Level blankLevel = new Level("blankLevel", "creator", ng);
+    sceneChanger.changeScene(new LevelEditor(blankLevel));
   }
 
   public void settings() {
