@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 // class to read user data from the data folder
 public class UserData {
@@ -53,6 +56,23 @@ public class UserData {
         }
         levelPathDict.put(level.getId(), levelPath.getPath());
         return true;
+    }
+    // upload a song file for a level
+    public void uploadLevelSongFile(Level level) {
+        // file chooser
+        JFileChooser fileChooser = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("WAV files", "wav");
+        fileChooser.setFileFilter(filter);
+        // create dialogue
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            // copy selected song file to level path
+            try {
+                addMusicFile(level, fileChooser.getSelectedFile());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     public void addMusicFile(Level level, File audioFile) throws IOException {

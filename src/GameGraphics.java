@@ -78,7 +78,7 @@ public class GameGraphics {
 
     private void drawScore(Graphics2D g){
         g.setColor(Color.BLACK);
-        g.drawString("" + gameState.getScore(), Layout.scoreP, Layout.targetLevel);
+        g.drawString("" + gameState.getScore(), layout.scoreP, layout.targetLevel);
     }
 
     private void drawHealthBar(Graphics2D g){
@@ -86,9 +86,9 @@ public class GameGraphics {
         double diff = ((gameState.getMaxHealth() - gameState.getHealth())/100) * getWidth();
         diff /= 2;
         System.out.println(diff);
-        g.fillRect((int)diff, 0, getWidth() - (int)(diff * 2), Layout.healthBarH);
+        g.fillRect((int)diff, 0, getWidth() - (int)(diff * 2), layout.healthBarH);
         g.setColor(Color.WHITE);
-        g.drawString("" + (int) gameState.getHealth(), getWidth()/2, Layout.healthBarH);
+        g.drawString("" + (int) gameState.getHealth(), getWidth()/2, layout.healthBarH);
     }
 
     // draws a track at the desired x coordinate (where x is the left side of the track)
@@ -184,9 +184,9 @@ public class GameGraphics {
         // the pixel level for the target line
         public int targetLevel;
 
-        public static int healthBarH;
+        public int healthBarH;
 
-        public static int scoreP;
+        public int scoreP;
 
         // uses the variables in GameGraphics to generate coordinates for graphical elements
         public void initialize(){

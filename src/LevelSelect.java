@@ -35,9 +35,6 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     	// does nothing since we are not using frames for this UI
     }
 
-    @Override
-    public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
-
     // cast this object as JPanel and return it
     @Override
     public void setSceneRunner(SceneRunner sceneRunner) { sceneChanger = sceneRunner; }
