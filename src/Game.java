@@ -92,7 +92,7 @@ public class Game extends JPanel implements ActionListener, Scene {
                 Note note = nextNote.getNote();
 
                 // set initial spawn position
-                note.updatePos(spawnOffset * noteSpeed);
+                note.setPos(spawnOffset * noteSpeed);
 
                 // add note to the list of active notes
                 gameState.spawnNote(track, note);

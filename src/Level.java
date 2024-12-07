@@ -22,9 +22,9 @@ public class Level {
     //level start delay (ms)
     private long startDelay = 0;
     //level title
-    private String title;
+    private String title = "";
     //level creator
-    private String creator;
+    private String creator = "";
     //level duration
     private long duration = 0;
     //level difficulty

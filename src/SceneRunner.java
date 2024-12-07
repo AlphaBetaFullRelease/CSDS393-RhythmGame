@@ -23,11 +23,6 @@ public class SceneRunner extends JFrame {
     // for now, launches straight into Game since there is no main menu
     public static void main(String[] args){
         // create level select
-      
-        //LevelSelect levelSelect = new LevelSelect();
-        
-
-        // create level select
         LevelSelect levelSelect = new LevelSelect();
 
         // create a new scenerunner with the starting scene
