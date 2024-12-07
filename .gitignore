@@ -29,3 +29,6 @@ replay_pid*
 *.mp3
 *.wav
 song.*
+
+*.xml
+*.iml

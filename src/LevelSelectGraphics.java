@@ -120,7 +120,10 @@ public class LevelSelectGraphics {
             pBody.add(bNext);
         }
         // main menu button
-        JButton bExit = new JButton("settings");
+
+        //JButton bExit = new JButton("settings");
+
+        JButton bExit = new JButton("main menu");
         bExit.setForeground(Color.white);
         // add event listener to tell level select to switch scenes
         bExit.addActionListener(
@@ -179,11 +182,17 @@ public class LevelSelectGraphics {
         // page text
         pageDisplay = new JLabel("1");
         pageDisplay.setBackground(cButton);
+
         TitledBorder pageBorder = BorderFactory.createTitledBorder("#");
         pageBorder.setTitleColor(Color.white);
         pageDisplay.setBorder(pageBorder);
         pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0,
                 pageNumberWidth, contButtonHeight);
+/*
+        pageDisplay.setBorder(BorderFactory.createTitledBorder("#"));
+        pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
+        pageNumberWidth, contButtonHeight);
+*/
         pHeader.add(pageDisplay);
         // level list
         listDisplay = new ListDisplay();
@@ -304,5 +313,31 @@ public class LevelSelectGraphics {
             // return the card panel
             return display;
         }
+    	// method to actually draw the card list, takes the list as input (provided from level select)
+    	private void drawList(ArrayList<LevelCard> list) {
+    		// clear all elements from the list panel
+    		this.removeAll();
+    		// draw the card list iterating on each card from the list
+    		for (final LevelCard card : list) {
+                // create the card button
+    			JButton cardButton = new JButton();
+                // add an actionlistener that opens the selected level
+                cardButton.addActionListener(
+                    new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            levelSelect.playLevel(card.getLevel());
+                        }
+                    }
+                );
+                // set button layout and position
+    			cardButton.setLayout(null);
+                cardButton.setBackground(cCard);
+    			cardButton.setBounds(0, cardHeight * (list.indexOf(card)), cardWidth, cardHeight);
+                // create a card display panel using the level and add it to the button
+    			cardButton.add(cardGetDisplay(card));
+                // add card button to the list panel
+    			this.add(cardButton);
+    		}
+    	}
     }
 }

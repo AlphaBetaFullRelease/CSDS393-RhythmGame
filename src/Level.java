@@ -1,5 +1,11 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
@@ -7,6 +13,10 @@ public class Level {
     private int id;
     //store note data (kept in order by spawn time)
     private ArrayList<StoredNote>[] noteGrid = new ArrayList[4];
+    //store path to mp3
+    private String songPath = "";
+    //store path to level folder
+    private String levelPath = "";
     //level tempo (bpm)
     private int tempo = 130;
     //level start delay (ms)
@@ -98,17 +108,13 @@ public class Level {
         return null;
     }
 
-    public void setTempo(int tempo) { this.tempo = tempo; }
+
     // TO DO: delete this method, maybe level select passes the level path to game and then it uses user data to get stuff
     public String getSongPath() {
         return "./data\\levels\\Mary had a little lamb\\song.wav";
     }
 
     public long getStartDelay() { return startDelay; }
-
-    public void setStartDelay(long startDelay) { this.startDelay = startDelay; }
-
-    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     private void calculateDuration() {
         int lastNoteTime = (int) (noteGrid[0].get(noteGrid[0].size() - 1).getNote().getPos() / 1000);
@@ -123,4 +129,37 @@ public class Level {
 
         this.duration = lastNoteTime;
     }
+
+    public void setSongPath(String songPath) {
+        this.songPath = songPath;
+    }
+
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
+    }
+
+    public void setStartDelay(long startDelay) {
+        this.startDelay = startDelay;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    // remove this main method once all testing of the file is complete
+    /*public static void main(String[] args) {
+        try {
+            Level level = loadFromFile("src\\test.json");
+            level.saveToFile("writetest.json");
+            level = loadFromFile("writetest.json");
+            level.saveToFile("writetest2.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
 }
+
