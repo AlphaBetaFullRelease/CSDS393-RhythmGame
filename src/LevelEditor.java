@@ -1,10 +1,14 @@
+import com.google.gson.Gson;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Point;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.event.ActionEvent;
@@ -571,7 +575,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         }
         if (e.getKeyCode() == 'O') {
             if (isCtrlHeld) {
-
+                loadLevel();
             }
         }
         if (e.getKeyCode() == 38) { // up
@@ -580,6 +584,31 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
         if (e.getKeyCode() == 40) { // down
             scroll(-200);
         }
+    }
+
+    private void loadLevel() {
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
+        fileChooser.removeChoosableFileFilter(fileChooser.getChoosableFileFilters()[0]);
+
+        int option = fileChooser.showOpenDialog(this);
+        File levelFile;
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            levelFile = fileChooser.getSelectedFile();
+
+            Gson gson = new Gson();
+
+            try {
+                level = gson.fromJson(new InputStreamReader(new FileInputStream(levelFile)), Level.class);
+            } catch (java.io.FileNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        audioFile = null;
+
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("WAV Files", "wav"));
+        fileChooser.removeChoosableFileFilter(fileChooser.getChoosableFileFilters()[0]);
     }
 
     @Override
