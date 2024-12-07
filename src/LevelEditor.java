@@ -41,7 +41,7 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     // draggable object for the scroll bar
     private Draggable scrollDrag;
     // reference to current object being dragged
-    private Draggable currentlyDragging;
+    private DraggableNote currentlyDragging;
     // flag determining if something is being dragged
     private boolean isDragging = false;
     // keeps track of which tool is currently active using an enumerated type
@@ -166,9 +166,15 @@ public class LevelEditor extends JPanel implements ActionListener, Scene, KeyLis
     public void mouseUp(){
         // check if an object is being dragged
         if(isDragging){
-            // if scrollbar being dragged, update each note's draggablePos
-
             // if note being dragged, update pos in notes
+            Note targetNote = currentlyDragging.linkedNote;
+            ListIterator<StoredNote> iter = notes[targetNote.getCol()].listIterator();
+            while(iter.hasNext()){
+                if(iter.next().getNote() == targetNote) {
+                    iter.previous().setPos(getTimeFromPos((float) targetNote.getPos()));
+                    break;
+                }
+            }
 
             // release the object
             isDragging = false;
