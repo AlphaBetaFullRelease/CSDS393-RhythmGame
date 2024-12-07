@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Game extends JPanel implements ActionListener, Scene {
@@ -60,10 +62,11 @@ public class Game extends JPanel implements ActionListener, Scene {
         // set up audio
         gameAudio = new GameAudio(config.getVolumeMusic());
         // load song
-        String pathToSong = level.getSongPath();
-        // play song if file exists
-        if(!pathToSong.isEmpty())
-            gameAudio.loadSong(level.getSongPath());
+        try {
+            gameAudio.loadSong(userData.getLevelMusicFile(level).getPath());
+        } catch (IOException e) {
+            System.out.println("Error loading level music file");
+        }
 
         // set start delay
         elapsedTime = -level.getStartDelay();

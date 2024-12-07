@@ -1,5 +1,9 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class LevelInfo extends JPanel implements Scene {
@@ -7,18 +11,17 @@ public class LevelInfo extends JPanel implements Scene {
     private UserData userData;
     private Level level;
     private SceneRunner sceneChanger;
-    private boolean newLevel;
+    private File musicFile;
     public LevelInfo(Level level) {
         userData = new UserData();
         userData.loadLevelData();
-        newLevel = (level == null);
-        ArrayList<StoredNote>[] ng = new ArrayList[]{new ArrayList<StoredNote>(), new ArrayList<StoredNote>(), new ArrayList<StoredNote>(), new ArrayList<StoredNote>()};
-        if (newLevel) this.level = new Level("Title", "Creator", ng);
-        else this.level = level;
+        this.level = level;
+        try {
+            this.musicFile = userData.getLevelMusicFile(level);
+        } catch (FileNotFoundException e) {
+            this.musicFile = null;
+        }
         graphicsHandler = new LevelInfoGraphics(this);
-    }
-    public void createLevelFile() {
-        userData.createLevelFile(level, true);
     }
     @Override
     public void update(long delta) {
@@ -29,14 +32,30 @@ public class LevelInfo extends JPanel implements Scene {
     public JPanel getPanel() { return (JPanel) this; }
     public Level getLevel() { return level; }
     public UserData getUserData() { return userData; }
-    //
-    public boolean isNewLevel() { return newLevel; }
-    //
-    public void save() {
-        userData.deleteLevelFile(level);
-        userData.createLevelFile(level, true);
+
+    public void edit() {
+        userData.createLevelFile(level);
+        try {
+            userData.addMusicFile(level, musicFile);
+            sceneChanger.changeScene(new LevelEditor(level));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void updateLevelSongFile(Level level) {
+        // file chooser
+        JFileChooser fileChooser = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("WAV files", "wav");
+        fileChooser.setFileFilter(filter);
+        // create dialogue
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            // set level song path
+            musicFile = new File(fileChooser.getSelectedFile().getPath());
+        }
     }
 
+    public File getMusicFile() { return musicFile; }
     public void exit() {
         sceneChanger.changeScene(new MainMenu());
     }

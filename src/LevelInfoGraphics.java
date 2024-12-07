@@ -22,6 +22,7 @@ public class LevelInfoGraphics extends JPanel implements Scene {
     private JPanel mainPanel;
     private Level level;
     private String songName;
+    private boolean songUploaded;
     // layout info
     private final int width = 800;
     private final int height = 450;
@@ -52,6 +53,8 @@ public class LevelInfoGraphics extends JPanel implements Scene {
     // constructor
     public LevelInfoGraphics(LevelInfo info) {
         this.levelInfo = info;
+        if (levelInfo.getMusicFile() == null) this.songUploaded = false;
+        else this.songUploaded = true;
         this.mainPanel = info.getPanel();
         this.level = info.getLevel();
         this.songName = level.getSongPath();
@@ -66,8 +69,7 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         pHeader.setBounds(0, 0, width, headerHeight);
         // add text to header panel
         JLabel lHeader = new JLabel();
-        if (levelInfo.isNewLevel()) lHeader.setText("New Level");
-        else lHeader.setText("Edit Level Info");
+        lHeader.setText("Edit level info");
         lHeader.setForeground(Color.white);
         lHeader.setBounds(headerButtonWidth, 0, width - headerButtonWidth * 2, headerHeight);
         pHeader.add(lHeader);
@@ -153,22 +155,21 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         // banner 1 song
         // get song path from file
         UserData data = levelInfo.getUserData();
-        // path text field
-        JTextField pathField = new JTextField(level.getSongPath());
-        pathField.setBorder(BorderFactory.createTitledBorder("song file:"));
-        pathField.setBounds(0, 0, width - headerButtonWidth, bannerHeight);
         // upload button
-        JButton uploadButton = new JButton("upload");
-        uploadButton.setBounds(width - headerButtonWidth, 0, headerButtonWidth, bannerHeight);
+        JButton uploadButton = new JButton();
+        if (!songUploaded) uploadButton.setText("Upload song file");
+        else uploadButton.setText("Update song file");
+        uploadButton.setBounds(0, 0, width, bannerHeight);
         // add actionListener to open file dialogue
         uploadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                data.uploadLevelSongFile(level);
+                levelInfo.updateLevelSongFile(level);
+                songUploaded = true;
+                refresh();
             }
         });
         // add to banner
-        pBanners[1].add(pathField);
         pBanners[1].add(uploadButton);
         // banner 2 tempo and difficulty
         // label
@@ -236,7 +237,8 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         bExit.setBackground(cButton);
         bExit.setBounds(0, 0, headerButtonWidth, headerHeight);
         // create apply button
-        JButton bNext = new JButton("apply");
+        JButton bNext = new JButton();
+        bNext.setText("edit level");
         //
         bNext.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -267,11 +269,11 @@ public class LevelInfoGraphics extends JPanel implements Scene {
         emptyCreator = (creator.equals(""));
         if (emptyCreator) applyMessage(creatorLabel, emptyField);
         // check pass
-        pass = !emptyTitle && !emptyCreator;
+        pass = songUploaded && !emptyTitle && !emptyCreator;
         if (pass) {
             level.setTitle(title);
             level.setCreator(creator);
-            levelInfo.save();
+            levelInfo.edit();
         } else {
             // refresh graphics
             refresh();

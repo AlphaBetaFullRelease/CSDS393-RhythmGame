@@ -141,6 +141,7 @@ public class LevelSelect extends JPanel implements ActionListener, Scene {
     // change scene to game
     public void playLevel(Level l) {
         // pass level to new game scene and change scenes
-        sceneChanger.changeScene(new Game(l));
+        //sceneChanger.changeScene(new Game(l));
+        sceneChanger.changeScene(new LevelInfo(l));
     }
 }

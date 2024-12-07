@@ -1,3 +1,4 @@
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class Level {
         for(int i = 0; i < spawnIndex.length; i++)
             spawnIndex[i] = 0;
     }
-    //TODO: code that generates a unique id using the system clock
+    //code that generates a unique id using the system clock
     private static int generateId() {
         int rand = (int) Math.random() * 1000;
         return (int) System.currentTimeMillis() + rand;

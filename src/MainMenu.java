@@ -1,8 +1,4 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.io.*;
 
 public class MainMenu extends JPanel implements Scene {
 
@@ -31,7 +27,7 @@ public class MainMenu extends JPanel implements Scene {
   }
 
   public void levelEditor() {
-    sceneChanger.changeScene(new LevelInfo(null));
+    sceneChanger.changeScene(new LevelEditor(new Level(null, null, null)));
   }
 
   public void settings() {

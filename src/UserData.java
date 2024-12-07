@@ -31,19 +31,33 @@ public class UserData {
     public File getLevelPath() { return LEVEL_PATH; }
     public ArrayList<Level> getLevels() { return levels; }
     // method to create or overwrite a Level json file
-    public boolean createLevelFile(Level level, boolean overwrite) {
-        // first check creation conditions for a file
-        // get level title for folder name
-        String title = level.getTitle();
-        // get folder and json file path
-        File folderPath = new File(LEVEL_PATH.getPath() + "\\" + title);
-        File levelPath = new File(folderPath.getPath() + "\\level.json");
-        // if a level file exists at the path, try to overwrite it
-        if (levelPath.exists()) {
-            // fail if we cannot overwrite file, otherwise delete old file
-            if (!overwrite) return false;
-            else levelPath.delete();
-        } else if (!folderPath.exists()) folderPath.mkdir(); // create level folder if nonexistent
+    public boolean createLevelFile(Level level) {
+        // get dict path
+        String levelPathStr = levelPathDict.get(level.getId());
+        // initialize level path
+        File levelPath = null;
+        //
+        File folderPath = new File(LEVEL_PATH.getPath() + "\\" + level.getTitle());
+        if (levelPathStr == null) {
+            // file not in dictionary
+            levelPath = new File(folderPath.getPath() + "\\level.json");
+            folderPath.mkdir();
+            levelPathDict.put(level.getId(), levelPath.getPath());
+        } else {
+            // compare folder path,  create new one and update dict
+            levelPath = new File(levelPathStr);
+            if (!folderPath.equals(levelPath.getParentFile())) {
+                // different folder names, update dictionary
+                folderPath.mkdir();
+                levelPathDict.put(level.getId(), folderPath.getPath() + "\\level.json");
+                levelPath.delete();
+                levelPath.getParentFile().delete();
+                levelPath = new File(levelPathDict.get(level.getId()));
+            } else {
+                // if they are the same, delete old file
+               levelPath.delete();
+            }
+        }
         // write file
         Gson gson = new Gson();
         try {
@@ -54,11 +68,10 @@ public class UserData {
             System.out.println(e.getMessage());
             return false;
         }
-        levelPathDict.put(level.getId(), levelPath.getPath());
         return true;
     }
     // upload a song file for a level
-    public void uploadLevelSongFile(Level level) {
+    public void updateLevelSongFile(Level level) {
         // file chooser
         JFileChooser fileChooser = new JFileChooser();
         FileFilter filter = new FileNameExtensionFilter("WAV files", "wav");
@@ -66,17 +79,25 @@ public class UserData {
         // create dialogue
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            // copy selected song file to level path
+            // set level song path
             try {
-                addMusicFile(level, fileChooser.getSelectedFile());
+                addMusicFile(level, new File(fileChooser.getSelectedFile().getPath()));
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
+    public File getLevelMusicFile(Level level) throws FileNotFoundException {
+        File folderPath = new File(levelPathDict.get(level.getId()));
+        File musicPath = new File(folderPath.getPath() + "\\song.wav");
+        if (musicPath.exists()) return musicPath;
+        else throw new FileNotFoundException();
+    }
+
     public void addMusicFile(Level level, File audioFile) throws IOException {
-        File folderPath = new File(LEVEL_PATH.getPath() + "\\" + level.getTitle());
+        File folderPath = new File(levelPathDict.get(level.getId()));
+        folderPath = folderPath.getParentFile();
         File sourceAudioFile = new File(folderPath.getPath() + "\\song.wav");
 
         FileInputStream fis = new FileInputStream(audioFile);
