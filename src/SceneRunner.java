@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.*;
 import javax.swing.JFrame;
 
@@ -21,6 +22,9 @@ public class SceneRunner extends JFrame {
     // starts the game with the main menu open
     // for now, launches straight into Game since there is no main menu
     public static void main(String[] args){
+        // create level select
+      
+        //LevelSelect levelSelect = new LevelSelect();
         
         // DEBUG create placeholder level data
         StoredNote[][] ng = {
@@ -42,6 +46,8 @@ public class SceneRunner extends JFrame {
         // initialize frame time
         sceneRunner.initFrameStart();
 
+        // create a new scenerunner with the starting scene
+        SceneRunner sceneRunner = new SceneRunner(levelSelect);
         // main loop
         while(true){
             // update loaded scene
@@ -121,7 +127,7 @@ public class SceneRunner extends JFrame {
     }
 
     // updates the loaded scene and delta time
-    private void update() {
+    protected void update() {
         // check if frame count should be reset
         if(numFrames == resetTrackEveryN){
             numFrames = 0; // reset frame count
@@ -141,7 +147,7 @@ public class SceneRunner extends JFrame {
     }
 
     // waits until the next frame (or doesn't wait at all if more than one frame's worth of time has passed)
-    private void waitUntilNextFrame(){
+    protected void waitUntilNextFrame(){
         // get diff between time passed and target amount of time
         long diff = targetFrameMillis - deltaTime();
 

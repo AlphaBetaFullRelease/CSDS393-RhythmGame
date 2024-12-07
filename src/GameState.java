@@ -24,4 +24,12 @@ public class GameState {
     public void spawnNote(int lane, Note n){
     	tracks.get(lane).add(n);
     }
+
+    // clears all tracks
+    public void resetTracks(){
+        int num = tracks.size();
+        tracks = new ArrayList<>();
+        for (int i = 0; i < num; i ++)
+            this.tracks.add(new ArrayList<>());
+    }
 }

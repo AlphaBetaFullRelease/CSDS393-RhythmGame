@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,11 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 // does all of the graphical work for the level select
 public class LevelSelectGraphics {
-	// reference to level select object
-	private LevelSelect levelSelect;
-	// level select JPanel
-	private JPanel mainPanel;
-	// page number display
+    // reference to level select object
+    private LevelSelect levelSelect;
+    // level select JPanel
+    private JPanel mainPanel;
+    // page number display
     private JLabel pageDisplay;
     // list display
     private ListDisplay listDisplay;
@@ -32,13 +33,13 @@ public class LevelSelectGraphics {
     private final Color cCard = new Color(71,49,94);
     private final Color cDiffStar = Color.red;
     private final Color cDiffCont = Color.black;
-    
+
     public LevelSelectGraphics(LevelSelect s) {
-    	// get level select object
-    	this.levelSelect = s;
-    	// get level select as a JPanel
-    	this.mainPanel = s.getPanel();
-    	// JPanel properties
+        // get level select object
+        this.levelSelect = s;
+        // get level select as a JPanel
+        this.mainPanel = s.getPanel();
+        // JPanel properties
         mainPanel.setPreferredSize(new Dimension(width, height));
         mainPanel.setFocusable(true);
         mainPanel.setLayout(null);
@@ -82,7 +83,9 @@ public class LevelSelectGraphics {
                 }
         );
         bSort.setBackground(cButton);
-        bSort.setBorder(BorderFactory.createTitledBorder("Sort"));
+        TitledBorder sortBorder = BorderFactory.createTitledBorder("Sort");
+        sortBorder.setTitleColor(Color.white);
+        bSort.setBorder(sortBorder);
         bSort.setBounds(width - contButtonWidth, 0, contButtonWidth, contButtonHeight);
         pHeader.add(bSort);
         // navigation buttons, only drawn if there is more than one page of cards
@@ -117,6 +120,9 @@ public class LevelSelectGraphics {
             pBody.add(bNext);
         }
         // main menu button
+
+        //JButton bExit = new JButton("settings");
+
         JButton bExit = new JButton("main menu");
         bExit.setForeground(Color.white);
         // add event listener to tell level select to switch scenes
@@ -176,9 +182,17 @@ public class LevelSelectGraphics {
         // page text
         pageDisplay = new JLabel("1");
         pageDisplay.setBackground(cButton);
+
+        TitledBorder pageBorder = BorderFactory.createTitledBorder("#");
+        pageBorder.setTitleColor(Color.white);
+        pageDisplay.setBorder(pageBorder);
+        pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0,
+                pageNumberWidth, contButtonHeight);
+/*
         pageDisplay.setBorder(BorderFactory.createTitledBorder("#"));
         pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
         pageNumberWidth, contButtonHeight);
+*/
         pHeader.add(pageDisplay);
         // level list
         listDisplay = new ListDisplay();
@@ -192,25 +206,51 @@ public class LevelSelectGraphics {
     }
     // method that re-draws the level card list
     public void refreshList() {
-    	// tell the list display to re-draw list, getting the page cards from level select
-    	listDisplay.drawList(levelSelect.getPageCards());
-    	// update page number display
-    	pageDisplay.setText("" + levelSelect.getPage() + "/" + levelSelect.getNumPages());
-    	// redraw level select panel
-    	mainPanel.revalidate();
-    	mainPanel.repaint();
+        // tell the list display to re-draw list, getting the page cards from level select
+        listDisplay.drawList(levelSelect.getPageCards());
+        // update page number display
+        pageDisplay.setText("" + levelSelect.getPage() + "/" + levelSelect.getNumPages());
+        // redraw level select panel
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
     // class to display and manage the level list UI
     private class ListDisplay extends JPanel {
-    	// constructor, just initializes the list panel
-    	public ListDisplay() {
-    		// set panel layout
-    		this.setLayout(null);
+        // constructor, just initializes the list panel
+        public ListDisplay() {
+            // set panel layout
+            this.setLayout(null);
             // make panel transparent
             this.setOpaque(false);
             // set panel border
             this.setBorder(BorderFactory.createLoweredBevelBorder());
-    	}
+        }
+        // method to actually draw the card list, takes the list as input (provided from level select)
+        private void drawList(ArrayList<LevelCard> list) {
+            // clear all elements from the list panel
+            this.removeAll();
+            // draw the card list iterating on each card from the list
+            for (final LevelCard card : list) {
+                // create the card button
+                JButton cardButton = new JButton();
+                // add an actionlistener that opens the selected level
+                cardButton.addActionListener(
+                        new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {
+                                levelSelect.playLevel(card.getLevel());
+                            }
+                        }
+                );
+                // set button layout and position
+                cardButton.setLayout(null);
+                cardButton.setBackground(cCard);
+                cardButton.setBounds(0, cardHeight * (list.indexOf(card)), cardWidth, cardHeight);
+                // create a card display panel using the level and add it to the button
+                cardButton.add(cardGetDisplay(card));
+                // add card button to the list panel
+                this.add(cardButton);
+            }
+        }
         // method that returns a card display (containing the title text, author, song duration, etc.) for a given card
         private JPanel cardGetDisplay(LevelCard card) {
             // initialize card panel
