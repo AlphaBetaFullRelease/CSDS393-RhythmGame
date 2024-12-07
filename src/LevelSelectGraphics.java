@@ -120,10 +120,8 @@ public class LevelSelectGraphics {
             pBody.add(bNext);
         }
         // main menu button
-
-        //JButton bExit = new JButton("settings");
-
-        JButton bExit = new JButton("main menu");
+        JButton bExit = new JButton("Main Menu");
+      
         bExit.setForeground(Color.white);
         // add event listener to tell level select to switch scenes
         bExit.addActionListener(
@@ -182,17 +180,9 @@ public class LevelSelectGraphics {
         // page text
         pageDisplay = new JLabel("1");
         pageDisplay.setBackground(cButton);
-
         TitledBorder pageBorder = BorderFactory.createTitledBorder("#");
         pageBorder.setTitleColor(Color.white);
         pageDisplay.setBorder(pageBorder);
-        pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0,
-                pageNumberWidth, contButtonHeight);
-/*
-        pageDisplay.setBorder(BorderFactory.createTitledBorder("#"));
-        pageDisplay.setBounds(contButtonWidth + cardWidth - pageNumberWidth, 0, 
-        pageNumberWidth, contButtonHeight);
-*/
         pHeader.add(pageDisplay);
         // level list
         listDisplay = new ListDisplay();
@@ -314,7 +304,7 @@ public class LevelSelectGraphics {
             return display;
         }
     	// method to actually draw the card list, takes the list as input (provided from level select)
-    	private void drawList(ArrayList<LevelCard> list) {
+    	/*private void drawList(ArrayList<LevelCard> list) {
     		// clear all elements from the list panel
     		this.removeAll();
     		// draw the card list iterating on each card from the list
@@ -338,6 +328,6 @@ public class LevelSelectGraphics {
                 // add card button to the list panel
     			this.add(cardButton);
     		}
-    	}
+    	}*/
     }
 }

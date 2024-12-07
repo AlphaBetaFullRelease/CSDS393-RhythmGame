@@ -1,11 +1,11 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 //holds all static data about a level & provides functions to load / save a level file
 public class Level {
@@ -22,9 +22,9 @@ public class Level {
     //level start delay (ms)
     private long startDelay = 0;
     //level title
-    private String title;
+    private String title = "";
     //level creator
-    private String creator;
+    private String creator = "";
     //level duration
     private long duration = 0;
     //level difficulty
@@ -44,7 +44,11 @@ public class Level {
         for(int i = 0; i < spawnIndex.length; i++)
             spawnIndex[i] = 0;
     }
-    //TODO: code that generates a unique id using the system clock
+
+    public void setPath(String path){
+        levelPath = path;
+    }
+  
     private static int generateId() {
         int rand = (int) Math.random() * 1000;
         return (int) System.currentTimeMillis() + rand;
@@ -68,7 +72,7 @@ public class Level {
     public ArrayList<StoredNote>[] getNoteGrid() { return noteGrid; }
 
     public int getDifficultyLevel() { return difficulty; }
-
+  
     public String getDurationString() {
         int hrs = (int) (duration / 60 / 60);
         int mins = (int) (duration / 60 % 60);
@@ -108,13 +112,12 @@ public class Level {
         return null;
     }
 
+    public void setTempo(int tempo) { this.tempo = tempo;}
 
-    // TO DO: delete this method, maybe level select passes the level path to game and then it uses user data to get stuff
+    // returns the path to the song file
     public String getSongPath() {
-        return "./data\\levels\\Mary had a little lamb\\song.wav";
+        return levelPath + "\\song.wav";
     }
-
-    public long getStartDelay() { return startDelay; }
 
     private void calculateDuration() {
         int lastNoteTime = (int) (noteGrid[0].get(noteGrid[0].size() - 1).getNote().getPos() / 1000);
@@ -134,17 +137,11 @@ public class Level {
         this.songPath = songPath;
     }
 
-    public void setTempo(int tempo) {
-        this.tempo = tempo;
-    }
+    public long getStartDelay() { return startDelay; }
 
-    public void setStartDelay(long startDelay) {
-        this.startDelay = startDelay;
-    }
+    public void setStartDelay(long startDelay) { this.startDelay = startDelay; }
 
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
-    }
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     public void setDuration(long duration) {
         this.duration = duration;

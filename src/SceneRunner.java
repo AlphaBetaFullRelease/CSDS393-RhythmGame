@@ -22,32 +22,10 @@ public class SceneRunner extends JFrame {
     // starts the game with the main menu open
     // for now, launches straight into Game since there is no main menu
     public static void main(String[] args){
-        // create level select
-      
-        //LevelSelect levelSelect = new LevelSelect();
-        
-        // DEBUG create placeholder level data
-        StoredNote[][] ng = {
-                {new StoredNote(600, 0, 0)},
-                {new StoredNote(610, 1, 0)},
-                {new StoredNote(620, 2, 0)},
-                {new StoredNote(630, 3, 0)}
-        };
-        Level testLevel = new Level("Test", "Ricardo", ng);
-
-        // create game
-        Game game = new Game(testLevel);
-        // create level select
-        LevelSelect levelSelect = new LevelSelect();
-
+        // main menu
+        MainMenu menu = new MainMenu();
         // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(levelSelect);
-
-        // initialize frame time
-        sceneRunner.initFrameStart();
-
-        // create a new scenerunner with the starting scene
-        SceneRunner sceneRunner = new SceneRunner(levelSelect);
+        SceneRunner sceneRunner = new SceneRunner(menu);
         // main loop
         while(true){
             // update loaded scene

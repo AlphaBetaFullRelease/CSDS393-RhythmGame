@@ -1,12 +1,13 @@
+
 public class LevelCard {
     //reference to level file
     private Level level;
     // level title
-    private String title;
+    private String title = "";
     // level creator
-    private String creator;
+    private String creator = "";
     // level duration
-    private String duration;
+    private String duration = "";
     // level difficulty
     private int difficulty;
     // level highscore

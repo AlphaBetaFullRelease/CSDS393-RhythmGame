@@ -1,16 +1,15 @@
 import java.io.File; 
 import java.io.IOException; 
 import java.io.UncheckedIOException;
-import java.util.Scanner; 
-  
-import javax.sound.sampled.AudioInputStream; 
-import javax.sound.sampled.AudioSystem; 
-import javax.sound.sampled.Clip; 
-import javax.sound.sampled.LineUnavailableException; 
-import javax.sound.sampled.UnsupportedAudioFileException;
+import java.util.Scanner;
+
+import javax.sound.sampled.*;
 
 // plays audio (sfx & music) for gameplay
 public class GameAudio {
+    // stores the volume to play music at
+    private float musicVolume;
+
     // stores current frame of the file (to track progress)
     private Long curFrame;
 
@@ -21,8 +20,8 @@ public class GameAudio {
     private AudioInputStream audioInputStream; 
 
     // creates a new audio player
-    public GameAudio(){
-        
+    public GameAudio(float musicVolume){
+        this.musicVolume = ((float) musicVolume) / 100;
     }
 
     // loads a song (long audio file) from file path
@@ -37,6 +36,12 @@ public class GameAudio {
 
             // set input stream into the clip
             clip.open(audioInputStream);
+
+            // set clip volume
+            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            float range = volumeControl.getMaximum() - volumeControl.getMinimum();
+            float gain = (range * musicVolume) + volumeControl.getMinimum();
+            volumeControl.setValue(gain);
 
             // set clip to loop
             clip.loop(Clip.LOOP_CONTINUOUSLY);
